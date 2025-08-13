@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Pacientes – Microdeleción 15q11.2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>Listado Completo de Pacientes</h1>
+    <p id="stats">Cargando…</p>
+    <nav aria-label="Principal">
+      <a class="nav-link" href="index.html">Inicio</a>
+      <a class="nav-link" href="form.html">Agregar Caso</a>
+      <a class="nav-link" href="stats.html">Estadísticas</a>
+      <a class="nav-link active" href="patients.html">Pacientes</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <a href="index.html" class="back-link">← Volver al inicio</a>
+    <div id="patientContainer" class="patient-grid"></div>
+  </main>
+
+  <footer>
+    <p>© 2025 – Análisis de Microdeleción</p>
+  </footer>
+
+  <script type="module" src="js/patients.js" defer></script>
+</body>
+</html>
