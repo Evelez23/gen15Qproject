@@ -1,108 +1,238 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
 <head>
-  <!-- Metadatos optimizados -->
   <meta charset="utf-8">
-  <title>Microdeleción 15q11.2 | Portal Colaborativo</title>
+  <title>Microdeleción 15q11.2 – Portal Colaborativo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Investigación abierta sobre microdeleciones cromosómicas. ¡Colabora!">
+  <meta name="description" content="Conoce la microdeleción 15q11.2 BP1-BP2 y colabora con datos clínicos para avanzar en la investigación">
   
-  <!-- Preload crítico -->
-  <link rel="preload" href="css/main.css" as="style">
-  <link rel="preload" href="js/theme-switcher.js" as="script">
+  <!-- Politica de Seguridad de Contenido (CSP) -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
+    img-src 'self' data: https:; 
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+    script-src 'self' https://cdn.jsdelivr.net https://cdn.sheetjs.com;
+    font-src 'self' https://fonts.gstatic.com;
+    media-src 'self' https://evelez23.github.io;
+    connect-src 'self' https://raw.githubusercontent.com">
   
-  <!-- Estilos -->
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="icon" href="assets/icons/dna.svg" type="image/svg+xml">
+  <!-- Favicon -->
+  <link rel="icon" href="/gen15Qproject/img/dna-icon.svg" type="image/svg+xml">
+  
+  <!-- Hojas de estilo -->
+  <link rel="stylesheet" href="/gen15Qproject/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Estilos adicionales -->
+  <style>
+    /* Estilos para estadísticas y errores */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .stat-card {
+      text-align: center;
+      padding: 1rem;
+      background: #f8fafc;
+      border-radius: 8px;
+    }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #2b6cb0;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      font-size: 0.9rem;
+      color: #4a5568;
+    }
+    .error {
+      background: #fff5f5;
+      color: #e53e3e;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      text-align: center;
+    }
+    
+    /* Estilos para h1 */
+    h1 {
+      font-size: 2rem;
+      margin: 0.67em 0;
+    }
+  </style>
 </head>
 
 <body>
-  <!-- Header animado -->
-  <header class="sticky-header">
-    <div class="header-content">
-      <a href="/" class="logo">
-        <svg class="dna-icon">...</svg>
-        <span>15q11.2 Research</span>
-      </a>
-      
-      <nav aria-label="Principal">
-        <button id="theme-toggle" aria-label="Cambiar modo oscuro/claro">🌓</button>
-        <a href="form.html" class="nav-button pulse">➕ Nuevo Caso</a>
-      </nav>
-    </div>
-    
-    <!-- Efecto partículas ADN (Canvas) -->
-    <canvas id="dna-particles"></canvas>
+  <header>
+    <nav aria-label="Principal">
+      <a class="nav-link active" href="/gen15Qproject/index.html" aria-current="page"><i class="fas fa-home"></i> Inicio</a>
+      <a class="nav-link" href="/gen15Qproject/form.html"><i class="fas fa-plus-circle"></i> Agregar Caso</a>
+      <a class="nav-link" href="/gen15Qproject/stats.html"><i class="fas fa-chart-bar"></i> Estadísticas</a>
+      <a class="nav-link" href="/gen15Qproject/patients.html"><i class="fas fa-users"></i> Pacientes</a>
+    </nav>
   </header>
 
-  <!-- Hero con video de fondo -->
-  <section class="hero">
-    <div class="hero-video">
-      <video autoplay muted loop playsinline>
-        <source src="assets/videos/dna-abstract.mp4" type="video/mp4">
-      </video>
-    </div>
-    
+  <section class="hero" aria-labelledby="hero-heading">
     <div class="hero-content">
-      <h1>Descifrando el <span class="highlight">cromosoma 15</span> juntos</h1>
-      <p>Cada aporte acerca la cura. Registra tu caso y sé parte del cambio.</p>
+      <h2 id="hero-heading">¿Sabías que una microdeleción del cromosoma 15 puede alterar el neurodesarrollo?</h2>
+      <p>
+        La microdeleción 15q11.2 BP1-BP2 afecta a menos del 1% de la población,
+        pero cada caso aporta piezas clave para entender autismo, hipotonía y más.
+      </p>
+      <a class="cta-button" href="/gen15Qproject/form.html" aria-label="Agregar mi caso a la investigación">
+        <i class="fas fa-plus"></i> Agregar mi caso
+      </a>
+    </div>
+  </section>
+
+  <main class="container">
+    <section class="card" aria-labelledby="que-es-heading">
+      <h3 id="que-es-heading"><i class="fas fa-dna"></i> ¿Qué es la microdeleción 15q11.2?</h3>
+      <p>
+        Es la pérdida de una pequeña porción de ADN en la región 15q11.2 del cromosoma 15.
+        Esta zona contiene cuatro genes cruciales (<em>CYFIP1, NIPA1, NIPA2, TUBGCP5</em>)
+        que afectan el desarrollo neurológico y muscular.
+      </p>
       
+      <div class="icon-grid">
+        <div class="icon-item">
+          <i class="fas fa-brain"></i>
+          <p>Problemas de neurodesarrollo</p>
+        </div>
+        <div class="icon-item">
+          <i class="fas fa-dna"></i>
+          <p>Transmisión autosómica dominante</p>
+        </div>
+        <div class="icon-item">
+          <i class="fas fa-child"></i>
+          <p>Hipotonía muscular</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="galeria-heading">
+      <h3 id="galeria-heading"><i class="fas fa-images"></i> Galería visual</h3>
+      <div class="slider" role="region" aria-label="Galería de imágenes">
+        <figure>
+          <img src="/gen15Qproject/img/hero-bg.jpg" alt="Niño con microdeleción jugando con terapeuta" loading="lazy">
+          <figcaption>Terapia de apoyo</figcaption>
+        </figure>
+        <figure>
+          <img src="/gen15Qproject/img/neurons.jpg" alt="Representación de conexiones neuronales afectadas" loading="lazy">
+          <figcaption>Impacto neurológico</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="estadisticas-heading">
+      <h3 id="estadisticas-heading"><i class="fas fa-chart-line"></i> Datos actualizados</h3>
+      <div class="stats-grid" id="stats-container">
+        <div class="stat-card">
+          <div class="stat-value" id="total-cases">--</div>
+          <div class="stat-label">Casos registrados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="avg-age">--</div>
+          <div class="stat-label">Edad promedio</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="female-percent">--%</div>
+          <div class="stat-label">Mujeres</div>
+        </div>
+      </div>
+      <a href="/gen15Qproject/stats.html" class="text-link">Ver análisis completo →</a>
+    </section>
+
+    <section class="card cta-card" aria-labelledby="cta-heading">
+      <h3 id="cta-heading"><i class="fas fa-hands-helping"></i> Tu aporte marca la diferencia</h3>
+      <p>
+        Cada caso registrado ayuda a los investigadores a entender mejor este síndrome
+        y desarrollar terapias más efectivas.
+      </p>
       <div class="cta-buttons">
-        <a href="form.html" class="cta-primary">Contribuir</a>
-        <a href="#casos-recientes" class="cta-secondary">Ver historias</a>
+        <a href="/gen15Qproject/form.html" class="cta-button primary"><i class="fas fa-plus"></i> Agregar caso</a>
+        <a href="/gen15Qproject/patients.html" class="cta-button secondary"><i class="fas fa-search"></i> Ver casos</a>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <!-- Sección de estadísticas en tiempo real -->
-  <section class="live-stats">
-    <div class="stat-card" data-counter="127">
-      <svg>...</svg>
-      <h3>Casos registrados</h3>
-    </div>
-    
-    <div class="stat-card" data-counter="18">
-      <svg>...</svg>
-      <h3>Países participantes</h3>
-    </div>
-    
-    <div class="stat-card" data-counter="63">
-      <svg>...</svg>
-      <h3>Investigadores</h3>
-    </div>
-  </section>
-
-  <!-- Simulador genético interactivo -->
-  <section class="gene-simulator">
-    <h2>¿Cómo afecta esta microdeleción?</h2>
-    <div class="simulator-container">
-      <div class="chromosome-visual"></div>
-      <div class="gene-info">
-        <h3>Genes afectados:</h3>
-        <ul class="gene-list">
-          <li data-gene="CYFIP1">CYFIP1</li>
-          <li data-gene="NIPA1">NIPA1</li>
-          <!-- ... -->
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer con wave SVG -->
   <footer>
-    <div class="footer-wave">...</div>
     <div class="footer-content">
-      <p>© 2025 - Investigación Colaborativa 15q11.2</p>
-      <div class="social-links">
-        <a href="#" aria-label="Twitter">🐦</a>
-        <a href="#" aria-label="Facebook">📘</a>
+      <p>© 2025 – Investigación colaborativa sobre microdeleción 15q11.2</p>
+      <div class="footer-links">
+        <a href="/gen15Qproject/privacy.html">Privacidad</a>
+        <a href="/gen15Qproject/ethics.html">Ética</a>
+        <a href="/gen15Qproject/contact.html">Contacto</a>
       </div>
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="js/particles.js" defer></script>
-  <script src="js/counters.js" defer></script>
-  <script src="js/gene-simulator.js" type="module"></script>
+  <!-- Scripts corregidos -->
+  <script src="/gen15Qproject/js/main.js"></script>
+  <script>
+    // Solución definitiva para CORS
+    async function loadStats() {
+      try {
+        // 1. Configuración segura
+        const STATS_CONTAINER = document.getElementById('stats-container');
+        const TOTAL_CASES = document.getElementById('total-cases');
+        const AVG_AGE = document.getElementById('avg-age');
+        const FEMALE_PERCENT = document.getElementById('female-percent');
+        
+        if (!STATS_CONTAINER || !TOTAL_CASES || !AVG_AGE || !FEMALE_PERCENT) {
+          throw new Error('Elementos de estadísticas no encontrados');
+        }
+
+        // 2. Carga con proxy confiable
+        const excelUrl = 'https://raw.githubusercontent.com/Evelez23/gen15Qproject/main/main/listaPacientes.xlsx';
+        
+        const response = await fetch(excelUrl);
+        if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
+        
+        // 3. Procesamiento de datos
+        const data = await response.arrayBuffer();
+        const { read, utils } = await import('https://cdn.sheetjs.com/xlsx-0.19.3/package/xlsx.mjs');
+        const workbook = read(data);
+        const pacientes = utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+
+        // 4. Cálculos seguros
+        const total = pacientes.length;
+        const edades = pacientes.map(p => {
+          const edadStr = String(p.Edad || '').replace(/\D+/g, '');
+          return edadStr ? parseInt(edadStr) : null;
+        }).filter(edad => edad !== null && !isNaN(edad));
+        
+        const avgAge = edades.length ? (edades.reduce((a, b) => a + b, 0) / edades.length).toFixed(1) : 'N/D';
+        const femalePercent = total ? Math.round((pacientes.filter(p => p['*Género'] === 'F' || p['*GÃ©nero'] === 'F').length / total) * 100) : 0;
+
+        // 5. Actualización del DOM
+        TOTAL_CASES.textContent = total;
+        AVG_AGE.textContent = avgAge;
+        FEMALE_PERCENT.textContent = `${femalePercent}%`;
+
+      } catch (error) {
+        console.error('Error al cargar estadísticas:', error);
+        const container = document.getElementById('stats-container') || document.querySelector('.stats-grid');
+        if (container) {
+          container.innerHTML = `
+            <div class="error">
+              <p>Datos no disponibles temporalmente</p>
+              <small>${error.message.includes('Error') ? error.message : 'Intente recargar la página'}</small>
+            </div>
+          `;
+        }
+      }
+    }
+
+    // Control de carga
+    if (document.readyState === 'complete') {
+      loadStats();
+    } else {
+      window.addEventListener('DOMContentLoaded', loadStats);
+    }
+  </script>
 </body>
 </html>
