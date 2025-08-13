@@ -177,3 +177,36 @@ function showError(error) {
     </div>
   `;
 }
+// patients.js - Solo las funciones clave para añadir
+async function loadPatientData() {
+  const DATA_SOURCES = [
+    'https://raw.githubusercontent.com/Evelez23/gen15Qproject/main/data/pacientes.json',
+    './data/pacientes.json'
+  ];
+
+  for (const source of DATA_SOURCES) {
+    try {
+      const response = await fetch(source);
+      if (!response.ok) continue;
+      return await response.json();
+    } catch (error) {
+      console.error(`Error loading ${source}:`, error);
+    }
+  }
+  throw new Error("No se pudieron cargar los datos");
+}
+
+// Ejemplo de cómo integrarlo con tu código existente:
+async function initPatientView() {
+  try {
+    const data = await loadPatientData();
+    // Usa data.pacientes aquí con tu lógica actual
+    console.log("Datos cargados:", data.pacientes);
+  } catch (error) {
+    console.error("Error:", error);
+    // Manejo de errores
+  }
+}
+
+// Llama a tu función de inicialización
+document.addEventListener('DOMContentLoaded', initPatientView);
