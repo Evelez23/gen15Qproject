@@ -1,2 +1,17 @@
-# gen15Qproject
-Portal colaborativo para el estudio de la microdeleción 15q11.2 (BP1-BP2).  Recopilación de datos clínicos, estadísticas y recursos para familias.  - Recursos educativos sobre TEA, hipotonía y trastornos asociados - Base de conocimiento compartido  Colaboradores: familias afectadas, genetistas y neurólogos.
+# Portal Colaborativo Microdeleción 15q11.2
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## 📌 Descripción
+Plataforma colaborativa para recopilar y analizar datos clínicos de pacientes con microdeleción 15q11.2 BP1-BP2, facilitando la investigación y el intercambio de conocimiento entre familias y especialistas.
+
+## 🌟 Características
+- 📊 Registro colaborativo de casos
+- 📈 Visualización de estadísticas
+- 🧬 Base de conocimiento compartido
+- 🏥 Recursos para familias y profesionales
+
+## 🚀 Instalación
+```bash
+git clone https://github.com/Evelez23/microdelecion.git
+cd microdelecion
