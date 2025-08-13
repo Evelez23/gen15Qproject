@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <!-- Metadatos optimizados -->
+  <meta charset="utf-8">
+  <title>Microdeleción 15q11.2 | Portal Colaborativo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Investigación abierta sobre microdeleciones cromosómicas. ¡Colabora!">
+  
+  <!-- Preload crítico -->
+  <link rel="preload" href="css/main.css" as="style">
+  <link rel="preload" href="js/theme-switcher.js" as="script">
+  
+  <!-- Estilos -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" href="assets/icons/dna.svg" type="image/svg+xml">
+</head>
+
+<body>
+  <!-- Header animado -->
+  <header class="sticky-header">
+    <div class="header-content">
+      <a href="/" class="logo">
+        <svg class="dna-icon">...</svg>
+        <span>15q11.2 Research</span>
+      </a>
+      
+      <nav aria-label="Principal">
+        <button id="theme-toggle" aria-label="Cambiar modo oscuro/claro">🌓</button>
+        <a href="form.html" class="nav-button pulse">➕ Nuevo Caso</a>
+      </nav>
+    </div>
+    
+    <!-- Efecto partículas ADN (Canvas) -->
+    <canvas id="dna-particles"></canvas>
+  </header>
+
+  <!-- Hero con video de fondo -->
+  <section class="hero">
+    <div class="hero-video">
+      <video autoplay muted loop playsinline>
+        <source src="assets/videos/dna-abstract.mp4" type="video/mp4">
+      </video>
+    </div>
+    
+    <div class="hero-content">
+      <h1>Descifrando el <span class="highlight">cromosoma 15</span> juntos</h1>
+      <p>Cada aporte acerca la cura. Registra tu caso y sé parte del cambio.</p>
+      
+      <div class="cta-buttons">
+        <a href="form.html" class="cta-primary">Contribuir</a>
+        <a href="#casos-recientes" class="cta-secondary">Ver historias</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de estadísticas en tiempo real -->
+  <section class="live-stats">
+    <div class="stat-card" data-counter="127">
+      <svg>...</svg>
+      <h3>Casos registrados</h3>
+    </div>
+    
+    <div class="stat-card" data-counter="18">
+      <svg>...</svg>
+      <h3>Países participantes</h3>
+    </div>
+    
+    <div class="stat-card" data-counter="63">
+      <svg>...</svg>
+      <h3>Investigadores</h3>
+    </div>
+  </section>
+
+  <!-- Simulador genético interactivo -->
+  <section class="gene-simulator">
+    <h2>¿Cómo afecta esta microdeleción?</h2>
+    <div class="simulator-container">
+      <div class="chromosome-visual"></div>
+      <div class="gene-info">
+        <h3>Genes afectados:</h3>
+        <ul class="gene-list">
+          <li data-gene="CYFIP1">CYFIP1</li>
+          <li data-gene="NIPA1">NIPA1</li>
+          <!-- ... -->
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer con wave SVG -->
+  <footer>
+    <div class="footer-wave">...</div>
+    <div class="footer-content">
+      <p>© 2025 - Investigación Colaborativa 15q11.2</p>
+      <div class="social-links">
+        <a href="#" aria-label="Twitter">🐦</a>
+        <a href="#" aria-label="Facebook">📘</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/particles.js" defer></script>
+  <script src="js/counters.js" defer></script>
+  <script src="js/gene-simulator.js" type="module"></script>
+</body>
+</html>
