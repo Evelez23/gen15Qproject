@@ -503,3 +503,103 @@ footer {
 .text-link:hover::after {
   transform: translateX(3px);
 }
+/* Estilos para patients.html */
+.patient-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.patient-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.patient-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.patient-card-header {
+  background: #4A6FA5;
+  color: white;
+  padding: 1.2rem;
+}
+
+.patient-card-header h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+.patient-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.patient-details {
+  padding: 1.2rem;
+}
+
+.detail-group {
+  margin-bottom: 1rem;
+}
+
+.detail-group h4 {
+  font-size: 0.9rem;
+  color: #4A6FA5;
+  margin: 0 0 0.3rem;
+}
+
+.detail-group p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 2rem;
+  color: #4A6FA5;
+}
+
+.error-card {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  color: #e53e3e;
+  padding: 1.5rem;
+  border-radius: 8px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.error-card button {
+  background: #e53e3e;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.no-patients {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .patient-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .patient-card {
+    margin: 0 0.5rem;
+  }
+}
