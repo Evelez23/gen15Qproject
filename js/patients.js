@@ -166,6 +166,15 @@ document.addEventListener('DOMContentLoaded', async () => {
           <li>Que tengas conexión a internet</li>
         </ul>
         <button onclick="window.location.reload()">Reintentar</button>
+        // Cambiar a módulo
+export function initPatientsPage() {
+  // Tu código actual aquí
+}
+
+// Inicialización automática
+if (document.getElementById('patientContainer')) {
+  initPatientsPage();
+}
       </div>
     `;
   }
