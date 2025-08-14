@@ -183,8 +183,9 @@
       "Necesidades": "Educación inclusiva;Falta deinformación médica"
     }
   ]
-}
+
 # Ejemplo mínimo en Python (guardar como 'excel_to_json.py')
 import pandas as pd
 df = pd.read_excel('listaPacientes(3).xlsx')
 df.to_json('pacientes.json', orient='records', force_ascii=False)
+}
