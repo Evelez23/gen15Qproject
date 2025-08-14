@@ -56,3 +56,45 @@ function hideTooltip() {
 
 // Exportar funciones si se usan módulos
 export { showTooltip, hideTooltip };
+// Cargar datos dinámicamente
+fetch('data/pacientes.json')
+  .then(response => response.json())
+  .then(data => {
+    const container = document.getElementById('patientContainer');
+    
+    // Generar tarjetas
+    data.forEach(patient => {
+      const card = `
+        <div class="col-md-4 mb-4 patient-card" data-gender="${patient['Género']}">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">
+                ${patient['Género'] === 'M' ? '♂' : '♀'} 
+                ${patient['Nombre']}
+              </h5>
+              <p class="card-text">
+                <strong>Edad:</strong> ${patient['Edad']}<br>
+                <strong>Síntomas:</strong> ${patient['Síntomas principales'].split(';')[0]}
+              </p>
+              <button 
+                class="btn btn-sm btn-primary view-details" 
+                data-id="${patient['Nombre']}">
+                Ver detalles
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      container.innerHTML += card;
+    });
+
+    // Filtrado por género
+    document.getElementById('filterGender').addEventListener('change', (e) => {
+      const gender = e.target.value;
+      document.querySelectorAll('.patient-card').forEach(card => {
+        card.style.display = (gender === 'all' || card.dataset.gender === gender) 
+          ? 'block' 
+          : 'none';
+      });
+    });
+  });
