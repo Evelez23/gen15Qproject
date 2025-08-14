@@ -4,117 +4,270 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pacientes - Gen15Q Project</title>
+    <link rel="stylesheet" href="css/styles.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .search-container {
-            display: flex;
-            margin-bottom: 20px;
-            gap: 10px;
-        }
-        
-        #search-input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        
-        #patients-container {
+        /* Estilos específicos para pacientes */
+        .patient-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
+            margin-top: 30px;
         }
         
         .patient-card {
-            background: #f9f9f9;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid #e0e0e0;
         }
         
         .patient-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
-        .patient-card h3 {
-            margin-top: 0;
-            color: #2980b9;
+        .patient-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
         }
         
-        .tag {
-            display: inline-block;
-            background: #e0f7fa;
+        .patient-card-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+        
+        .gender-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .male-icon {
+            color: #3498db;
+        }
+        
+        .female-icon {
+            color: #e91e63;
+        }
+        
+        .patient-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .patient-card.expanded .patient-details {
+            max-height: 500px;
+            margin-top: 15px;
+        }
+        
+        .symptoms-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .symptoms-list li {
+            background: #e3f2fd;
             padding: 3px 8px;
-            margin: 2px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        
+        .badge {
+            padding: 3px 8px;
             border-radius: 4px;
-            font-size: 0.8em;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-left: auto;
         }
         
-        #loading-indicator, #error-message {
-            text-align: center;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 4px;
+        .mild {
+            background: #c8e6c9;
+            color: #2e7d32;
         }
         
-        #loading-indicator {
-            background: #fff8e1;
+        .moderate {
+            background: #fff9c4;
+            color: #f57f17;
         }
         
-        #error-message {
-            background: #ffebee;
+        .severe {
+            background: #ffcdd2;
             color: #c62828;
-        }
-        
-        .filter-section {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        
-        @media (max-width: 768px) {
-            #patients-container {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
 <body>
-    <h1>Registro de Pacientes</h1>
-    
-    <div class="filter-section">
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="Buscar por nombre o síntomas...">
-            <button id="reset-btn">Reiniciar</button>
+    <!-- [Cabecera similar a index.html] -->
+    <header>
+        <!-- Tu cabecera existente -->
+    </header>
+
+    <main class="patients-dashboard">
+        <!-- Filtros avanzados -->
+        <div class="filters">
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Buscar pacientes...">
+                <button id="reset-btn">Reiniciar</button>
+            </div>
+            
+            <div class="filter-group">
+                <h3>Filtrar por:</h3>
+                <select id="filter-select">
+                    <option value="all">Todos</option>
+                    <option value="mild">Leve</option>
+                    <option value="moderate">Moderado</option>
+                    <option value="severe">Grave</option>
+                </select>
+            </div>
         </div>
-    </div>
-    
-    <div id="loading-indicator" style="display: none;">
-        <p>Cargando datos de pacientes...</p>
-    </div>
-    
-    <div id="error-message"></div>
-    
-    <div id="patients-container"></div>
-    
+
+        <!-- Contenedor principal de pacientes -->
+        <div class="patient-grid" id="patients-container">
+            <!-- Las tarjetas se generarán dinámicamente con JavaScript -->
+        </div>
+    </main>
+
+    <!-- [Pie de página similar a index.html] -->
+    <footer>
+        <!-- Tu pie de página existente -->
+    </footer>
+
     <script src="js/patients.js"></script>
+    <script>
+        // patients.js - Versión adaptada para el diseño colapsable
+        document.addEventListener('DOMContentLoaded', function() {
+            const DATA_SOURCES = [
+                'https://raw.githubusercontent.com/Evelez23/gen15Qproject/main/data/pacientes.json',
+                './data/pacientes.json'
+            ];
+            
+            const container = document.getElementById('patients-container');
+            const searchInput = document.getElementById('search-input');
+            const resetBtn = document.getElementById('reset-btn');
+            const filterSelect = document.getElementById('filter-select');
+            
+            let allPatients = [];
+            
+            // Cargar y mostrar pacientes
+            async function loadPatients() {
+                try {
+                    // Intenta cada fuente de datos
+                    for (const source of DATA_SOURCES) {
+                        try {
+                            const response = await fetch(source);
+                            if (!response.ok) continue;
+                            const data = await response.json();
+                            allPatients = data.pacientes;
+                            renderPatients(allPatients);
+                            return;
+                        } catch (error) {
+                            console.warn(`Error con ${source}:`, error);
+                        }
+                    }
+                    throw new Error("No se pudieron cargar los datos");
+                } catch (error) {
+                    console.error("Error:", error);
+                    container.innerHTML = `<p class="error">${error.message}</p>`;
+                }
+            }
+            
+            // Renderizar pacientes
+            function renderPatients(patients) {
+                container.innerHTML = '';
+                
+                patients.forEach(patient => {
+                    const card = document.createElement('article');
+                    card.className = 'patient-card';
+                    
+                    // Determinar icono de género
+                    const genderIcon = patient.Género === 'M' ? 
+                        '<span class="gender-icon male-icon">👦</span>' : 
+                        '<span class="gender-icon female-icon">👧</span>';
+                    
+                    // Determinar clase de severidad
+                    let severityClass = 'mild';
+                    if (patient['Nivel de afectación'].includes('Moderado')) severityClass = 'moderate';
+                    if (patient['Nivel de afectación'].includes('Grave')) severityClass = 'severe';
+                    
+                    // Formatear síntomas
+                    const symptoms = patient['Síntomas principales'].split(';')
+                        .map(s => `<li>${s.trim()}</li>`)
+                        .join('');
+                    
+                    card.innerHTML = `
+                        <div class="patient-card-header">
+                            ${genderIcon}
+                            <h3>${patient.Nombre}</h3>
+                            <span class="badge ${severityClass}">
+                                ${patient['Nivel de afectación'].split(' ')[0]}
+                            </span>
+                        </div>
+                        <div class="patient-details">
+                            <p><strong>Edad:</strong> ${patient.Edad} años</p>
+                            <ul class="symptoms-list">${symptoms}</ul>
+                            <p><strong>Necesidades:</strong> ${patient.Necesidades || 'No especificadas'}</p>
+                        </div>
+                    `;
+                    
+                    // Evento para expandir/colapsar
+                    card.addEventListener('click', () => {
+                        card.classList.toggle('expanded');
+                    });
+                    
+                    container.appendChild(card);
+                });
+            }
+            
+            // Filtrado y búsqueda
+            function setupFilters() {
+                searchInput.addEventListener('input', filterPatients);
+                filterSelect.addEventListener('change', filterPatients);
+                resetBtn.addEventListener('click', () => {
+                    searchInput.value = '';
+                    filterSelect.value = 'all';
+                    filterPatients();
+                });
+            }
+            
+            function filterPatients() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const severityFilter = filterSelect.value;
+                
+                const filtered = allPatients.filter(patient => {
+                    // Filtrar por búsqueda
+                    const matchesSearch = 
+                        patient.Nombre.toLowerCase().includes(searchTerm) || 
+                        patient['Síntomas principales'].toLowerCase().includes(searchTerm);
+                    
+                    // Filtrar por severidad
+                    let matchesSeverity = true;
+                    if (severityFilter !== 'all') {
+                        const severity = patient['Nivel de afectación'].toLowerCase();
+                        matchesSeverity = 
+                            (severityFilter === 'mild' && severity.includes('leve')) ||
+                            (severityFilter === 'moderate' && severity.includes('moderado')) ||
+                            (severityFilter === 'severe' && severity.includes('grave'));
+                    }
+                    
+                    return matchesSearch && matchesSeverity;
+                });
+                
+                renderPatients(filtered);
+            }
+            
+            // Inicializar
+            loadPatients();
+            setupFilters();
+        });
+    </script>
 </body>
 </html>
