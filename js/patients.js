@@ -1,212 +1,158 @@
-import { read, utils } from 'https://cdn.sheetjs.com/xlsx-0.19.3/package/xlsx.mjs';
-
-// Configuración
-const EXCEL_URL = 'https://raw.githubusercontent.com/Evelez23/gen15Qproject/main/main/listaPacientes.xlsx';
-const LOCAL_BACKUP = 'data/backup_pacientes.xlsx';
-
-// Función mejorada para corregir caracteres
-const fixEncoding = (str) => {
-  if (!str) return 'No especificado';
-  return str
-    .replace(/Ã¡/g, 'á').replace(/Ã©/g, 'é').replace(/Ã/g, 'í')
-    .replace(/Ã³/g, 'ó').replace(/Ãº/g, 'ú').replace(/Ã±/g, 'ñ')
-    .replace(/Ã¼/g, 'ü').replace(/Â¿/g, '¿').replace(/Â¡/g, '¡')
-    .replace(/Ã‰/g, 'É').replace(/Ã“/g, 'Ó');
-};
-
-// Mostrar estado de carga
-function showLoading() {
-  const container = document.getElementById('patientContainer');
-  container.innerHTML = `
-    <div class="loading-spinner">
-      <i class="fas fa-spinner fa-spin"></i>
-      <p>Cargando datos de pacientes...</p>
-    </div>
-  `;
-}
-
-// Función mejorada para procesar datos
-function processPatientData(rawData) {
-  return rawData.map(p => {
-    // Manejo robusto de todos los campos
-    const getField = (fieldNames, defaultValue = 'No especificado') => {
-      for (const name of fieldNames) {
-        if (p[name] !== undefined && p[name] !== '') {
-          return fixEncoding(p[name]);
+// patients.js - Versión completa con todas las funcionalidades
+document.addEventListener('DOMContentLoaded', function() {
+    // Fuentes de datos (primero remoto, luego local como fallback)
+    const DATA_SOURCES = [
+        'https://raw.githubusercontent.com/Evelez23/gen15Qproject/main/data/pacientes.json',
+        './data/pacientes.json'
+    ];
+    
+    // Elementos del DOM
+    const container = document.getElementById('patients-container');
+    const searchInput = document.getElementById('search-input');
+    const resetBtn = document.getElementById('reset-btn');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const errorMessage = document.getElementById('error-message');
+    
+    // Variables globales
+    let allPatients = [];
+    let filteredPatients = [];
+    
+    // Inicialización
+    init();
+    
+    async function init() {
+        showLoading(true);
+        clearError();
+        
+        try {
+            // Cargar datos
+            allPatients = await loadPatients();
+            
+            if (allPatients.length === 0) {
+                throw new Error("No se encontraron datos de pacientes");
+            }
+            
+            // Mostrar todos los pacientes inicialmente
+            filteredPatients = [...allPatients];
+            renderPatients(filteredPatients);
+            
+            // Configurar eventos
+            setupEventListeners();
+            
+        } catch (error) {
+            showError(error.message);
+        } finally {
+            showLoading(false);
         }
-      }
-      return defaultValue;
-    };
-
-    return {
-      nombre: getField(['Nombre', 'nombre'], 'Nombre no disponible'),
-      edad: getField(['Edad', 'edad']),
-      genero: getField(['*Género', '*GÃ©nero']) === 'F' ? 'Femenino' : 'Masculino',
-      sintomas: getField(['Síntomas principales', 'SÃ­ntomas principales']),
-      pruebas: getField(['Pruebas realizadas']),
-      medicamentos: getField(['Medicamentos actuales/pasados']),
-      terapias: getField(['Terapias recibidas']),
-      estudios: getField(['Â¿Ha participado en estudios clÃ­nicos o genÃ©ticos?']),
-      necesidades: getField(['Necesidades y Desafíos'])
-    };
-  });
-}
-
-// Renderizar pacientes con formato mejorado
-function renderPatients(pacientes) {
-  const container = document.getElementById('patientContainer');
-  const statsElement = document.getElementById('stats');
-  
-  statsElement.textContent = `${pacientes.length} casos registrados`;
-  
-  let htmlContent = '';
-  const grupos = {
-    Femenino: pacientes.filter(p => p.genero === 'Femenino'),
-    Masculino: pacientes.filter(p => p.genero === 'Masculino')
-  };
-
-  Object.entries(grupos).forEach(([genero, lista]) => {
-    if (lista.length === 0) return;
-    
-    htmlContent += `
-      <section class="gender-section">
-        <h2>${genero} (${lista.length})</h2>
-        <div class="patient-grid">
-    `;
-    
-    lista.forEach(paciente => {
-      htmlContent += `
-        <div class="patient-card">
-          <div class="patient-card-header">
-            <h3>${paciente.nombre}</h3>
-            <div class="patient-meta">
-              <span class="patient-age">${paciente.edad} años</span>
-              <span class="patient-gender">${paciente.genero}</span>
-            </div>
-          </div>
-          
-          <div class="patient-details">
-            <div class="detail-group">
-              <h4>Síntomas principales:</h4>
-              <p>${paciente.sintomas.replace(/;/g, ', ')}</p>
-            </div>
-            
-            <div class="detail-group">
-              <h4>Pruebas realizadas:</h4>
-              <p>${paciente.pruebas}</p>
-            </div>
-            
-            <div class="detail-group">
-              <h4>Medicamentos:</h4>
-              <p>${paciente.medicamentos}</p>
-            </div>
-            
-            <div class="detail-group">
-              <h4>Terapias recibidas:</h4>
-              <p>${paciente.terapias}</p>
-            </div>
-            
-            <div class="detail-group">
-              <h4>Participación en estudios:</h4>
-              <p>${paciente.estudios}</p>
-            </div>
-            
-            <div class="detail-group">
-              <h4>Necesidades y desafíos:</h4>
-              <p>${paciente.necesidades}</p>
-            </div>
-          </div>
-        </div>
-      `;
-    });
-    
-    htmlContent += `</div></section>`;
-  });
-  
-  container.innerHTML = htmlContent || '<p class="no-patients">No se encontraron pacientes registrados</p>';
-}
-
-// Carga principal de datos
-document.addEventListener('DOMContentLoaded', async () => {
-  showLoading();
-  
-  try {
-    // Intenta cargar desde la URL principal primero
-    let response = await fetch(EXCEL_URL);
-    
-    // Si falla, intenta con el backup local
-    if (!response.ok) {
-      console.warn('Fallo al cargar Excel remoto, intentando con backup local');
-      response = await fetch(LOCAL_BACKUP);
     }
     
-    if (!response.ok) {
-      throw new Error(`Error HTTP: ${response.status}`);
+    // Cargar datos de pacientes
+    async function loadPatients() {
+        for (const source of DATA_SOURCES) {
+            try {
+                const response = await fetch(source);
+                
+                if (!response.ok) {
+                    continue; // Intentar con la siguiente fuente
+                }
+                
+                const data = await response.json();
+                return data.pacientes || [];
+                
+            } catch (error) {
+                console.error(`Error al cargar ${source}:`, error);
+                // Continuar con la siguiente fuente
+            }
+        }
+        
+        throw new Error("No se pudieron cargar los datos desde ninguna fuente");
     }
     
-    const data = await response.arrayBuffer();
-    const workbook = read(data);
-    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-    const pacientes = utils.sheet_to_json(firstSheet);
-    
-    if (!pacientes || pacientes.length === 0) {
-      throw new Error('El archivo Excel no contiene datos de pacientes');
+    // Renderizar pacientes
+    function renderPatients(patients) {
+        container.innerHTML = '';
+        
+        if (patients.length === 0) {
+            container.innerHTML = '<p>No se encontraron pacientes que coincidan con los criterios de búsqueda.</p>';
+            return;
+        }
+        
+        patients.forEach(patient => {
+            const card = document.createElement('div');
+            card.className = 'patient-card';
+            
+            // Formatear síntomas y necesidades
+            const symptoms = formatItems(patient['Síntomas principales']);
+            const needs = patient.Necesidades ? formatItems(patient.Necesidades) : 'No especificadas';
+            
+            card.innerHTML = `
+                <h3>${patient.Nombre}</h3>
+                <p><strong>Edad:</strong> ${patient.Edad} años</p>
+                <p><strong>Género:</strong> ${patient.Género}</p>
+                <div class="symptoms"><strong>Síntomas principales:</strong> ${symptoms}</div>
+                <div class="needs"><strong>Necesidades:</strong> ${needs}</div>
+                <p><strong>Nivel de afectación:</strong> ${patient['Nivel de afectación'].replace(/\(.*?\)/g, '')}</p>
+            `;
+            
+            container.appendChild(card);
+        });
     }
     
-    const pacientesNormalizados = processPatientData(pacientes);
-    renderPatients(pacientesNormalizados);
+    // Formatear listas de items (síntomas, necesidades)
+    function formatItems(text) {
+        if (!text) return '';
+        return text.split(';')
+            .map(item => `<span class="tag">${item.trim()}</span>`)
+            .join(' ');
+    }
     
-  } catch (error) {
-    console.error('Error:', error);
-    showError(error);
-  }
+    // Configurar event listeners
+    function setupEventListeners() {
+        // Búsqueda en tiempo real
+        searchInput.addEventListener('input', () => {
+            filterPatients();
+        });
+        
+        // Botón de reinicio
+        resetBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            filterPatients();
+        });
+    }
+    
+    // Filtrar pacientes según búsqueda
+    function filterPatients() {
+        const searchTerm = searchInput.value.toLowerCase();
+        
+        if (!searchTerm) {
+            filteredPatients = [...allPatients];
+        } else {
+            filteredPatients = allPatients.filter(patient => {
+                return (
+                    patient.Nombre.toLowerCase().includes(searchTerm) ||
+                    (patient['Síntomas principales'] && patient['Síntomas principales'].toLowerCase().includes(searchTerm)) ||
+                    (patient.Necesidades && patient.Necesidades.toLowerCase().includes(searchTerm))
+                );
+            });
+        }
+        
+        renderPatients(filteredPatients);
+    }
+    
+    // Mostrar/ocultar indicador de carga
+    function showLoading(show) {
+        loadingIndicator.style.display = show ? 'block' : 'none';
+    }
+    
+    // Mostrar mensaje de error
+    function showError(message) {
+        errorMessage.textContent = `Error: ${message}`;
+        errorMessage.style.display = 'block';
+    }
+    
+    // Limpiar mensaje de error
+    function clearError() {
+        errorMessage.textContent = '';
+        errorMessage.style.display = 'none';
+    }
 });
-
-function showError(error) {
-  const container = document.getElementById('patientContainer');
-  container.innerHTML = `
-    <div class="error-card">
-      <h3>Error al cargar los datos</h3>
-      <p>${error.message}</p>
-      <p>Por favor, verifica:</p>
-      <ul>
-        <li>Que el archivo Excel esté en la ubicación correcta</li>
-        <li>Que tengas conexión a internet</li>
-      </ul>
-      <button onclick="window.location.reload()">Reintentar</button>
-    </div>
-  `;
-}
-// patients.js - Solo las funciones clave para añadir
-async function loadPatientData() {
-  const DATA_SOURCES = [
-    'https://raw.githubusercontent.com/Evelez23/gen15Qproject/main/data/pacientes.json',
-    './data/pacientes.json'
-  ];
-
-  for (const source of DATA_SOURCES) {
-    try {
-      const response = await fetch(source);
-      if (!response.ok) continue;
-      return await response.json();
-    } catch (error) {
-      console.error(`Error loading ${source}:`, error);
-    }
-  }
-  throw new Error("No se pudieron cargar los datos");
-}
-
-// Ejemplo de cómo integrarlo con tu código existente:
-async function initPatientView() {
-  try {
-    const data = await loadPatientData();
-    // Usa data.pacientes aquí con tu lógica actual
-    console.log("Datos cargados:", data.pacientes);
-  } catch (error) {
-    console.error("Error:", error);
-    // Manejo de errores
-  }
-}
-
-// Llama a tu función de inicialización
-document.addEventListener('DOMContentLoaded', initPatientView);
