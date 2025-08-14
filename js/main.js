@@ -98,3 +98,25 @@ fetch('data/pacientes.json')
       });
     });
   });
+// Mostrar detalles en modal
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('view-details')) {
+    const patientName = e.target.dataset.id;
+    fetch('data/pacientes.json')
+      .then(res => res.json())
+      .then(data => {
+        const patient = data.find(p => p['Nombre'] === patientName);
+        document.getElementById('modalTitle').textContent = patient['Nombre'];
+        document.getElementById('modalBody').innerHTML = `
+          <p><strong>Edad:</strong> ${patient['Edad']}</p>
+          <p><strong>Pruebas realizadas:</strong> ${patient['Pruebas realizadas']}</p>
+          <hr>
+          <h6>Síntomas:</h6>
+          <ul>
+            ${patient['Síntomas principales'].split(';').map(s => `<li>${s.trim()}</li>`).join('')}
+          </ul>
+        `;
+        new bootstrap.Modal(document.getElementById('patientModal')).show();
+      });
+  }
+});
