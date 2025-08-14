@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes - Gen15Q Project</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Estilos específicos para pacientes */
+        .gender-section {
+            margin-bottom: 40px;
+        }
+        
+        .gender-section h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .boys-section h2 {
+            color: #3498db;
+            border-color: #3498db;
+        }
+        
+        .girls-section h2 {
+            color: #e91e63;
+            border-color: #e91e63;
+        }
+        
+        .gender-icon {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .patient-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .patient-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .patient-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .patient-card-header {
+            display: flex;
+            align-items: center;
+        }
+        
+        .patient-card-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+        
+        .badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-left: auto;
+        }
+        
+        .mild {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+        
+        .moderate {
+            background: #fff9c4;
+            color: #f57f17;
+        }
+        
+        .severe {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+        
+        .patient-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .patient-card.expanded .patient-details {
+            max-height: 500px;
+            margin-top: 15px;
+        }
+        
+        .symptoms-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .symptoms-list li {
+            background: #e3f2fd;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        
+        .nav-button {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .nav-button:hover {
+            background: #1a252f;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabecera -->
+    <header>
+        <div class="header-content">
+            <h1>Gen15Q Project</h1>
+            <nav>
+                <header>
+    <nav aria-label="Principal">
+      <a class="nav-link active" href="/gen15Qproject/index.html" aria-current="page"><i class="fas fa-home"></i> Inicio</a>
+      <a class="nav-link" href="/gen15Qproject/form.html"><i class="fas fa-plus-circle"></i> Agregar Caso</a>
+      <a class="nav-link" href="/gen15Qproject/stats.html"><i class="fas fa-chart-bar"></i> Estadísticas</a>
+      <a class="nav-link" href="/gen15Qproject/patients.html"><i class="fas fa-users"></i> Pacientes</a>
+    </nav>
+  </header>
+            </nav>
+        </div>
+    </header>
+
+    <main class="patients-dashboard">
+        <!-- Botones de navegación -->
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="window.location.href='index.html'">← Volver al Inicio</button>
+            <div>
+                <button class="nav-button" onclick="window.location.href='research.html'">Investigación</button>
+                <button class="nav-button" onclick="window.location.href='contact.html'">Contacto</button>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filters">
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Buscar pacientes...">
+                <button id="reset-btn" class="nav-button">Reiniciar</button>
+            </div>
+            
+            <div class="filter-group">
+                <select id="filter-select" class="nav-button">
+                    <option value="all">Todos los niveles</option>
+                    <option value="mild">Leve</option>
+                    <option value="moderate">Moderado</option>
+                    <option value="severe">Grave</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Sección de Niños -->
+        <div class="gender-section boys-section">
+            <h2><span class="gender-icon">👦</span> Niños</h2>
+            <div class="patient-grid" id="boys-container"></div>
+        </div>
+
+        <!-- Sección de Niñas -->
+        <div class="gender-section girls-section">
+            <h2><span class="gender-icon">👧</span> Niñas</h2>
+            <div class="patient-grid" id="girls-container"></div>
+        </div>
+    </main>
+
+    <!-- Pie de página -->
+    <footer>
+        <div class="footer-content">
+            <p>© 2023 Gen15Q Project. Todos los derechos reservados.</p>
+            <div class="footer-links">
+                <a href="privacy.html">Política de Privacidad</a>
+                <a href="terms.html">Términos de Uso</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // patients.js - Versión final con separación por género
+        document.addEventListener('DOMContentLoaded', function() {
+            const DATA_SOURCES = [
+                'https://raw.githubusercontent.com/Evelez23/gen15Qproject/main/data/pacientes.json',
+                './data/pacientes.json'
+            ];
+            
+            const boysContainer = document.getElementById('boys-container');
+            const girlsContainer = document.getElementById('girls-container');
+            const searchInput = document.getElementById('search-input');
+            const resetBtn = document.getElementById('reset-btn');
+            const filterSelect = document.getElementById('filter-select');
+            
+            let allPatients = [];
+            let filteredPatients = [];
+            
+            // Cargar y mostrar pacientes
+            async function loadPatients() {
+                try {
+                    // Intenta cada fuente de datos
+                    for (const source of DATA_SOURCES) {
+                        try {
+                            const response = await fetch(source);
+                            if (!response.ok) continue;
+                            const data = await response.json();
+                            allPatients = data.pacientes;
+                            filterPatients();
+                            return;
+                        } catch (error) {
+                            console.warn(`Error con ${source}:`, error);
+                        }
+                    }
+                    throw new Error("No se pudieron cargar los datos");
+                } catch (error) {
+                    console.error("Error:", error);
+                    boysContainer.innerHTML = girlsContainer.innerHTML = `<p class="error">${error.message}</p>`;
+                }
+            }
+            
+            // Renderizar pacientes
+            function renderPatients(patients) {
+                boysContainer.innerHTML = '';
+                girlsContainer.innerHTML = '';
+                
+                patients.forEach(patient => {
+                    // Determinar clase de severidad
+                    let severityClass = 'mild';
+                    if (patient['Nivel de afectación'].includes('Moderado')) severityClass = 'moderate';
+                    if (patient['Nivel de afectación'].includes('Grave')) severityClass = 'severe';
+                    
+                    // Formatear síntomas
+                    const symptoms = patient['Síntomas principales'].split(';')
+                        .map(s => `<li>${s.trim()}</li>`)
+                        .join('');
+                    
+                    const card = document.createElement('article');
+                    card.className = 'patient-card';
+                    card.innerHTML = `
+                        <div class="patient-card-header">
+                            <h3>${patient.Nombre}</h3>
+                            <span class="badge ${severityClass}">
+                                ${patient['Nivel de afectación'].split(' ')[0]}
+                            </span>
+                        </div>
+                        <div class="patient-details">
+                            <p><strong>Edad:</strong> ${patient.Edad} años</p>
+                            <ul class="symptoms-list">${symptoms}</ul>
+                            <p><strong>Necesidades:</strong> ${patient.Necesidades || 'No especificadas'}</p>
+                        </div>
+                    `;
+                    
+                    // Evento para expandir/colapsar
+                    card.addEventListener('click', () => {
+                        card.classList.toggle('expanded');
+                    });
+                    
+                    // Agregar al contenedor correspondiente
+                    if (patient.Género === 'M') {
+                        boysContainer.appendChild(card);
+                    } else {
+                        girlsContainer.appendChild(card);
+                    }
+                });
+            }
+            
+            // Filtrado y búsqueda
+            function setupFilters() {
+                searchInput.addEventListener('input', filterPatients);
+                filterSelect.addEventListener('change', filterPatients);
+                resetBtn.addEventListener('click', () => {
+                    searchInput.value = '';
+                    filterSelect.value = 'all';
+                    filterPatients();
+                });
+            }
+            
+            function filterPatients() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const severityFilter = filterSelect.value;
+                
+                filteredPatients = allPatients.filter(patient => {
+                    // Filtrar por búsqueda
+                    const matchesSearch = 
+                        patient.Nombre.toLowerCase().includes(searchTerm) || 
+                        patient['Síntomas principales'].toLowerCase().includes(searchTerm);
+                    
+                    // Filtrar por severidad
+                    let matchesSeverity = true;
+                    if (severityFilter !== 'all') {
+                        const severity = patient['Nivel de afectación'].toLowerCase();
+                        matchesSeverity = 
+                            (severityFilter === 'mild' && severity.includes('leve')) ||
+                            (severityFilter === 'moderate' && severity.includes('moderado')) ||
+                            (severityFilter === 'severe' && severity.includes('grave'));
+                    }
+                    
+                    return matchesSearch && matchesSeverity;
+                });
+                
+                renderPatients(filteredPatients);
+            }
+            
+            // Inicializar
+            loadPatients();
+            setupFilters();
+        });
+    </script>
+</body>
+</html>
