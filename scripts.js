@@ -1,57 +1,53 @@
-async function cargarCasos() {
-  const validados = await fetch('casos_validados.json').then(r => r.json());
-  const noValidados = await fetch('casos_no_validados.json').then(r => r.json());
+fetch('data.json')
+  .then(res => res.json())
+  .then(data => {
+    renderCards(data);
+    renderChart(data);
+    setupFilter(data);
+  });
 
-  mostrarCasos(validados, 'validados');
-  mostrarCasos(noValidados, 'noValidados');
-  generarGraficos([...validados, ...noValidados]);
-}
-
-function mostrarCasos(casos, contenedorId) {
-  const contenedor = document.getElementById(contenedorId);
-  casos.forEach(caso => {
-    const div = document.createElement('div');
-    div.innerHTML = `
-      <h3>${caso.Nombre} (${caso.Edad} años, ${caso.Género})</h3>
-      <p><strong>Localización:</strong> ${caso.Localizacion}</p>
-      <p><strong>Síntomas:</strong> ${caso["síntomas principales"]}</p>
-      <p><strong>Terapias:</strong> ${caso["Terapias recibidas"]}</p>
-      <p><strong>Medicamentos:</strong> ${caso["Medicamentos actuales/pasados"]}</p>
-      <p><strong>Desafíos:</strong> ${caso["Necesidades y Desafíos"]}</p>
-    `;
-    contenedor.appendChild(div);
+function renderCards(data) {
+  const container = document.getElementById('cards');
+  container.innerHTML = '';
+  data.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<h2>${p.nombre}</h2>
+      <p><strong>Edad:</strong> ${p.edad}</p>
+      <p><strong>Síntomas:</strong> ${p.sintomas.join(', ')}</p>
+      <p><strong>Genotipo:</strong> ${p.genotipo}</p>`;
+    container.appendChild(card);
   });
 }
 
-function generarGraficos(casos) {
-  const edades = casos.map(c => c.Edad);
-  const sintomas = casos.flatMap(c => c["síntomas principales"].split(',').map(s => s.trim()));
-  const conteoSintomas = {};
-  sintomas.forEach(s => conteoSintomas[s] = (conteoSintomas[s] || 0) + 1);
+function renderChart(data) {
+  const ctx = document.getElementById('symptomChart').getContext('2d');
+  const allSymptoms = data.flatMap(p => p.sintomas);
+  const counts = {};
+  allSymptoms.forEach(s => counts[s] = (counts[s] || 0) + 1);
 
-  new Chart(document.getElementById('graficoEdad'), {
+  new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: edades,
+      labels: Object.keys(counts),
       datasets: [{
-        label: 'Distribución de edades',
-        data: edades,
-        backgroundColor: '#005a9c'
-      }]
-    }
-  });
-
-  new Chart(document.getElementById('graficoSintomas'), {
-    type: 'pie',
-    data: {
-      labels: Object.keys(conteoSintomas),
-      datasets: [{
-        label: 'Síntomas frecuentes',
-        data: Object.values(conteoSintomas),
-        backgroundColor: ['#005a9c', '#4db6ac', '#ff8a65', '#9575cd']
+        label: 'Frecuencia de síntomas',
+        data: Object.values(counts),
+        backgroundColor: '#00c2a8'
       }]
     }
   });
 }
 
-document.addEventListener('DOMContentLoaded', cargarCasos);
+function setupFilter(data) {
+  document.getElementById('genotipoFilter').addEventListener('change', e => {
+    const val = e.target.value;
+    const filtered = val === 'all' ? data : data.filter(p => p.genotipo === val);
+    renderCards(filtered);
+    renderChart(filtered);
+  });
+}
+
+document.getElementById('toggleDark').addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+});
