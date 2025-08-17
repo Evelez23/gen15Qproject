@@ -1,57 +1,103 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Microdeleción 15q11.2 | Elmer & Axiom</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" href="favicon.png">
-  <script defer src="script.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Microdeletion 15q11.2 | NeuroGrid</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --primary: #1e2a38;
+      --accent: #00c2a8;
+      --card-bg: #ffffff;
+      --font-main: 'Poppins', sans-serif;
+      --font-code: 'Roboto Mono', monospace;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-main);
+      background-color: var(--bg);
+      color: var(--primary);
+    }
+
+    header {
+      background-color: var(--primary);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-left: 5px solid var(--accent);
+      padding: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.8rem;
+      color: #888;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>Microdeleción 15q11.2</h1>
-    <p>Plataforma colaborativa para documentar, visualizar y comprender esta condición genética.</p>
+    <h1>Microdeletion 15q11.2 — NeuroGrid</h1>
+    <p>Explora casos, patrones genéticos y conexiones clínicas</p>
   </header>
 
-  <section id="intro">
-    <h2>¿Qué es la microdeleción 15q11.2?</h2>
-    <p>La microdeleción 15q11.2 (BP1-BP2) es una alteración genética asociada a condiciones del neurodesarrollo como autismo, TDAH, retraso cognitivo, hipotonía y otros síntomas clínicos. Esta plataforma busca reunir casos reales para fomentar el entendimiento y la colaboración médica.</p>
-  </section>
-
-  <section id="graficos">
-    <h2>Principales hallazgos</h2>
-    <canvas id="graficoEdad"></canvas>
-    <canvas id="graficoSintomas"></canvas>
-  </section>
-
-  <section id="casos">
-    <h2>Casos clínicos validados</h2>
-    <div id="validados"></div>
-
-    <h2>Casos clínicos no validados</h2>
-    <div id="noValidados"></div>
-  </section>
-
-  <section id="formulario">
-    <h2>Agregar nuevo caso</h2>
-    <form id="nuevoCaso">
-      <input type="text" name="nombre" placeholder="Nombre" required>
-      <input type="number" name="edad" placeholder="Edad" required>
-      <select name="genero">
-        <option>Femenino</option>
-        <option>Masculino</option>
-        <option>No binario</option>
-      </select>
-      <input type="text" name="localizacion" placeholder="Localización">
-      <textarea name="sintomas" placeholder="Síntomas principales"></textarea>
-      <textarea name="medicamentos" placeholder="Medicamentos actuales/pasados"></textarea>
-      <textarea name="terapias" placeholder="Terapias recibidas"></textarea>
-      <textarea name="necesidades" placeholder="Necesidades y desafíos"></textarea>
-      <button type="submit">Enviar caso</button>
-    </form>
+  <section class="grid">
+    <div class="card">
+      <h2>Paciente A</h2>
+      <p><strong>Edad:</strong> 5 años<br>
+         <strong>Síntomas:</strong> Retraso del habla, hipotonía<br>
+         <strong>Genotipo:</strong> BP1-BP2</p>
+    </div>
+    <div class="card">
+      <h2>Paciente B</h2>
+      <p><strong>Edad:</strong> 12 años<br>
+         <strong>Síntomas:</strong> TDAH, dificultades de aprendizaje<br>
+         <strong>Genotipo:</strong> BP1-BP2</p>
+    </div>
+    <!-- Más tarjetas aquí -->
   </section>
 
   <footer>
+    Proyecto colaborativo | Elmer & Copilot
+  </footer>
+</body>
+</html>
     <p>Desarrollado con 💙 por Elmer & Axiom</p>
   </footer>
 </body>
