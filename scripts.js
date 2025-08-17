@@ -1,53 +1,41 @@
-fetch('data.json')
+fetch('data/microdeletion.json')
   .then(res => res.json())
   .then(data => {
-    renderCards(data);
-    renderChart(data);
-    setupFilter(data);
+    renderNeuroMap(data);
+    renderStories(data);
   });
 
-function renderCards(data) {
-  const container = document.getElementById('cards');
+function renderNeuroMap(data) {
+  const container = document.getElementById('visualization');
   container.innerHTML = '';
-  data.forEach(p => {
+
+  data.forEach((entry, index) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.title = `Paciente ${entry.id}: ${entry.symptoms.join(', ')}`;
+    dot.style.position = 'absolute';
+    dot.style.left = `${Math.random() * 90}%`;
+    dot.style.top = `${Math.random() * 90}%`;
+    dot.style.width = '10px';
+    dot.style.height = '10px';
+    dot.style.backgroundColor = '#00FFD1';
+    dot.style.borderRadius = '50%';
+    container.appendChild(dot);
+  });
+}
+
+function renderStories(data) {
+  const container = document.getElementById('story-cards');
+  container.innerHTML = '';
+
+  data.forEach(entry => {
     const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `<h2>${p.nombre}</h2>
-      <p><strong>Edad:</strong> ${p.edad}</p>
-      <p><strong>Síntomas:</strong> ${p.sintomas.join(', ')}</p>
-      <p><strong>Genotipo:</strong> ${p.genotipo}</p>`;
+    card.className = 'story-card';
+    card.innerHTML = `
+      <h3>Paciente ${entry.id}</h3>
+      <p><strong>Edad:</strong> ${entry.age}</p>
+      <p><strong>Historia:</strong> ${entry.story}</p>
+    `;
     container.appendChild(card);
   });
 }
-
-function renderChart(data) {
-  const ctx = document.getElementById('symptomChart').getContext('2d');
-  const allSymptoms = data.flatMap(p => p.sintomas);
-  const counts = {};
-  allSymptoms.forEach(s => counts[s] = (counts[s] || 0) + 1);
-
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: Object.keys(counts),
-      datasets: [{
-        label: 'Frecuencia de síntomas',
-        data: Object.values(counts),
-        backgroundColor: '#00c2a8'
-      }]
-    }
-  });
-}
-
-function setupFilter(data) {
-  document.getElementById('genotipoFilter').addEventListener('change', e => {
-    const val = e.target.value;
-    const filtered = val === 'all' ? data : data.filter(p => p.genotipo === val);
-    renderCards(filtered);
-    renderChart(filtered);
-  });
-}
-
-document.getElementById('toggleDark').addEventListener('click', () => {
-  document.body.classList.toggle('dark');
-});
