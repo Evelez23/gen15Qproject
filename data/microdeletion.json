@@ -1,0 +1,14 @@
+[
+  {
+    "id": "042",
+    "age": 7,
+    "symptoms": ["Retraso del habla", "Ansiedad leve"],
+    "story": "Silencio en el cromosoma, pero música en la mirada."
+  },
+  {
+    "id": "073",
+    "age": 4,
+    "symptoms": ["Epilepsia", "Déficit de atención"],
+    "story": "Cada convulsión es una batalla, cada sonrisa una victoria."
+  }
+]
