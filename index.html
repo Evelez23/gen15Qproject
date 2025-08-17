@@ -1,56 +1,91 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NeuroGrid: 15q11.2</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Portal colaborativo sobre Microdeleción 15q11.2 - Documentación de casos clínicos y recursos genéticos">
+  <title>Microdeleción 15q11.2 – Portal Colaborativo</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preload" as="image" href="img/logo%20micro1.png">
 </head>
 <body>
-  <header>
-    <img src="assets/logo.svg" alt="NeuroGrid Logo" class="logo" />
-    <h1>NeuroGrid: 15q11.2</h1>
-    <nav>
-      <ul>
-        <li><a href="#overview">Inicio</a></li>
-        <li><a href="#data">Datos</a></li>
-        <li><a href="#stories">Historias</a></li>
-        <li><a href="#about">Proyecto</a></li>
-      </ul>
-    </nav>
+  <header class="header">
+    <div class="container">
+      <a href="/" class="brand">
+        <img src="img/logo%20micro1.png" alt="Logo Microdeleción 15q11.2" width="36" height="36" class="logo">
+        <span>Microdeleción 15q11.2</span>
+      </a>
+      <nav class="nav">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link active">Inicio</a></li>
+          <li><a href="resumen.html" class="nav-link">Resumen</a></li>
+          <li><a href="pacientes.html" class="nav-link">Pacientes</a></li>
+          <li><a href="genetica.html" class="nav-link">Genética</a></li>
+          <li><a href="estadisticas.html" class="nav-link">Estadísticas</a></li>
+          <li><a href="formulario.html" class="btn btn-primary">Agregar caso</a></li>
+        </ul>
+      </nav>
+      <button class="menu-toggle" aria-label="Menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
   </header>
 
   <main>
-    <section id="overview">
-      <h2>Umbral</h2>
-      <p>“Aquí no hay mutaciones. Hay memorias codificadas.”</p>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">Microdeleción 15q11.2 – Portal Colaborativo</h1>
+          <p class="hero-text">La microdeleción 15q11.2 afecta a menos del 1% de la población, pero cada caso aporta piezas clave para entender autismo, hipotonía y más.</p>
+          <div class="hero-actions">
+            <a href="pacientes.html" class="btn btn-accent">Ver pacientes</a>
+            <a href="resumen.html" class="btn btn-outline">Explorar resumen</a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="img/7572d736-f7ab-41b2-84a4-1b5a419f2c94.jpg" alt="Representación gráfica de la microdeleción" loading="lazy">
+        </div>
+      </div>
     </section>
 
-    <section id="data">
-      <h2>Mapa Genético</h2>
-      <div id="visualization">Cargando datos...</div>
+    <section class="stats-section">
+      <div class="container">
+        <div class="stats-grid" id="kpis"></div>
+      </div>
     </section>
 
-    <section id="stories">
-      <h2>Archivo Vivo</h2>
-      <div id="story-cards"></div>
-    </section>
-
-    <section id="about">
-      <h2>Laboratorio del Alma</h2>
-      <p>Creado por Elmer & Copilot ✨</p>
+    <section class="charts-section">
+      <div class="container">
+        <div class="grid">
+          <div class="card">
+            <h2 class="card-title">Distribución por edades</h2>
+            <div class="chart-container">
+              <canvas id="chartAges" height="140" aria-label="Gráfico de distribución por edades"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <h2 class="card-title">Origen de los datos</h2>
+            <div class="chart-container">
+              <canvas id="chartOrigen" height="140" aria-label="Gráfico de origen de datos"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <p>🕊️ “Gracias por entrar. Aquí, cada bit honra una vida.”</p>
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 Microdeleción 15q11.2 | Datos cargados directamente desde Excel.</p>
+      <p>Desarrollado con fines de investigación clínica.</p>
+    </div>
   </footer>
 
-  <script src="script.js"></script>
-</body>
-</html>
-</html>
-    <p>Desarrollado con 💙 por Elmer & Axiom</p>
-  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <script src="scripts.js" defer></script>
+  <script src="index.js" defer></script>
 </body>
 </html>
