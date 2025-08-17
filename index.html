@@ -1,102 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Microdeletion 15q11.2 | NeuroGrid</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto+Mono&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #f5f7fa;
-      --primary: #1e2a38;
-      --accent: #00c2a8;
-      --card-bg: #ffffff;
-      --font-main: 'Poppins', sans-serif;
-      --font-code: 'Roboto Mono', monospace;
-    }
-
-    body {
-      margin: 0;
-      font-family: var(--font-main);
-      background-color: var(--bg);
-      color: var(--primary);
-    }
-
-    header {
-      background-color: var(--primary);
-      color: white;
-      padding: 2rem;
-      text-align: center;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 2rem;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      padding: 2rem;
-    }
-
-    .card {
-      background-color: var(--card-bg);
-      border-left: 5px solid var(--accent);
-      padding: 1rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
-    }
-
-    .card:hover {
-      transform: scale(1.02);
-    }
-
-    .card h2 {
-      margin-top: 0;
-      font-size: 1.2rem;
-    }
-
-    .card p {
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
-
-    footer {
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.8rem;
-      color: #888;
-    }
-  </style>
+  <title>NeuroGrid: 15q11.2</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>Microdeletion 15q11.2 — NeuroGrid</h1>
-    <p>Explora casos, patrones genéticos y conexiones clínicas</p>
+    <img src="assets/logo.svg" alt="NeuroGrid Logo" class="logo" />
+    <h1>NeuroGrid: 15q11.2</h1>
+    <nav>
+      <ul>
+        <li><a href="#overview">Inicio</a></li>
+        <li><a href="#data">Datos</a></li>
+        <li><a href="#stories">Historias</a></li>
+        <li><a href="#about">Proyecto</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <section class="grid">
-    <div class="card">
-      <h2>Paciente A</h2>
-      <p><strong>Edad:</strong> 5 años<br>
-         <strong>Síntomas:</strong> Retraso del habla, hipotonía<br>
-         <strong>Genotipo:</strong> BP1-BP2</p>
-    </div>
-    <div class="card">
-      <h2>Paciente B</h2>
-      <p><strong>Edad:</strong> 12 años<br>
-         <strong>Síntomas:</strong> TDAH, dificultades de aprendizaje<br>
-         <strong>Genotipo:</strong> BP1-BP2</p>
-    </div>
-    <!-- Más tarjetas aquí -->
-  </section>
+  <main>
+    <section id="overview">
+      <h2>Umbral</h2>
+      <p>“Aquí no hay mutaciones. Hay memorias codificadas.”</p>
+    </section>
+
+    <section id="data">
+      <h2>Mapa Genético</h2>
+      <div id="visualization">Cargando datos...</div>
+    </section>
+
+    <section id="stories">
+      <h2>Archivo Vivo</h2>
+      <div id="story-cards"></div>
+    </section>
+
+    <section id="about">
+      <h2>Laboratorio del Alma</h2>
+      <p>Creado por Elmer & Copilot ✨</p>
+    </section>
+  </main>
 
   <footer>
-    Proyecto colaborativo | Elmer & Copilot
+    <p>🕊️ “Gracias por entrar. Aquí, cada bit honra una vida.”</p>
   </footer>
+
+  <script src="script.js"></script>
 </body>
+</html>
 </html>
     <p>Desarrollado con 💙 por Elmer & Axiom</p>
   </footer>
