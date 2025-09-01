@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Casos Registrados | Microdeleción 15q11.2</title>
+  <meta name="description" content="Base de datos de casos de microdeleción 15q11.2 reportados por familias">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --muted: #94a3b8;
+      --text: #f1f5f9;
+      --primary: #3b82f6;
+      --primary-light: #60a5fa;
+      --accent: #ef4444;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --border-radius: 16px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(ellipse at top right, rgba(59, 130, 246, 0.15), transparent 60%),
+                  radial-gradient(ellipse at bottom left, rgba(16, 185, 129, 0.1), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      flex: 1;
+    }
+
+    /* Navegación mejorada */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav .inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: .3px;
+    }
+
+    .brand img.logo {
+      height: 40px;
+      width: auto;
+      border-radius: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .nav a.active, .nav a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,.05);
+    }
+
+    .btn-agregar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      padding: 10px 16px;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .btn-agregar:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    h1 {
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.1;
+      margin: 0 0 16px;
+      background: linear-gradient(to right, #f1f5f9, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 1.1em;
+    }
+
+    /* Controles de filtrado mejorados */
+    .controls {
+      display: flex;
+      gap: 16px;
+      margin: 24px 0;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .controls input,
+    .controls select {
+      padding: 12px 16px;
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(255,255,255,.1);
+      background: var(--card);
+      color: var(--text);
+      flex: 1;
+      min-width: 200px;
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    .controls input:focus,
+    .controls select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 12px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .button:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .filtros-activos {
+      margin-bottom: 24px;
+    }
+
+    .filtro-tag {
+      background: rgba(59, 130, 246, 0.2);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 8px 8px 0;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .filtro-tag button {
+      background: none;
+      border: none;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 1.1em;
+      padding: 0;
+      margin-left: 4px;
+    }
+
+    /* Panel de estadísticas */
+    .panel {
+      background: var(--card);
+      border-radius: var(--border-radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 5px 0 0 0;
+      text-align: center;
+      line-height: 1;
+    }
+
+    /* Listado de casos */
+    .listado-casos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 24px;
+      margin: 32px 0;
+    }
+
+    .caso-panel {
+      background: var(--card);
+      border-radius: var(--border-radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .caso-panel:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .caso-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--success));
+    }
+
+    .caso-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .caso-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+      font-size: 1.2em;
+      flex-shrink: 0;
+    }
+
+    .caso-header h3 {
+      margin: 0;
+      font-size: 1.3em;
+    }
+
+    .badge {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge.leve {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge.moderado {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .badge.severo {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .badge.no-especificado {
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--muted);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .info-basica {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .info-item {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 12px;
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .info-item strong {
+      color: var(--primary);
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.9em;
+    }
+
+    .panel-header.toggle {
+      cursor: pointer;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: var(--border-radius);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: var(--transition);
+    }
+
+    .panel-header.toggle:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .panel-body {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .panel-body.open {
+      max-height: 2000px;
+      padding: 20px 0 0 0;
+    }
+
+    .caso-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .caso-info-item {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 16px;
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .caso-info-item h4 {
+      margin: 0 0 12px 0;
+      color: var(--primary);
+      font-size: 1em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .caso-info-item p {
+      margin: 0;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .sintomas-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .sintoma-tag {
+      background: rgba(59, 130, 246, 0.15);
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 0.85em;
+      color: var(--primary);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+      grid-column: 1 / -1;
+    }
+
+    .empty-state .icon {
+      font-size: 3.5em;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      margin: 0 0 12px 0;
+      color: var(--text);
+      font-size: 1.4em;
+    }
+
+    .disclaimer {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), transparent);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: var(--border-radius);
+      padding: 20px 24px;
+      margin: 40px 0;
+    }
+
+    .disclaimer p {
+      margin: 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .disclaimer p::before {
+      content: "🔒";
+      font-size: 1.2em;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 28px;
+      margin-top: auto;
+      color: var(--muted);
+      font-size: 0.9rem;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .arrow {
+      transition: transform 0.3s ease;
+    }
+
+    .arrow.open {
+      transform: rotate(90deg);
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+      .nav .inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      
+      .nav-links {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 8px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 16px;
+      }
+      
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .controls input,
+      .controls select {
+        min-width: auto;
+      }
+      
+      .listado-casos {
+        grid-template-columns: 1fr;
+      }
+      
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      
+      .caso-info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .caso-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      
+      .info-basica {
+        grid-template-columns: 1fr;
+      }
+      
+      .nav a {
+        padding: 8px 12px;
+        font-size: 0.9em;
+      }
+      
+      .btn-agregar {
+        padding: 8px 12px;
+        font-size: 0.9em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="inner">
+      <div class="brand">
+        <img class="logo" src="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/img/logo%20micro1.webp" alt="Logo Microdeleción 15q11.2">
+        <div>Microdeleción 15q11.2</div>
+      </div>
+      <div class="nav-links">
+        <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+        <a href="genetica.html"><i class="fas fa-dna"></i> Genética</a> 
+        <a href="casos.html" class="active"><i class="fas fa-folder-open"></i> Casos</a>
+        <a href="estadisticas.html"><i class="fas fa-chart-bar"></i> Estadísticas</a>
+        <a href="recursos.html"><i class="fas fa-book"></i> Recursos</a>
+        <a class="btn-agregar" href="formulario.html"><i class="fas fa-plus-circle"></i> Reportar caso</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="container">
+    <h1>Casos Registrados</h1>
+    <p class="subtitle">Base de datos comunitaria de personas con microdeleción 15q11.2 reportados por familias</p>
+
+    <div class="controls">
+      <input type="text" id="search" placeholder="Buscar casos por nombre, ubicación o síntomas..." aria-label="Buscar casos">
+      
+      <select id="filtro-genero">
+        <option value="">Todos los géneros</option>
+        <option value="m">Masculino</option>
+        <option value="f">Femenino</option>
+      </select>
+
+      <select id="filtro-gravedad">
+        <option value="">Todos los niveles</option>
+        <option value="leve">Leve</option>
+        <option value="moderado">Moderado</option>
+        <option value="severo">Severo</option>
+      </select>
+
+      <button id="btn-limpiar" class="button"><i class="fas fa-times"></i> Limpiar filtros</button>
+    </div>
+
+    <div class="filtros-activos" id="filtros-activos"></div>
+
+    <!-- Estadísticas de resultados -->
+    <div class="panel" id="estadisticas-resultados">
+      <div class="grid-3">
+        <div>
+          <h3>Total de casos</h3>
+          <p class="stat-number" id="total-casos">0</p>
+        </div>
+        <div>
+          <h3>Casos validados</h3>
+          <p class="stat-number" id="casos-validados">0</p>
+        </div>
+        <div>
+          <h3>Casos no validados</h3>
+          <p class="stat-number" id="casos-no-validados">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Casos Validados -->
+    <h2><i class="fas fa-check-circle" style="color: var(--success);"></i> Casos Validados</h2>
+    <div id="casos-validados-container" class="listado-casos"></div>
+
+    <!-- Casos No Validados -->
+    <h2><i class="fas fa-hourglass-half" style="color: var(--warning);"></i> Casos No Validados</h2>
+    <div id="casos-no-validados-container" class="listado-casos"></div>
+
+  </section>
+
+  <div class="disclaimer">
+    <p><strong>Privacidad:</strong> La información mostrada es de carácter general. Para proteger la privacidad, solo se muestra el primer nombre de cada caso.</p>
+  </div>
+
+  <footer class="footer">© 2025 | Comunidad de Familias 15q11.2</footer>
+
+  <!-- JavaScript integrado -->
+  <script>
+    // URLs de los archivos
+    const CASOS_VALIDADOS_URL = 'https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/data/casos_validados.json';
+    const CASOS_NO_VALIDADOS_URL = 'https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/data/casos_no_validados.json';
+
+    // Función para obtener solo el primer nombre
+    function obtenerPrimerNombre(nombreCompleto) {
+      if (!nombreCompleto) return 'Anónimo';
+      return nombreCompleto.split(' ')[0];
+    }
+
+    // Función para obtener el campo de localización
+    function obtenerLocalizacion(caso) {
+      return caso.Localizacion || caso.localizacion || caso.Localización || 
+             caso.Localizacion || caso.Ubicacion || caso[' Necesidades y Desafíos'] || 
+             caso.Localización || 'No especificada';
+    }
+
+    // Función para obtener la edad
+    function obtenerEdad(caso) {
+      const edad = caso.Edad || caso.edad || caso['Edad '] || 0;
+      return typeof edad === 'string' ? parseInt(edad) || 0 : edad;
+    }
+
+    // Función para obtener síntomas
+    function obtenerSintomas(caso) {
+      return caso.sintomas || caso['síntomas principales  '] || caso['síntomas principales'] || 'No especificado';
+    }
+
+    // Función para obtener nivel de afectación simplificado
+    function obtenerGravedadSimplificada(caso) {
+      const gravedad = caso['Nivel de afectación'] || caso['Nivel de afectacion'] || caso.gravedad || '';
+      if (!gravedad) return 'No especificado';
+      
+      if (gravedad.toLowerCase().includes('leve')) return 'Leve';
+      if (gravedad.toLowerCase().includes('moderado')) return 'Moderado';
+      if (gravedad.toLowerCase().includes('grave') || gravedad.toLowerCase().includes('sever')) return 'Severo';
+      
+      return gravedad;
+    }
+
+    // Función para cargar datos
+    async function loadDataset() {
+      try {
+        const [responseValidados, responseNoValidados] = await Promise.all([
+          fetch(CASOS_VALIDADOS_URL),
+          fetch(CASOS_NO_VALIDADOS_URL)
+        ]);
+        
+        if (!responseValidados.ok || !responseNoValidados.ok) {
+          throw new Error('Error al cargar los archivos');
+        }
+        
+        const [casosValidados, casosNoValidados] = await Promise.all([
+          responseValidados.json(),
+          responseNoValidados.json()
+        ]);
+        
+        return [
+          ...casosValidados.map(caso => ({ ...caso, __origen: "validado" })),
+          ...casosNoValidados.map(caso => ({ ...caso, __origen: "no_validado" }))
+        ];
+      } catch (error) {
+        console.error('Error cargando datos:', error);
+        return [];
+      }
+    }
+
+    // Función principal
+    async function initCasos() {
+      const data = await loadDataset();
+      const contValidados = document.getElementById('casos-validados-container');
+      const contNoValidados = document.getElementById('casos-no-validados-container');
+      const searchInput = document.getElementById('search');
+      const filtroGenero = document.getElementById('filtro-genero');
+      const filtroGravedad = document.getElementById('filtro-gravedad');
+      const btnLimpiar = document.getElementById('btn-limpiar');
+      const filtrosActivos = document.getElementById('filtros-activos');
+      const totalCasosElem = document.getElementById('total-casos');
+      const casosValidadosElem = document.getElementById('casos-validados');
+      const casosNoValidadosElem = document.getElementById('casos-no-validados');
+
+      // Icono según género y edad
+      function iconoGeneroEdad(genero, edad) {
+        if (!genero) return "👤";
+        const g = genero.toLowerCase();
+        if (g.startsWith("m")) return edad && edad < 18 ? "👦" : "👨";
+        if (g.startsWith("f")) return edad && edad < 18 ? "👧" : "👩";
+        return "👤";
+      }
+
+      // Badge de gravedad
+      function gravBadge(gravedad) {
+        const nivel = (gravedad || '').toLowerCase();
+        if (nivel.includes('leve')) return 'badge leve';
+        if (nivel.includes('moderado')) return 'badge moderado';
+        if (nivel.includes('grave') || nivel.includes('sever')) return 'badge severo';
+        return 'badge no-especificado';
+      }
+
+      // Formatear listas
+      function formatearLista(texto) {
+        if (!texto || texto === "No especificado") return "No especificado";
+        if (texto.includes(";")) {
+          const items = texto.split(";").map(t => t.trim()).filter(t => t.length > 0);
+          return items.map(i => `<span class="sintoma-tag">${i}</span>`).join("");
+        }
+        return texto;
+      }
+
+      // Actualizar estadísticas
+      function actualizarEstadisticas(validados, noValidados) {
+        totalCasosElem.textContent = validados.length + noValidados.length;
+        casosValidadosElem.textContent = validados.length;
+        casosNoValidadosElem.textContent = noValidados.length;
+      }
+
+      // Mostrar filtros activos
+      function actualizarFiltrosActivos() {
+        const filtros = [];
+        
+        if (searchInput.value) {
+          filtros.push(`Búsqueda: "${searchInput.value}"`);
+        }
+        
+        if (filtroGenero.value) {
+          const generoText = filtroGenero.value === 'm' ? 'Masculino' : 'Femenino';
+          filtros.push(`Género: ${generoText}`);
+        }
+        
+        if (filtroGravedad.value) {
+          const gravedadText = filtroGravedad.value.charAt(0).toUpperCase() + filtroGravedad.value.slice(1);
+          filtros.push(`Gravedad: ${gravedadText}`);
+        }
+        
+        if (filtros.length > 0) {
+          filtrosActivos.innerHTML = `
+            <div class="panel">
+              <h3>Filtros aplicados:</h3>
+              <div class="filtros-lista">
+                ${filtros.map(f => `<span class="filtro-tag">${f} <button onclick="this.parentElement.remove()">×</button></span>`).join('')}
+              </div>
+            </div>
+          `;
+        } else {
+          filtrosActivos.innerHTML = '';
+        }
+      }
+
+      // Renderizar casos
+      function renderCasos(casos, container) {
+        container.innerHTML = '';
+
+        if (casos.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="icon">🔍</div>
+              <h3>No se encontraron casos</h3>
+              <p>Intenta ajustar los filtros de búsqueda</p>
+            </div>
+          `;
+          return;
+        }
+
+        const casosHTML = casos.map((caso, i) => {
+          const primerNombre = obtenerPrimerNombre(caso.Nombre || caso.nombre);
+          const edad = obtenerEdad(caso);
+          const localizacion = obtenerLocalizacion(caso);
+          const sintomas = obtenerSintomas(caso);
+          const gravedad = obtenerGravedadSimplificada(caso);
+          const genero = caso.Género || caso.genero || 'No especificado';
+
+          return `
+            <div class="panel caso-panel">
+              <div class="caso-header">
+                <div class="caso-avatar">${primerNombre.charAt(0)}</div>
+                <div>
+                  <h3>${primerNombre}</h3>
+                  <span class="${gravBadge(gravedad)}">${gravedad}</span>
+                </div>
+              </div>
+              
+              <div class="info-basica">
+                <div class="info-item">
+                  <strong><i class="fas fa-birthday-cake"></i> Edad</strong>
+                  <span>${edad || 'No especificado'} años</span>
+                </div>
+                <div class="info-item">
+                  <strong><i class="fas fa-venus-mars"></i> Género</strong>
+                  <span>${genero}</span>
+                </div>
+                <div class="info-item">
+                  <strong><i class="fas fa-map-marker-alt"></i> Ubicación</strong>
+                  <span>${localizacion}</span>
+                </div>
+              </div>
+              
+              <div class="panel-header toggle">
+                <span><i class="fas fa-file-medical"></i> Ver detalles completos</span>
+                <span class="arrow">▶</span>
+              </div>
+              
+              <div class="panel-body">
+                <div class="caso-info-grid">
+                  <div class="caso-info-item">
+                    <h4><i class="fas fa-stethoscope"></i> Síntomas</h4>
+                    <div class="sintomas-list">${formatearLista(sintomas)}</div>
+                  </div>
+                  
+                  <div class="caso-info-item">
+                    <h4><i class="fas fa-flask"></i> Pruebas realizadas</h4>
+                    <p>${caso['Pruebas realizadas'] || caso['Pruebas realizadas  (ej: array genético, EEG, resonancia)  '] || 'No especificado'}</p>
+                  </div>
+                  
+                  <div class="caso-info-item">
+                    <h4><i class="fas fa-pills"></i> Medicamentos</h4>
+                    <p>${caso['Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  '] || caso['Medicamentos actuales/pasados'] || caso.medicamentos || 'No especificado'}</p>
+                  </div>
+                  
+                  <div class="caso-info-item">
+                    <h4><i class="fas fa-hand-holding-heart"></i> Terapias</h4>
+                    <p>${caso['Terapias recibidas\n(logopedia, psicoterapia, etc.):  '] || caso['Terapias recibidas'] || caso.terapias || 'No especificado'}</p>
+                  </div>
+                  
+                  <div class="caso-info-item">
+                    <h4><i class="fas fa-tasks"></i> Desafíos</h4>
+                    <p>${caso[' Necesidades y Desafíos'] || caso['Necesidades y Desafíos'] || caso.desafios || 'No especificado'}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        container.innerHTML = casosHTML;
+
+        // Toggle de detalles
+        container.querySelectorAll('.panel-header.toggle').forEach(header => {
+          header.addEventListener('click', () => {
+            const body = header.nextElementSibling;
+            const arrow = header.querySelector('.arrow');
+            const isOpen = body.classList.contains('open');
+
+            if (isOpen) {
+              body.classList.remove('open');
+              arrow.classList.remove('open');
+            } else {
+              body.classList.add('open');
+              arrow.classList.add('open');
+            }
+          });
+        });
+      }
+
+      // Filtrar y renderizar
+      function filtrarYRenderizar() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        let filtrados = data;
+
+        // Búsqueda
+        if (searchTerm) {
+          filtrados = filtrados.filter(c =>
+            (c.Nombre || c.nombre || '').toLowerCase().includes(searchTerm) ||
+            (obtenerLocalizacion(c) || '').toLowerCase().includes(searchTerm) ||
+            (obtenerSintomas(c) || '').toLowerCase().includes(searchTerm) ||
+            (obtenerGravedadSimplificada(c) || '').toLowerCase().includes(searchTerm)
+          );
+        }
+
+        // Filtros
+        if (filtroGenero && filtroGenero.value) {
+          const generoFiltro = filtroGenero.value.toLowerCase();
+          filtrados = filtrados.filter(c => {
+            const generoCaso = (c.Género || c.genero || '').toLowerCase();
+            return generoFiltro === 'm' ? generoCaso.startsWith('m') : 
+                   generoFiltro === 'f' ? generoCaso.startsWith('f') : true;
+          });
+        }
+        
+        if (filtroGravedad && filtroGravedad.value) {
+          const gravedadFiltro = filtroGravedad.value.toLowerCase();
+          filtrados = filtrados.filter(c => 
+            (obtenerGravedadSimplificada(c) || '').toLowerCase().includes(gravedadFiltro)
+          );
+        }
+
+        // División validados / no validados
+        const validados = filtrados.filter(c => c.__origen === 'validado');
+        const noValidados = filtrados.filter(c => c.__origen === 'no_validado');
+
+        renderCasos(validados, contValidados);
+        renderCasos(noValidados, contNoValidados);
+        actualizarEstadisticas(validados, noValidados);
+        actualizarFiltrosActivos();
+      }
+
+      // Limpiar filtros
+      function limpiarFiltros() {
+        searchInput.value = '';
+        filtroGenero.value = '';
+        filtroGravedad.value = '';
+        filtrarYRenderizar();
+      }
+
+      // Eventos
+      searchInput.addEventListener('input', filtrarYRenderizar);
+      filtroGenero.addEventListener('change', filtrarYRenderizar);
+      filtroGravedad.addEventListener('change', filtrarYRenderizar);
+      btnLimpiar.addEventListener('click', limpiarFiltros);
+
+      // Render inicial
+      filtrarYRenderizar();
+    }
+
+    // Iniciar
+    document.addEventListener('DOMContentLoaded', initCasos);
+  </script>
+</body>
+</html>
