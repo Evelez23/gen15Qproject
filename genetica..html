@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Genética | Microdeleción 15q11.2</title>
+  <meta name="description" content="Información genética sobre la microdeleción 15q11.2">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --muted: #94a3b8;
+      --text: #f1f5f9;
+      --primary: #3b82f6;
+      --primary-light: #60a5fa;
+      --accent: #ef4444;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --border-radius: 16px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(ellipse at top right, rgba(59, 130, 246, 0.15), transparent 60%),
+                  radial-gradient(ellipse at bottom left, rgba(16, 185, 129, 0.1), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      flex: 1;
+    }
+
+    /* Navegación mejorada */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav .inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: .3px;
+    }
+
+    .brand img.logo {
+      height: 40px;
+      width: auto;
+      border-radius: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .nav a.active, .nav a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,.05);
+    }
+
+    .btn-agregar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      padding: 10px 16px;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .btn-agregar:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    h1 {
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.1;
+      margin: 0 0 16px;
+      background: linear-gradient(to right, #f1f5f9, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      margin: 0 0 32px;
+      color: var(--muted);
+      font-size: 1.1em;
+    }
+
+    /* Panel principal */
+    .panel {
+      background: var(--card);
+      border-radius: var(--border-radius);
+      padding: 32px;
+      box-shadow: var(--shadow);
+      margin-bottom: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: var(--transition);
+    }
+
+    .panel:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .panel h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: var(--primary-light);
+      font-size: 1.6em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .panel p {
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .highlight {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    
+    .highlight-green {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    /* Grid system */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 28px;
+      margin: 32px 0;
+    }
+
+    /* Lista de genes */
+    .gene-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .gene-list li {
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .gene-list li:last-child {
+      border-bottom: none;
+    }
+
+    .gene-list li::before {
+      content: "•";
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1.4em;
+      line-height: 0.8;
+    }
+
+    /* Contenedor de imágenes */
+    .image-container {
+      text-align: center;
+      margin: 28px 0;
+    }
+
+    .image-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--border-radius);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .image-container img:hover {
+      transform: scale(1.02);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .image-caption {
+      color: var(--muted);
+      font-style: italic;
+      margin-top: 12px;
+      font-size: 0.95em;
+    }
+
+    /* Bloques de código */
+    .code-block {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin: 20px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95em;
+      overflow-x: auto;
+      border-left: 4px solid var(--primary);
+    }
+
+    /* Gráficos */
+    .chart-container {
+      position: relative;
+      height: 200px;
+      margin-top: 20px;
+    }
+
+    .chart-footer {
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: var(--border-radius);
+      border-left: 4px solid var(--primary);
+    }
+
+    .chart-footer p {
+      margin: 0;
+      font-size: 0.95em;
+      color: var(--muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .chart-footer p::before {
+      content: "💡";
+      font-size: 1.1em;
+    }
+
+    /* Blockquote */
+    blockquote {
+      border-left: 4px solid var(--primary);
+      padding: 24px;
+      margin: 32px 0;
+      font-style: italic;
+      background: rgba(59, 130, 246, 0.08);
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+      position: relative;
+    }
+
+    blockquote::before {
+      content: """;
+      position: absolute;
+      top: -15px;
+      left: 10px;
+      font-size: 80px;
+      color: rgba(59, 130, 246, 0.2);
+      font-family: Georgia, serif;
+    }
+
+    /* Disclaimer */
+    .disclaimer {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), transparent);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: var(--border-radius);
+      padding: 20px 24px;
+      margin: 40px 0;
+    }
+
+    .disclaimer p {
+      margin: 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .disclaimer p::before {
+      content: "📊";
+      font-size: 1.2em;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 28px;
+      margin-top: auto;
+      color: var(--muted);
+      font-size: 0.9rem;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+      .nav .inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      
+      .nav-links {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 8px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 16px;
+      }
+      
+      .panel {
+        padding: 24px;
+      }
+      
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      
+      .code-block {
+        padding: 16px;
+        font-size: 0.9em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav a {
+        padding: 8px 12px;
+        font-size: 0.9em;
+      }
+      
+      .btn-agregar {
+        padding: 8px 12px;
+        font-size: 0.9em;
+      }
+      
+      .panel {
+        padding: 20px;
+      }
+      
+      .gene-list li {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="inner">
+      <div class="brand">
+        <img class="logo" src="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/img/logo%20micro1.webp" alt="Logo Microdeleción 15q11.2">
+        <div>Microdeleción 15q11.2</div>
+      </div>
+      <div class="nav-links">
+        <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+        <a href="genetica.html" class="active"><i class="fas fa-dna"></i> Genética</a> 
+        <a href="casos.html"><i class="fas fa-folder-open"></i> Casos</a>
+        <a href="estadisticas.html"><i class="fas fa-chart-bar"></i> Estadísticas</a>
+        <a href="recursos.html"><i class="fas fa-book"></i> Recursos</a>
+        <a class="btn-agregar" href="formulario.html"><i class="fas fa-plus-circle"></i> Reportar caso</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="container">
+    <h1>Microdeleción 15q11.2</h1>
+    <p class="subtitle">Información clave para comprender esta condición genética poco frecuente, organizada de manera clara para familias y profesionales.</p>
+
+    <!-- Hero con imagen -->
+    <div class="image-container">
+      <img src="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/img/IMG-20250823-WA0014.webp" alt="Familias y microdeleción" style="max-height: 300px;">
+      <p class="image-caption">Comunidad de familias 15q11.2 - Apoyo mutuo e información compartida</p>
+    </div>
+
+    <!-- Qué es -->
+    <div class="panel">
+      <h2><i class="fas fa-question-circle"></i> ¿Qué es?</h2>
+      <p>La <span class="highlight">microdeleción 15q11.2</span> es una condición genética rara causada por la <span class="highlight">pérdida de una pequeña porción del cromosoma 15</span>, en la región conocida como <em>Burnside-Butler</em>. Afecta los genes <span class="highlight">TUBGCP5, CYFIP1, NIPA2 y NIPA1</span>.</p>
+    </div>
+
+    <!-- Síntomas -->
+    <div class="grid-2">
+      <div class="panel">
+        <h2><i class="fas fa-stethoscope"></i> Síntomas frecuentes</h2>
+        <ul class="gene-list">
+          <li>Retraso en el desarrollo motor y/o del lenguaje.</li>
+          <li>Dificultades de aprendizaje (leves a moderadas).</li>
+          <li>Trastornos de la comunicación, TEA, TDAH, ansiedad.</li>
+          <li>Convulsiones o actividad epileptiforme.</li>
+          <li>Hipotonía en la infancia.</li>
+          <li>Problemas gastrointestinales y de sueño.</li>
+        </ul>
+      </div>
+      <div class="panel image-container">
+        <img src="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/img/Cell-karyotype-exhibiting-trisomy_Credit_NIH.webp" alt="Estructura de cromosomas" style="max-height: 200px;">
+        <p class="image-caption">Representación de cromosomas - Estructura genética</p>
+      </div>
+    </div>
+
+    <!-- Frecuencia y herencia -->
+    <div class="grid-2">
+      <div class="panel">
+        <h2><i class="fas fa-chart-pie"></i> ¿Qué tan común es?</h2>
+        <p>La prevalencia de la microdeleción 15q11.2 es relativamente rara. La información actual sugiere una prevalencia estimada de <span class="highlight">1 a 2 por cada 10,000 nacidos vivos</span> en la población general.</p>
+        
+        <p>Sin embargo, entre las personas que se someten a un microarray genético (una prueba específica), se detecta en un <span class="highlight">0.25–0.30% de los casos</span>, lo que la convierte en una de las microdeleciones más frecuentes encontradas en análisis clínicos.</p>
+        
+        <p><em>Expresividad variable:</em> no todos los portadores presentan síntomas graves.</p>
+      </div>
+      <div class="panel">
+        <h2><i class="fas fa-dna"></i> ¿Se hereda?</h2>
+        <p class="highlight">Herencia Autosómica Dominante</p>
+        <p>La microdeleción 15q11.2 sigue un patrón de herencia autosómico dominante. Esto significa que una persona afectada tiene un <span class="highlight">50% de probabilidad</span> de transmitir la microdeleción a cada uno de sus hijos.</p>
+        
+        <p class="highlight-green">Origen "De Novo" (Nuevo)</p>
+        <p>En aproximadamente el <span class="highlight-green">65% de los casos</span>, la microdeleción es de novo, lo que significa que ocurrió como un evento nuevo en el niño y no fue heredada de los padres. En este escenario:</p>
+        <ul class="gene-list">
+          <li>La probabilidad de que esos padres tengan otro hijo con la misma condición es muy baja (menor al 1%).</li>
+          <li>Sin embargo, el niño afectado, al tener la microdeleción en su ADN, sí tiene un 50% de riesgo de pasarla a su descendencia.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Detección -->
+    <div class="panel">
+      <h2><i class="fas fa-search"></i> ¿Cómo se detecta?</h2>
+      <p>Mediante estudios como <span class="highlight">Microarray CGH o SNP microarrays</span>, que son más precisos que el cariotipo convencional. Si ves un resultado similar a este en un informe, aquí te explicamos qué significa:</p>
+      
+      <div class="code-block">
+        arr[hg19] 15q11.2 (22,728,371-23,260,335)x1 dn
+      </div>
+      
+      <ul class="gene-list">
+        <li><span class="highlight">arr</span>: Es el tipo de prueba (array o microarray).</li>
+        <li><span class="highlight">15q11.2</span>: Es la "dirección" del problema. Significa que está en el cromosoma 15, en el brazo largo (q), en la banda 11.2.</li>
+        <li><span class="highlight">(22,728,371-23,260,335)</span>: Son las "coordenadas" exactas del trozo de ADN que falta.</li>
+        <li><span class="highlight">x1</span>: Significa que solo hay una copia de este trozo, cuando debería haber dos (una de cada progenitor).</li>
+        <li><span class="highlight">dn</span>: A menudo significa "de novo", indicando que la mutación es nueva en el niño.</li>
+      </ul>
+      
+      <p><em>Nota: La nomenclatura puede variar ligeramente entre laboratorios, pero la estructura suele ser similar.</em></p>
+    </div>
+
+    <!-- Genes involucrados -->
+    <div class="grid-2">
+      <div class="panel">
+        <h2><i class="fas fa-dna"></i> Genes involucrados</h2>
+        <ul class="gene-list">
+          <li><span class="highlight">NIPA1 / NIPA2</span>: transporte de magnesio, epilepsia y rigidez muscular.</li>
+          <li><span class="highlight">CYFIP1</span>: vinculado con autismo y dificultades cognitivas.</li>
+          <li><span class="highlight">TUBGCP5</span>: asociado a TDAH, TOC y ansiedad.</li>
+        </ul>
+      </div>
+      <div class="panel image-container">
+        <img src="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/img/micro.webp" alt="Ilustración de microdeleción" style="max-height: 200px;">
+        <p class="image-caption">Representación de microdeleción cromosómica</p>
+      </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="grid-2">
+      <div class="panel">
+        <h2><i class="fas fa-dna"></i> Genes implicados</h2>
+        <div class="gene-info">
+          <p>Esta región crítica contiene cuatro genes principales:</p>
+          <ul class="gene-list">
+            <li><span class="highlight">CYFIP1</span>: Regula la síntesis de proteínas en sinapsis neuronales</li>
+            <li><span class="highlight">NIPA1/2</span>: Transportadores de magnesio esenciales</li>
+            <li><span class="highlight">TUBGCP5</span>: Participa en la organización microtubular</li>
+          </ul>
+        </div>
+        <div class="chart-container">
+          <canvas id="chartGenes" aria-label="Frecuencia de afectación de genes"></canvas>
+        </div>
+        <div class="chart-footer">
+          <p>Los genes CYFIP1 y NIPA1 son los más frecuentemente asociados con manifestaciones clínicas.</p>
+        </div>
+      </div>
+      
+      <div class="panel">
+        <h2><i class="fas fa-family"></i> Patrón de herencia</h2>
+        <div class="inheritance-info">
+          <p>Características genéticas principales:</p>
+          <ul class="gene-list">
+            <li>Herencia <span class="highlight">autosómica dominante</span> con penetrancia variable</li>
+            <li>~65% de casos son <em>de novo</em> (no heredados)</li>
+            <li>Riesgo de recurrencia del 50% en descendencia</li>
+          </ul>
+        </div>
+        <div class="chart-container">
+          <canvas id="chartHerencia" aria-label="Distribución de patrones de herencia"></canvas>
+        </div>
+        <div class="chart-footer">
+          <p>La mayoría de casos son esporádicos (de novo), no heredados de los padres.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="panel">
+      <div class="disclaimer">
+        <p><strong>Nota sobre los datos:</strong> Los gráficos muestran información basada en literatura médica general 
+        sobre microdeleción 15q11.2. Los porcentajes son ilustrativos y pueden variar en cada caso individual.</p>
+      </div>
+    </div>
+
+    <!-- Apoyo -->
+    <div class="panel">
+      <h2><i class="fas fa-hands-helping"></i> Apoyo y recomendaciones</h2>
+      <p>La intervención temprana con <span class="highlight">terapias de lenguaje, fisioterapia y apoyo conductual</span> puede marcar la diferencia.<br>Existen comunidades de familias, como <em>Unique</em>, donde compartir experiencias y apoyarse mutuamente.</p>
+      <blockquote>
+        "La microdeleción 15q11.2 no define a tu hijo. Con apoyos adecuados, cada persona puede desarrollarse a su manera y alcanzar su máximo potencial."
+      </blockquote>
+    </div>
+  </section>
+
+  <footer class="footer">© 2025 | Información genética actualizada a 2025</footer>
+
+  <!-- JavaScript integrado -->
+  <script>
+    // Inicializar gráficos cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', function() {
+      // Gráfico de genes
+      const chartGenes = document.getElementById('chartGenes');
+      if (chartGenes) {
+        new Chart(chartGenes, {
+          type: 'bar',
+          data: {
+            labels: ['CYFIP1', 'NIPA1', 'NIPA2', 'TUBGCP5'],
+            datasets: [{
+              label: 'Frecuencia de alteraciones',
+              data: [85, 60, 45, 30],
+              backgroundColor: [
+                'rgba(59, 130, 246, 0.7)',
+                'rgba(16, 185, 129, 0.7)',
+                'rgba(59, 130, 246, 0.5)',
+                'rgba(245, 158, 11, 0.7)'
+              ],
+              borderColor: [
+                'rgba(59, 130, 246, 1)',
+                'rgba(16, 185, 129, 1)',
+                'rgba(59, 130, 246, 0.8)',
+                'rgba(245, 158, 11, 1)'
+              ],
+              borderWidth: 1,
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100,
+                title: {
+                  display: true,
+                  text: 'Porcentaje de casos',
+                  color: '#94a3b8'
+                },
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.05)'
+                },
+                ticks: {
+                  color: '#94a3b8'
+                }
+              },
+              x: {
+                grid: {
+                  display: false
+                },
+                ticks: {
+                  color: '#f1f5f9'
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                titleColor: '#f1f5f9',
+                bodyColor: '#f1f5f9',
+                borderColor: 'rgba(59, 130, 246, 0.5)',
+                borderWidth: 1,
+                cornerRadius: 8,
+                displayColors: false
+              }
+            }
+          }
+        });
+      }
+
+      // Gráfico de herencia
+      const chartHerencia = document.getElementById('chartHerencia');
+      if (chartHerencia) {
+        new Chart(chartHerencia, {
+          type: 'pie',
+          data: {
+            labels: ['Heredado', 'De novo', 'Desconocido'],
+            datasets: [{
+              data: [30, 65, 5],
+              backgroundColor: [
+                'rgba(59, 130, 246, 0.7)',
+                'rgba(16, 185, 129, 0.7)',
+                'rgba(148, 163, 184, 0.7)'
+              ],
+              borderColor: [
+                'rgba(59, 130, 246, 1)',
+                'rgba(16, 185, 129, 1)',
+                'rgba(148, 163, 184, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  color: '#f1f5f9',
+                  padding: 15,
+                  font: {
+                    size: 12
+                  }
+                }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                titleColor: '#f1f5f9',
+                bodyColor: '#f1f5f9',
+                borderColor: 'rgba(59, 130, 246, 0.5)',
+                borderWidth: 1,
+                cornerRadius: 8
+              }
+            }
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
