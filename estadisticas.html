@@ -670,9 +670,8 @@
     }
 
     async function loadDataset() {
-     const CASOS_VALIDADOS_URL = 'https://evelez23.github.io/gen15Qproject/data/casos_validados.json';
-const CASOS_NO_VALIDADOS_URL = 'https://evelez23.github.io/gen15Qproject/data/casos_no_validados.json';
-
+   const urlValidados = 'https://evelez23.github.io/gen15Qproject/data/casos_validados.json';
+const urlNoValidados = 'https://evelez23.github.io/gen15Qproject/data/casos_no_validados.json';
       try {
         const [resValidados, resNoValidados] = await Promise.all([
           fetch(urlValidados),
