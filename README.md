@@ -1,17 +1,18 @@
-# Portal Colaborativo Microdeleción 15q11.2
+# Gen15Q Project
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+## Instalación
 
-## 📌 Descripción
-Plataforma colaborativa para recopilar y analizar datos clínicos de pacientes con microdeleción 15q11.2 BP1-BP2, facilitando la investigación y el intercambio de conocimiento entre familias y especialistas.
+Para instalar el proyecto, utiliza el siguiente comando:
 
-## 🌟 Características
-- 📊 Registro colaborativo de casos
-- 📈 Visualización de estadísticas
-- 🧬 Base de conocimiento compartido
-- 🏥 Recursos para familias y profesionales
-
-## 🚀 Instalación
 ```bash
-git clone https://github.com/Evelez23/microdelecion.git
-cd microdelecion
+git clone https://github.com/Evelez23/gen15Qproject.git
+cd gen15Qproject
+```
+
+## Uso
+
+Instrucciones sobre cómo usar el proyecto.
+
+## Contribuciones
+
+Si deseas contribuir, por favor sigue las pautas de contribución.
