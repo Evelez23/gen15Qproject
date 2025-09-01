@@ -8,133 +8,696 @@
         default-src 'self';
         img-src 'self' data: https://raw.githubusercontent.com;
         style-src 'self' 'unsafe-inline';
-        script-src 'self' 'unsafe-inline' https://formsubmit.co https://giscus.app;
+        script-src 'self' 'unsafe-inline' https://formsubmit.co;
     ">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --muted: #94a3b8;
-            --text: #f1f5f9;
-            --primary: #3b82f6;
-            --primary-light: #60a5fa;
-            --accent: #ef4444;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
+            --bg: #0b1020;
+            --card: #0f1730;
+            --muted: #a8b3cf;
+            --text: #e8ecf7;
+            --primary: #6ea8fe;
+            --accent: #e53935;
+            --danger: #ff6b6b;
+            --ok: #63e6be;
+            --warn: #ffd43b;
             --shadow: 0 10px 30px rgba(0,0,0,.35);
-            --border-radius: 16px;
-            --transition: all 0.3s ease;
+            --border-radius: 12px;
         }
-        /* ...resto de tu CSS igual... */
-        .giscus {
-          margin-top: 24px;
-          border-radius: var(--border-radius);
-          background: rgba(255,255,255,0.05);
-          box-shadow: var(--shadow);
-          padding: 0;
-          border: 1px solid rgba(255,255,255,0.06);
-          font-family: inherit;
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        .giscus-frame {
-          border-radius: var(--border-radius);
+        
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Ubuntu, Cantarell, Noto Sans, sans-serif;
+            background: radial-gradient(1200px 800px at 80% -10%, rgba(110,168,254,.14), transparent 60%),
+                        radial-gradient(800px 600px at -10% 20%, rgba(0,209,209,.10), transparent 60%),
+                        var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+            flex: 1;
+        }
+        
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            background: linear-gradient(180deg, rgba(11,16,32,.85), rgba(11,16,32,.45));
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+        
+        .nav .inner {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            justify-content: space-between;
+            padding: 12px 24px;
+            flex-wrap: wrap;
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            letter-spacing: .3px;
+        }
+        
+        .brand img.logo {
+            height: 40px;
+            width: auto;
+            margin-right: 10px;
+            display: inline-block;
+            vertical-align: middle;
+            background: none;
+            border: none;
+        }
+        
+        .nav a {
+            color: var(--muted);
+            text-decoration: none;
+            padding: 10px 12px;
+            border-radius: var(--border-radius);
+            transition: .2s;
+        }
+        
+        .nav a.active, .nav a:hover {
+            color: var(--text);
+            background: rgba(255,255,255,.05);
+        }
+        
+        .nav .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-agregar {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent);
+            color: white;
+            padding: 10px 14px;
+            border-radius: var(--border-radius);
+            font-weight: 700;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,.1);
+            box-shadow: var(--shadow);
+            transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+        }
+        
+        .btn-agregar:hover {
+            background: #33e0e0;
+            transform: translateY(-1px);
+            box-shadow: 0 12px 30px rgba(0,209,209,.25);
+        }
+        
+        h1 {
+            font-size: clamp(28px, 4vw, 46px);
+            line-height: 1.1;
+            margin: 0 0 16px;
+        }
+        
+        .subtitle {
+            margin: 0 0 18px;
+            color: var(--muted);
+        }
+        
+        .panel {
+            background: var(--card);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .panel h2 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .resource-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+        }
+        
+        .resource-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .resource-card h3 {
+            margin: 0 0 12px 0;
+            color: var(--text);
+        }
+        
+        .resource-card p {
+            color: var(--muted);
+            flex-grow: 1;
+            margin-bottom: 15px;
+        }
+        
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary);
+            color: var(--bg);
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: background .2s ease;
+            margin-top: auto;
+        }
+        
+        .btn-download:hover {
+            background: #8bb9fe;
+        }
+        
+        .links-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+        
+        .links-list li {
+            margin-bottom: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .links-list a {
+            color: var(--primary);
+            text-decoration: none;
+            flex-grow: 1;
+        }
+        
+        .links-list a:hover {
+            text-decoration: underline;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .tag-pdf {
+            background: #e53935;
+            color: white;
+        }
+        
+        .tag-link {
+            background: var(--primary);
+            color: var(--bg);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 24px;
+            margin-top: auto;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+        
+        .coming-soon {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+        }
+        
+        .brochure-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .brochure-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .brochure-item:hover {
+            transform: translateY(-3px);
+        }
+        
+        .brochure-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--ok);
+        }
+        
+        .suggestion-form {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text);
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            font-family: inherit;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn-submit {
+            background: var(--ok);
+            color: var(--bg);
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s ease;
+        }
+        
+        .btn-submit:hover {
+            background: #7df0d3;
+        }
+        
+        .suggestions-container {
+            margin-top: 30px;
+        }
+        
+        .suggestions-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+        
+        .suggestion-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .suggestion-text {
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        
+        .suggestion-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+        
+        .no-suggestions {
+            text-align: center;
+            padding: 30px;
+            color: var(--muted);
+            font-style: italic;
+        }
+        
+        .toggle-suggestions {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border: none;
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .resources-grid, .brochure-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 16px;
+            }
+            
+            .suggestion-meta {
+                flex-direction: column;
+                gap: 5px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- ...contenido igual hasta la última sección... -->
+    <nav class="nav">
+        <div class="inner">
+            <div class="brand">
+                <img class="logo" src="https://raw.githubusercontent.com/Evelez23/-microdelecion/refs/heads/main/img/logo%20micro1.png" alt="Logo Microdeleción 15q11.2">
+                <div>Microdeleción 15q11.2</div>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Inicio</a>
+                <a href="genetica.html">Genética</a> 
+                <a href="casos.html">Casos</a>
+                <a href="estadisticas.html">Estadísticas</a>
+                <a href="recursos.html" class="active">Recursos</a>
+                <a class="btn-agregar" href="formulario.html">Reportar caso</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="container">
+        <h1>Recursos Prácticos</h1>
+        <p class="subtitle">Herramientas útiles para el día a día con microdeleción 15q11.2</p>
+
         <div class="panel">
-            <h2><i class="fas fa-rocket"></i> Próximos Recursos</h2>
-            <p>Estamos trabajando en crear más materiales útiles para la comunidad</p>
+            <h2>📋 Documentos Descargables</h2>
+            <p>Material práctico basado en la experiencia de nuestra comunidad</p>
+            
             <div class="resources-grid">
                 <div class="resource-card">
-                    <div class="resource-icon"><i class="fas fa-phone-alt"></i></div>
-                    <h3>Directorio de Contactos</h3>
-                    <p>Profesionales y centros especializados recomendados por la comunidad.</p>
-                    <span class="tag tag-link">En desarrollo</span>
+                    <div class="resource-icon">📝</div>
+                    <h3>Registro de Síntomas</h3>
+                    <p>Plantilla para llevar un control detallado de síntomas, tratamientos y evolución.</p>
+                    <a href="https://github.com/Evelez23/microdelecion-15q11.2/raw/main/resources/registro-sintomas.pdf" class="btn-download" download>
+                        <span>Descargar PDF</span>
+                    </a>
                 </div>
+                
                 <div class="resource-card">
-                    <div class="resource-icon"><i class="fas fa-chart-line"></i></div>
-                    <h3>Guía de Terapias</h3>
-                    <p>Tipos de terapias y su efectividad según nuestra comunidad.</p>
-                    <span class="tag tag-link">En desarrollo</span>
-                </div>
-                <div class="resource-card">
-                    <div class="resource-icon"><i class="fas fa-school"></i></div>
-                    <h3>Adaptaciones Escolares</h3>
-                    <p>Estrategias para apoyar el aprendizaje en el aula.</p>
-                    <span class="tag tag-link">En desarrollo</span>
-                </div>
-            </div>
-            <div class="suggestion-form">
-                <h3><i class="fas fa-lightbulb"></i> ¿Qué recursos te gustaría que agreguemos?</h3>
-                <form id="suggestionForm" action="https://formsubmit.co/elmer_velez@hotmail.com" method="POST">
-                    <div class="form-group">
-                        <label for="name">
-                            <i class="fas fa-user"></i>Nombre (opcional):
-                        </label>
-                        <input type="text" id="name" name="name" placeholder="Tu nombre">
-                    </div>
-                    <div class="form-group">
-                        <label for="suggestion">
-                            <i class="fas fa-comment"></i>Tu sugerencia:
-                        </label>
-                        <textarea id="suggestion" name="suggestion" placeholder="¿Qué tipo de recurso te sería más útil?" required></textarea>
-                    </div>
-                    <input type="hidden" name="_next" value="https://evelez23.github.io/microdelecion-15q11.2/gracias.html">
-                    <input type="hidden" name="_captcha" value="false">
-                    <button type="submit" class="btn-submit">
-                        <i class="fas fa-paper-plane"></i> Enviar Sugerencia
-                    </button>
-                </form>
-            </div>
-            <div class="suggestions-container">
-                <h2><i class="fas fa-comments"></i> Sugerencias de la Comunidad</h2>
-                <button class="toggle-suggestions" onclick="toggleSuggestions()">
-                    <span id="toggle-icon">▼</span>
-                    <span id="toggle-text">Ver sugerencias</span>
-                </button>
-                <div id="suggestions-list" style="display: none;">
-                    <ul class="suggestions-list" id="suggestions-container">
-                        <!-- Las sugerencias se cargarán aquí dinámicamente -->
-                    </ul>
-                    <div class="no-suggestions" id="no-suggestions" style="display: none;">
-                        <i class="fas fa-info-circle"></i> Aún no hay sugerencias. ¡Sé el primero en compartir tus ideas!
-                    </div>
+                    <div class="resource-icon">❓</div>
+                    <h3>Preguntas para Especialistas</h3>
+                    <p>Lista de preguntas importantes para hacer en consultas con genetistas y neurólogos.</p>
+                    <a href="https://github.com/Evelez23/microdelecion-15q11.2/raw/main/resources/preguntas-genetista.pdf" class="btn-download" download>
+                        <span>Descargar PDF</span>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- Caja de comentarios Giscus discreta -->
-        <div class="panel" style="background: none; box-shadow: none; border: none; margin-top: 0; padding: 0;">
-          <h3 style="color: var(--primary-light); margin-top: 30px; margin-bottom: 8px; font-size: 1.25em; font-weight: 600; letter-spacing: .05em;">
-            <i class="fas fa-comments"></i> Comentarios públicos
-          </h3>
-          <div style="max-width: 700px; margin: 0 auto; background: none;">
-            <script src="https://giscus.app/client.js"
-              data-repo="Evelez23/gen15Qproject"
-              data-repo-id="R_kgDOL2Q3CQ"
-              data-category="General"
-              data-category-id="DIC_kwDOL2Q3Cc4CdtgK"
-              data-mapping="pathname"
-              data-strict="1"
-              data-reactions-enabled="1"
-              data-emit-metadata="0"
-              data-input-position="bottom"
-              data-theme="dark"
-              data-lang="es"
-              crossorigin="anonymous"
-              async>
-            </script>
-          </div>
+        <div class="panel">
+            <h2>📚 Folletos Informativos</h2>
+            <p>Documentos compartidos por la comunidad sobre diferentes aspectos de la microdeleción</p>
+            
+            <div class="brochure-grid">
+                <div class="brochure-item">
+                    <div class="brochure-icon">⚡</div>
+                    <h3>Epilepsia en pacientes</h3>
+                    <a href="https://github.com/Evelez23/microdelecion-15q11.2/raw/main/resources/Epilepsia%20en%20pacientes%20con%20síndrome%20INVDUP15.pdf" class="btn-download" download>
+                        <span>Descargar</span>
+                    </a>
+                </div>
+                
+                <div class="brochure-item">
+                    <div class="brochure-icon">😴</div>
+                    <h3>Importancia del sueño</h3>
+                    <a href="https://github.com/Evelez23/microdelecion-15q11.2/raw/main/resources/Importancia%20del%20sueño%20en%20encefalopatías%20epilépticas.pdf" class="btn-download" download>
+                        <span>Descargar</span>
+                    </a>
+                </div>
+                
+                <div class="brochure-item">
+                    <div class="brochure-icon">🧬</div>
+                    <h3>Microdeleciones 15q11.2</h3>
+                    <a href="https://github.com/Evelez23/microdelecion-15q11.2/raw/main/resources/Microdeleciones%2015q11.2.pdf" class="btn-download" download>
+                        <span>Descargar</span>
+                    </a>
+                </div>
+                
+                <div class="brochure-item">
+                    <div class="brochure-icon">🔬</div>
+                    <h3>Novedades científicas</h3>
+                    <a href="https://github.com/Evelez23/microdelecion-15q11.2/raw/main/resources/NOVEDADES%20CIENTÍFICAS%20EN%20INV-DUP%2015%20Dr.pdf" class="btn-download" download>
+                        <span>Descargar</span>
+                    </a>
+                </div>
+                
+                <div class="brochure-item">
+                    <div class="brochure-icon">🏥</div>
+                    <h3>Proyecto diagnóstico</h3>
+                    <a href="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/resources/PROYECTO%20DE%20DIAGN%C3%93STICO%2C%20SEGUIMIENTO%20Y%20TRATAMIENTO%20DE%20LOS%20PACIENTES%20CON%20S%C3%8DNDROME%20DE%20INVERSI%C3%93N-DUPLICACI%C3%93N%20DEL%20CROMOSOMA%2015.pdf" class="btn-download" download>
+                        <span>Descargar</span>
+                    </a>
+                </div>
+                
+                <div class="brochure-item">
+                    <div class="brochure-icon">🆕</div>
+                    <h3>Nuevo síndrome</h3>
+                    <a href="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/resources/Un%20nuevo%20s%C3%ADndrome%20con%20expresividad%20variable%20.pdf" class="btn-download" download>
+                        <span>Descargar</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>🔗 Enlaces y Organizaciones</h2>
+            <p>Recursos externos de confianza sobre microdeleciones</p>
+            
+            <ul class="links-list">
+                <li>
+                    <a href="https://www.rarechromo.org" target="_blank">Rare Chromosome Disorder Support Group</a>
+                    <span class="tag tag-link">Inglés</span>
+                </li>
+                <li>
+                    <a href="https://medlineplus.gov/spanish/genetics/condition/15q112-microdeletion/" target="_blank">MedlinePlus - Información en español</a>
+                    <span class="tag tag-link">Español</span>
+                </li>
+                <li>
+                    <a href="https://www.genome.gov/Genetic-Disorders/15q11-2-Microdeletion" target="_blank">National Human Genome Research Institute</a>
+                    <span class="tag tag-link">Inglés</span>
+                </li>
+                <li>
+                    <a href="https://www.instagram.com/sindromedelecion15q11.2" target="_blank">Síndrome Deleción 15q11.2 en Instagram</a>
+                    <span class="tag tag-link">Red social</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel">
+            <h2>🚀 Próximos Recursos</h2>
+            <p>Estamos trabajando en crear más materiales útiles para la comunidad</p>
+            
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon">📞</div>
+                    <h3>Directorio de Contactos</h3>
+                    <p>Profesionales y centros especializados recomendados por la comunidad.</p>
+                    <span class="tag">En desarrollo</span>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon">📊</div>
+                    <h3>Guía de Terapias</h3>
+                    <p>Tipos de terapias y su efectividad según nuestra comunidad.</p>
+                    <span class="tag">En desarrollo</span>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon">🏫</div>
+                    <h3>Adaptaciones Escolares</h3>
+                    <p>Estrategias para apoyar el aprendizaje en el aula.</p>
+                    <span class="tag">En desarrollo</span>
+                </div>
+            </div>
+            
+            <div class="suggestion-form">
+                <h3>💡 ¿Qué recursos te gustaría que agreguemos?</h3>
+                <form id="suggestionForm" action="https://formsubmit.co/elmer_velez@hotmail.com" method="POST">
+                    <div class="form-group">
+                        <label for="name">Nombre (opcional):</label>
+                        <input type="text" id="name" name="name" placeholder="Tu nombre">
+                    </div>
+                    <div class="form-group">
+                        <label for="suggestion">Tu sugerencia:</label>
+                        <textarea id="suggestion" name="suggestion" placeholder="¿Qué tipo de recurso te sería más útil?" required></textarea>
+                    </div>
+                    <input type="hidden" name="_next" value="https://evelez23.github.io/microdelecion-15q11.2/gracias.html">
+                    <input type="hidden" name="_captcha" value="false">
+                    
+                    <button type="submit" class="btn-submit">Enviar Sugerencia</button>
+                </form>
+            </div>
+
+            <div class="suggestions-container">
+                <h2>💬 Sugerencias de la Comunidad</h2>
+                <button class="toggle-suggestions" onclick="toggleSuggestions()">
+                    <span id="toggle-icon">▼</span>
+                    <span id="toggle-text">Ver sugerencias</span>
+                </button>
+                
+                <div id="suggestions-list" style="display: none;">
+                    <ul class="suggestions-list" id="suggestions-container">
+                        </ul>
+                    <div class="no-suggestions" id="no-suggestions" style="display: none;">
+                        Aún no hay sugerencias. ¡Sé el primero en compartir tus ideas!
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
+
     <footer class="footer">
         <p>© 2025 | Microdeleción 15q11.2 - Recursos creados por y para la comunidad</p>
     </footer>
+
     <script>
-        // ...tu JS igual, aquí no es necesario modificar nada...
+        // Almacenamiento de sugerencias
+        const STORAGE_KEY = 'suggestions_15q11';
+        
+        // Cargar sugerencias al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSuggestions();
+        });
+        
+        // Función para cargar sugerencias
+        function loadSuggestions() {
+            const suggestions = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            const container = document.getElementById('suggestions-container');
+            const noSuggestions = document.getElementById('no-suggestions');
+            
+            container.innerHTML = '';
+            
+            if (suggestions.length === 0) {
+                noSuggestions.style.display = 'block';
+                return;
+            }
+            
+            noSuggestions.style.display = 'none';
+            
+            // Mostrar sugerencias en orden inverso (más recientes primero)
+            suggestions.reverse().forEach(suggestion => {
+                const li = document.createElement('li');
+                li.className = 'suggestion-item';
+                
+                const date = new Date(suggestion.date);
+                const formattedDate = date.toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                li.innerHTML = `
+                    <div class="suggestion-text">${suggestion.text}</div>
+                    <div class="suggestion-meta">
+                        <span>Por: ${suggestion.name || 'Anónimo'}</span>
+                        <span>${formattedDate}</span>
+                    </div>
+                `;
+                
+                container.appendChild(li);
+            });
+        }
+        
+        // Función para togglear la visibilidad de sugerencias
+        function toggleSuggestions() {
+            const suggestionsList = document.getElementById('suggestions-list');
+            const toggleIcon = document.getElementById('toggle-icon');
+            const toggleText = document.getElementById('toggle-text');
+            
+            if (suggestionsList.style.display === 'none') {
+                suggestionsList.style.display = 'block';
+                toggleIcon.textContent = '▲';
+                toggleText.textContent = 'Ocultar sugerencias';
+            } else {
+                suggestionsList.style.display = 'none';
+                toggleIcon.textContent = '▼';
+                toggleText.textContent = 'Ver sugerencias';
+            }
+        }
+        
+        // Manejar el formulario de sugerencias
+        document.getElementById('suggestionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nameInput = document.getElementById('name');
+            const suggestionInput = document.getElementById('suggestion');
+            
+            const suggestion = {
+                name: nameInput.value.trim(),
+                text: suggestionInput.value.trim(),
+                date: new Date().toISOString()
+            };
+            
+            if (!suggestion.text) return;
+            
+            // Guardar sugerencia
+            const suggestions = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            suggestions.push(suggestion);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(suggestions));
+            
+            // Mostrar mensaje de éxito
+            alert(`¡Gracias ${suggestion.name || 'Anónimo'} por tu sugerencia!\n\nTu idea será considerada para futuros recursos.`);
+            
+            // Limpiar formulario y recargar sugerencias
+            this.reset();
+            loadSuggestions();
+            
+            // Mostrar las sugerencias si estaban ocultas
+            document.getElementById('suggestions-list').style.display = 'block';
+            document.getElementById('toggle-icon').textContent = '▲';
+            document.getElementById('toggle-text').textContent = 'Ocultar sugerencias';
+        });
     </script>
 </body>
 </html>
