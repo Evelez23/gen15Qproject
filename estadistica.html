@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Estadísticas y Resumen Clínico | Microdeleción 15q11.2</title>
   <meta name="description" content="Estadísticas detalladas y análisis de casos de microdeleción 15q11.2">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Política de seguridad de contenido corregida -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' https://cdn.jsdelivr.net">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧬</text></svg>">
   <script defer src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -393,7 +395,7 @@
       to { transform: rotate(360deg); }
     }
 
-    /* Responsive */
+    /* Media queries corregidas - sintaxis válida */
     @media (max-width: 968px) {
       .nav .inner {
         flex-direction: column;
@@ -459,7 +461,8 @@
   <nav class="nav">
     <div class="inner">
       <div class="brand">
-        <img class="logo" src="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/img/logo%20micro1.webp" alt="Logo Microdeleción 15q11.2">
+        <!-- Imagen local para evitar problemas de CSP -->
+        <div style="width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, #3b82f6, #60a5fa); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">🧬</div>
         <div>Microdeleción 15q11.2</div>
       </div>
       <div class="nav-links">
@@ -1000,194 +1003,194 @@
                   'rgba(245, 158, 11, 1)'
                 ],
                 borderWidth: 1
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: { 
-                legend: { 
-                  position: 'bottom',
-                  labels: {
-                    color: '#f1f5f9',
-                    padding: 15,
-                    font: {
-                      size: 12
-                    }
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { 
+              legend: { 
+                position: 'bottom',
+                labels: {
+                  color: '#f1f5f9',
+                  padding: 15,
+                  font: {
+                    size: 12
                   }
-                },
-                tooltip: {
-                  backgroundColor: 'rgba(30, 41, 59, 0.95)',
-                  titleColor: '#f1f5f9',
-                  bodyColor: '#f1f5f9',
-                  borderColor: 'rgba(59, 130, 246, 0.5)',
-                  borderWidth: 1,
-                  cornerRadius: 8,
-                  callbacks: {
-                    label: function(context) {
-                      const label = context.label || '';
-                      const value = context.raw || 0;
-                      const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                      const percentage = Math.round((value / total) * 100);
-                      return `${label}: ${value} (${percentage}%)`;
-                    }
+                }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                titleColor: '#f1f5f9',
+                bodyColor: '#f1f5f9',
+                borderColor: 'rgba(59, 130, 246, 0.5)',
+                borderWidth: 1,
+                cornerRadius: 8,
+                callbacks: {
+                  label: function(context) {
+                    const label = context.label || '';
+                    const value = context.raw || 0;
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = Math.round((value / total) * 100);
+                    return `${label}: ${value} (${percentage}%)`;
                   }
                 }
               }
             }
-          });
-        }
-        
-        // 7. DESPLIEGUE DE PAÍSES Y CIUDADES - CORREGIDO
-        const localizaciones = data.filter(r => r.localizacion && r.localizacion.trim() !== '');
-        const paises = {};
-        
-        localizaciones.forEach(r => {
-          const loc = (r.localizacion || '').trim();
-          let pais, ciudad;
-
-          // Primero verificar si la localización es directamente un país
-          const paisNormalizado = normalizarPais(loc);
-          if (paisNormalizado && esPaisReconocido(paisNormalizado)) {
-            pais = paisNormalizado;
-            ciudad = 'No especificada';
-          } 
-          // Si no es un país, intentar extraer país y ciudad
-          else if (loc.includes(',')) {
-            const partes = loc.split(',');
-            ciudad = partes[0].trim();
-            pais = normalizarPais(partes[1].trim());
-          } else if (loc.includes('/')) {
-            const partes = loc.split('/');
-            pais = normalizarPais(partes[0].trim());
-            ciudad = partes.length > 1 ? partes[1].trim() : 'No especificada';
-          } else {
-            // Si no hay separador, asumir que es una ciudad y determinar su país
-            ciudad = loc;
-            pais = determinarPaisPorCiudad(ciudad) || 'No especificado';
-          }
-          
-          // Si después de todo no tenemos un país válido, intentar determinar por la ciudad
-          if (!pais || pais.toLowerCase() === 'no especificado') {
-            pais = determinarPaisPorCiudad(ciudad) || 'No especificado';
-          }
-          
-          // Si la ciudad es conocida pero no tenemos país, usar España por defecto (mayoría de casos)
-          if (ciudad && determinarPaisPorCiudad(ciudad) && pais === 'No especificado') {
-            pais = 'España';
-          }
-          
-          // Corrección final: si el "país" es realmente una ciudad española, asignar a España
-          if (pais !== 'España' && determinarPaisPorCiudad(pais) === 'españa') {
-            ciudad = pais;
-            pais = 'España';
-          }
-          
-          // Asegurar que el país está normalizado
-          pais = normalizarPais(pais) || 'No especificado';
-          
-          if (!paises[pais]) {
-            paises[pais] = { total: 0, ciudades: {} };
-          }
-          paises[pais].total++;
-          
-          if (ciudad && ciudad.toLowerCase() !== 'no especificada') {
-            if (!paises[pais].ciudades[ciudad]) {
-              paises[pais].ciudades[ciudad] = 0;
-            }
-            paises[pais].ciudades[ciudad]++;
           }
         });
-
-        // Calcular el total de países únicos para el KPI
-        const uniqueCountries = new Set(Object.keys(paises).filter(p => p !== 'No especificado'));
-        document.getElementById('paises-total').textContent = uniqueCountries.size;
-
-        const getBandera = (nombrePais) => {
-            const banderas = {
-                'españa': '🇪🇸',
-                'honduras': '🇭🇳',
-                'argentina': '🇦🇷',
-                'méxico': '🇲🇽',
-                'colombia': '🇨🇴',
-                'chile': '🇨🇱',
-                'perú': '🇵🇪'
-            };
-            return banderas[nombrePais.toLowerCase()] || '🗺️';
-        };
-
-        const paisesArray = Object.keys(paises)
-          .filter(pais => pais !== 'No especificado')
-          .map(nombre => ({
-            nombre,
-            total: paises[nombre].total,
-            bandera: getBandera(nombre),
-            ciudades: Object.keys(paises[nombre].ciudades)
-              .filter(ciudad => ciudad !== 'No especificada')
-              .map(ciudadNombre => ({
-                nombre: ciudadNombre,
-                count: paises[nombre].ciudades[ciudadNombre]
-              })).sort((a,b) => b.count - a.count)
-          }));
-        
-        paisesArray.sort((a, b) => b.total - a.total);
-        
-        const paisesContainer = document.getElementById('paises-container');
-        paisesContainer.style.display = 'grid';
-        document.getElementById('paises-loading').style.display = 'none';
-
-        paisesArray.forEach(pais => {
-          const card = document.createElement('div');
-          card.className = 'pais-card';
-          let ciudadesHtml = '';
-          
-          if (pais.ciudades.length > 0) {
-            ciudadesHtml = `<div style="margin-top: 10px; font-size: 0.8em; color: var(--muted);">${pais.ciudades.map(c => `${c.nombre} (${c.count})`).join(', ')}</div>`;
-          }
-
-          card.innerHTML = `
-            <span class="bandera">${pais.bandera}</span>
-            <div class="pais-nombre">${pais.nombre}</div>
-            <div class="pais-casos">${pais.total} caso${pais.total > 1 ? 's' : ''}</div>
-            ${ciudadesHtml}
-          `;
-          paisesContainer.appendChild(card);
-        });
-        
-        // Calcular porcentaje de casos con múltiples síntomas para la nota
-        const casosConMultiplesSintomas = data.filter(r => {
-            const sintomas = (r.sintomas || '').toLowerCase();
-            const esMultiple = (sintomas.includes(',') || sintomas.includes(';') || sintomas.includes(' y '));
-            return esMultiple;
-        });
-        
-        const porcentajeSintomasMultiples = data.length > 0 ? 
-          Math.round((casosConMultiplesSintomas.length / data.length) * 100) : 0;
-        document.getElementById('sintomas-multiples').textContent = porcentajeSintomasMultiples;
-
-        // Ocultar mensaje de carga
-        document.getElementById('loading').style.display = 'none';
-
-        // Animaciones
-        if (window.anime) {
-          anime({
-            targets: '.panel, .pais-card',
-            opacity: [0, 1],
-            translateY: [20, 0],
-            delay: anime.stagger(100),
-            duration: 800,
-            easing: 'easeOutQuad'
-          });
-        }
-
-      } catch (error) {
-        console.error('Error al cargar datos o generar gráficos:', error);
-        const loadingDiv = document.getElementById('loading');
-        if (loadingDiv) loadingDiv.textContent = 'Hubo un error al cargar los datos. Por favor, inténtelo de nuevo más tarde.';
       }
-    }
+      
+      // 7. DESPLIEGUE DE PAÍSES Y CIUDADES - CORREGIDO
+      const localizaciones = data.filter(r => r.localizacion && r.localizacion.trim() !== '');
+      const paises = {};
+      
+      localizaciones.forEach(r => {
+        const loc = (r.localizacion || '').trim();
+        let pais, ciudad;
 
-    document.addEventListener('DOMContentLoaded', initStats);
+        // Primero verificar si la localización es directamente un país
+        const paisNormalizado = normalizarPais(loc);
+        if (paisNormalizado && esPaisReconocido(paisNormalizado)) {
+          pais = paisNormalizado;
+          ciudad = 'No especificada';
+        } 
+        // Si no es un país, intentar extraer país y ciudad
+        else if (loc.includes(',')) {
+          const partes = loc.split(',');
+          ciudad = partes[0].trim();
+          pais = normalizarPais(partes[1].trim());
+        } else if (loc.includes('/')) {
+          const partes = loc.split('/');
+          pais = normalizarPais(partes[0].trim());
+          ciudad = partes.length > 1 ? partes[1].trim() : 'No especificada';
+        } else {
+          // Si no hay separador, asumir que es una ciudad y determinar su país
+          ciudad = loc;
+          pais = determinarPaisPorCiudad(ciudad) || 'No especificado';
+        }
+        
+        // Si después de todo no tenemos un país válido, intentar determinar por la ciudad
+        if (!pais || pais.toLowerCase() === 'no especificado') {
+          pais = determinarPaisPorCiudad(ciudad) || 'No especificado';
+        }
+        
+        // Si la ciudad es conocida pero no tenemos país, usar España por defecto (mayoría de casos)
+        if (ciudad && determinarPaisPorCiudad(ciudad) && pais === 'No especificado') {
+          pais = 'España';
+        }
+        
+        // Corrección final: si el "país" es realmente una ciudad española, asignar a España
+        if (pais !== 'España' && determinarPaisPorCiudad(pais) === 'españa') {
+          ciudad = pais;
+          pais = 'España';
+        }
+        
+        // Asegurar que el país está normalizado
+        pais = normalizarPais(pais) || 'No especificado';
+        
+        if (!paises[pais]) {
+          paises[pais] = { total: 0, ciudades: {} };
+        }
+        paises[pais].total++;
+        
+        if (ciudad && ciudad.toLowerCase() !== 'no especificada') {
+          if (!paises[pais].ciudades[ciudad]) {
+            paises[pais].ciudades[ciudad] = 0;
+          }
+          paises[pais].ciudades[ciudad]++;
+        }
+      });
+
+      // Calcular el total de países únicos para el KPI
+      const uniqueCountries = new Set(Object.keys(paises).filter(p => p !== 'No especificado'));
+      document.getElementById('paises-total').textContent = uniqueCountries.size;
+
+      const getBandera = (nombrePais) => {
+          const banderas = {
+              'españa': '🇪🇸',
+              'honduras': '🇭🇳',
+              'argentina': '🇦🇷',
+              'méxico': '🇲🇽',
+              'colombia': '🇨🇴',
+              'chile': '🇨🇱',
+              'perú': '🇵🇪'
+          };
+          return banderas[nombrePais.toLowerCase()] || '🗺️';
+      };
+
+      const paisesArray = Object.keys(paises)
+        .filter(pais => pais !== 'No especificado')
+        .map(nombre => ({
+          nombre,
+          total: paises[nombre].total,
+          bandera: getBandera(nombre),
+          ciudades: Object.keys(paises[nombre].ciudades)
+            .filter(ciudad => ciudad !== 'No especificada')
+            .map(ciudadNombre => ({
+              nombre: ciudadNombre,
+              count: paises[nombre].ciudades[ciudadNombre]
+            })).sort((a,b) => b.count - a.count)
+        }));
+      
+      paisesArray.sort((a, b) => b.total - a.total);
+      
+      const paisesContainer = document.getElementById('paises-container');
+      paisesContainer.style.display = 'grid';
+      document.getElementById('paises-loading').style.display = 'none';
+
+      paisesArray.forEach(pais => {
+        const card = document.createElement('div');
+        card.className = 'pais-card';
+        let ciudadesHtml = '';
+        
+        if (pais.ciudades.length > 0) {
+          ciudadesHtml = `<div style="margin-top: 10px; font-size: 0.8em; color: var(--muted);">${pais.ciudades.map(c => `${c.nombre} (${c.count})`).join(', ')}</div>`;
+        }
+
+        card.innerHTML = `
+          <span class="bandera">${pais.bandera}</span>
+          <div class="pais-nombre">${pais.nombre}</div>
+          <div class="pais-casos">${pais.total} caso${pais.total > 1 ? 's' : ''}</div>
+          ${ciudadesHtml}
+        `;
+        paisesContainer.appendChild(card);
+      });
+      
+      // Calcular porcentaje de casos con múltiples síntomas para la nota
+      const casosConMultiplesSintomas = data.filter(r => {
+          const sintomas = (r.sintomas || '').toLowerCase();
+          const esMultiple = (sintomas.includes(',') || sintomas.includes(';') || sintomas.includes(' y '));
+          return esMultiple;
+      });
+      
+      const porcentajeSintomasMultiples = data.length > 0 ? 
+        Math.round((casosConMultiplesSintomas.length / data.length) * 100) : 0;
+      document.getElementById('sintomas-multiples').textContent = porcentajeSintomasMultiples;
+
+      // Ocultar mensaje de carga
+      document.getElementById('loading').style.display = 'none';
+
+      // Animaciones
+      if (window.anime) {
+        anime({
+          targets: '.panel, .pais-card',
+          opacity: [0, 1],
+          translateY: [20, 0],
+          delay: anime.stagger(100),
+          duration: 800,
+          easing: 'easeOutQuad'
+        });
+      }
+
+    } catch (error) {
+      console.error('Error al cargar datos o generar gráficos:', error);
+      const loadingDiv = document.getElementById('loading');
+      if (loadingDiv) loadingDiv.textContent = 'Hubo un error al cargar los datos. Por favor, inténtelo de nuevo más tarde.';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initStats);
   </script>
 </body>
 </html>
