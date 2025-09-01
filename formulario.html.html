@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reportar caso | Microdeleción 15q11.2</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --muted: #94a3b8;
+      --text: #f1f5f9;
+      --primary: #3b82f6;
+      --primary-light: #60a5fa;
+      --accent: #ef4444;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --border-radius: 16px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(ellipse at top right, rgba(59, 130, 246, 0.15), transparent 60%),
+                  radial-gradient(ellipse at bottom left, rgba(16, 185, 129, 0.1), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 24px;
+      flex: 1;
+    }
+
+    /* Navegación mejorada */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav .inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: .3px;
+    }
+
+    .brand img.logo {
+      height: 40px;
+      width: auto;
+      border-radius: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .nav a.active, .nav a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,.05);
+    }
+
+    .btn-agregar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      padding: 10px 16px;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .btn-agregar:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    h1 {
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.1;
+      margin: 0 0 16px;
+      background: linear-gradient(to right, #f1f5f9, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      margin: 0 0 32px;
+      color: var(--muted);
+      font-size: 1.1em;
+    }
+
+    /* Panel principal */
+    .panel {
+      background: var(--card);
+      border-radius: var(--border-radius);
+      padding: 32px;
+      box-shadow: var(--shadow);
+      margin-bottom: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .panel h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: var(--primary-light);
+      font-size: 1.6em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .panel p {
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    /* Estados del formulario */
+    .form-status {
+      padding: 16px 20px;
+      border-radius: var(--border-radius);
+      margin: 20px 0;
+      display: none;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .form-status.success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+    }
+    
+    .form-status.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+
+    /* Contenedor del formulario */
+    .form-container {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: var(--border-radius);
+      padding: 32px;
+      margin: 24px 0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    fieldset {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--border-radius);
+      padding: 28px;
+      margin-bottom: 28px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    legend {
+      padding: 0 16px;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.2em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--text);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .required::after {
+      content: " *";
+      color: var(--danger);
+    }
+
+    .form-group input, 
+    .form-group select, 
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--card);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1em;
+      transition: var(--transition);
+    }
+
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-group input:focus, 
+    .form-group select:focus, 
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .form-help {
+      font-size: 0.9em;
+      color: var(--muted);
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Checkbox de privacidad */
+    .privacy-check {
+      display: flex;
+      gap: 12px;
+      margin: 28px 0;
+      padding: 20px;
+      background: rgba(16, 185, 129, 0.08);
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .privacy-check input {
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .privacy-check label {
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    /* Botón de envío */
+    .submit-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 16px 32px;
+      font-weight: 600;
+      font-size: 1.1em;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      margin-top: 16px;
+    }
+
+    .submit-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(59, 130, 246, 0.35);
+    }
+
+    .submit-button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Grid de información */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin: 32px 0;
+    }
+
+    .info-panel {
+      background: var(--card);
+      border-radius: var(--border-radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .info-panel h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: var(--primary-light);
+      font-size: 1.4em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-panel ul {
+      margin: 16px 0;
+      padding-left: 20px;
+    }
+
+    .info-panel li {
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .info-panel strong {
+      color: var(--primary);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 28px;
+      margin-top: auto;
+      color: var(--muted);
+      font-size: 0.9rem;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Validación de campos */
+    .form-group.error input,
+    .form-group.error select,
+    .form-group.error textarea {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    }
+
+    .error-message {
+      color: var(--danger);
+      font-size: 0.9em;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      display: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+      .nav .inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      
+      .nav-links {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 8px;
+      }
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 16px;
+      }
+      
+      .panel {
+        padding: 24px;
+      }
+      
+      .form-container {
+        padding: 24px;
+      }
+      
+      fieldset {
+        padding: 20px;
+      }
+      
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      
+      .privacy-check {
+        flex-direction: column;
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav a {
+        padding: 8px 12px;
+        font-size: 0.9em;
+      }
+      
+      .btn-agregar {
+        padding: 8px 12px;
+        font-size: 0.9em;
+      }
+      
+      fieldset {
+        padding: 16px;
+      }
+      
+      .form-group input, 
+      .form-group select, 
+      .form-group textarea {
+        padding: 12px 16px;
+      }
+      
+      .submit-button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="inner">
+      <div class="brand">
+        <img class="logo" src="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/img/logo%20micro1.webp" alt="Logo Microdeleción 15q11.2">
+        <div>Microdeleción 15q11.2</div>
+      </div>
+      <div class="nav-links">
+        <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+        <a href="genetica.html"><i class="fas fa-dna"></i> Genética</a> 
+        <a href="casos.html"><i class="fas fa-folder-open"></i> Casos</a>
+        <a href="estadisticas.html"><i class="fas fa-chart-bar"></i> Estadísticas</a>
+        <a href="recursos.html"><i class="fas fa-book"></i> Recursos</a>
+        <a class="btn-agregar" href="formulario.html"><i class="fas fa-plus-circle"></i> Reportar caso</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="container">
+    <h1>Reportar un caso</h1>
+    <p class="subtitle">Comparte información sobre un caso de microdeleción 15q11.2 para ayudar a nuestra comunidad</p>
+
+    <div class="panel">
+      <h2><i class="fas fa-clipboard-list"></i> Formulario de reporte</h2>
+      <p>Utiliza el siguiente formulario para reportar un nuevo caso. Los campos marcados con <span class="required"></span> son obligatorios.</p>
+      
+      <div id="form-status" class="form-status"></div>
+      
+      <form id="casoForm" class="form-container" action="https://formsubmit.co/elmer_velez@hotmail.com" method="POST">
+        <!-- Campos ocultos de FormSubmit -->
+        <input type="hidden" name="_subject" value="Nuevo caso de Microdeleción 15q11.2">
+        <input type="hidden" name="_next" value="https://evelez23.github.io/microdelecion-15q11.2/gracias.html">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        
+        <!-- Información básica -->
+        <fieldset>
+          <legend><i class="fas fa-user"></i> Información básica</legend>
+          
+          <div class="form-group">
+            <label for="nombre" class="required">
+              <i class="fas fa-signature"></i>Nombre o seudónimo:
+            </label>
+            <input type="text" id="nombre" name="nombre" placeholder="Cómo te gustaría que te llamemos" required>
+            <div class="error-message" id="nombre-error">
+              <i class="fas fa-exclamation-circle"></i> Este campo es obligatorio
+            </div>
+            <div class="form-help">
+              <i class="fas fa-info-circle"></i> Puedes usar un nombre completo, pero solo se mostrará públicamente el primer nombre.
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="edad" class="required">
+                <i class="fas fa-birthday-cake"></i>Edad:
+              </label>
+              <input type="number" id="edad" name="edad" min="0" max="120" placeholder="Edad en años" required>
+              <div class="error-message" id="edad-error">
+                <i class="fas fa-exclamation-circle"></i> Ingresa una edad válida
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="genero" class="required">
+                <i class="fas fa-venus-mars"></i>Género:
+              </label>
+              <select id="genero" name="genero" required>
+                <option value="">Seleccionar...</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Otro">Otro</option>
+                <option value="Prefiero no especificar">Prefiero no especificar</option>
+              </select>
+              <div class="error-message" id="genero-error">
+                <i class="fas fa-exclamation-circle"></i> Este campo es obligatorio
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="localizacion">
+              <i class="fas fa-map-marker-alt"></i>Ubicación (país/ciudad):
+            </label>
+            <input type="text" id="localizacion" name="localizacion" placeholder="Ej: Madrid, España">
+            <div class="form-help">
+              <i class="fas fa-info-circle"></i> Nos ayuda a entender la distribución geográfica.
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Información médica -->
+        <fieldset>
+          <legend><i class="fas fa-hospital"></i> Información médica</legend>
+          
+          <div class="form-group">
+            <label for="sintomas" class="required">
+              <i class="fas fa-stethoscope"></i>Síntomas principales:
+            </label>
+            <textarea id="sintomas" name="sintomas" rows="3" placeholder="Ej: TEA, hipotonía, retraso en el lenguaje, epilepsia, TDAH..." required></textarea>
+            <div class="error-message" id="sintomas-error">
+              <i class="fas fa-exclamation-circle"></i> Este campo es obligatorio
+            </div>
+            <div class="form-help">
+              <i class="fas fa-info-circle"></i> Separa los síntomas con comas. Sé tan específico como puedas.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="gravedad" class="required">
+              <i class="fas fa-balance-scale"></i>Nivel de afectación:
+            </label>
+            <select id="gravedad" name="gravedad" required>
+              <option value="">Seleccionar...</option>
+              <option value="Leve">Leve (vida independiente con apoyos mínimos)</option>
+              <option value="Moderado">Moderado (necesita apoyo significativo)</option>
+              <option value="Severo">Severo (dependencia total o casi total)</option>
+              <option value="No especificado">No estoy seguro/a</option>
+            </select>
+            <div class="error-message" id="gravedad-error">
+              <i class="fas fa-exclamation-circle"></i> Este campo es obligatorio
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="pruebas">
+              <i class="fas fa-flask"></i>Pruebas realizadas:
+            </label>
+            <textarea id="pruebas" name="pruebas" rows="2" placeholder="Ej: Array genético, EEG, resonancia magnética, cariotipo..."></textarea>
+          </div>
+        </fieldset>
+
+        <!-- Tratamientos y terapias -->
+        <fieldset>
+          <legend><i class="fas fa-pills"></i> Tratamientos y terapias</legend>
+          
+          <div class="form-group">
+            <label for="medicamentos">
+              <i class="fas fa-capsules"></i>Medicamentos:
+            </label>
+            <textarea id="medicamentos" name="medicamentos" rows="2" placeholder="Ej: Risperidona, magnesio, antiepilépticos, metilfenidato..."></textarea>
+            <div class="form-help">
+              <i class="fas fa-info-circle"></i> Incluye dosis si las conoces.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="terapias">
+              <i class="fas fa-hand-holding-heart"></i>Terapias recibidas:
+            </label>
+            <textarea id="terapias" name="terapias" rows="2" placeholder="Ej: Logopedia, fisioterapia, psicoterapia, integración sensorial..."></textarea>
+            <div class="form-help">
+              <i class="fas fa-info-circle"></i> Frecuencia y duración de las terapias.
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Información adicional -->
+        <fieldset>
+          <legend><i class="fas fa-info-circle"></i> Información adicional</legend>
+          
+          <div class="form-group">
+            <label for="desafios">
+              <i class="fas fa-tasks"></i>Desafíos principales:
+            </label>
+            <textarea id="desafios" name="desafios" rows="3" placeholder="¿Qué desafíos enfrentas día a día? Ej: comunicación, movilidad, alimentación, sueño..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="comentarios">
+              <i class="fas fa-comment"></i>Comentarios adicionales:
+            </label>
+            <textarea id="comentarios" name="comentarios" rows="3" placeholder="Algo más que quieras compartir con la comunidad..."></textarea>
+            <div class="form-help">
+              <i class="fas fa-info-circle"></i> Logros, consejos, cosas que te han funcionado...
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Consentimiento -->
+        <div class="privacy-check">
+          <input type="checkbox" id="privacidad" required>
+          <label for="privacidad" class="required">
+            ✅ Acepto que esta información se comparta de forma <strong>anónima</strong> con la comunidad para fines de apoyo mutuo dentro de la comunidad.
+          </label>
+        </div>
+        <div class="error-message" id="privacidad-error">
+          <i class="fas fa-exclamation-circle"></i> Debes aceptar la política de privacidad para enviar el formulario
+        </div>
+
+        <button type="submit" class="submit-button">
+          <i class="fas fa-paper-plane"></i> Enviar reporte
+        </button>
+      </form>
+    </div>
+
+    <div class="grid-2">
+      <div class="info-panel">
+        <h2><i class="fas fa-hands-helping"></i> ¿Por qué reportar un caso?</h2>
+        <ul>
+          <li><strong>Ayuda a la comunidad:</strong> Tu experiencia puede ayudar a otras familias.</li>
+          <li><strong>Contribuye a la investigación:</strong> Los datos agregados ayudan a entender mejor esta condición.</li>
+          <li><strong>Recibe apoyo:</strong> Al compartir tu caso, puedes conectar con otras familias en situaciones similares.</li>
+          <li><strong>Mantén el anonimato:</strong> Toda la información personal se mantendrá confidencial.</li>
+        </ul>
+      </div>
+
+      <div class="info-panel">
+        <h2><i class="fas fa-lock"></i> Política de privacidad</h2>
+        <p><strong>Tu privacidad es nuestra prioridad:</strong></p>
+        <ul>
+          <li>✅ Nunca publicaremos información personal identificable</li>
+          <li>✅ Los datos se muestran de forma agregada y anónima</li>
+          <li>✅ Puedes solicitar eliminar tu información en cualquier momento</li>
+          <li>✅ Los datos que compartes se usan únicamente para nutrir esta plataforma, generar estadísticas.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">© 2025 | Formulario seguro y confidencial - Comunidad de Familias 15q11.2</footer>
+
+  <!-- JavaScript mejorado -->
+  <script>
+    // Elementos del DOM
+    const form = document.getElementById('casoForm');
+    const formStatus = document.getElementById('form-status');
+    const submitButton = form.querySelector('button[type="submit"]');
+    
+    // Mostrar mensaje de error en un campo
+    function showError(fieldId, message) {
+      const field = document.getElementById(fieldId);
+      const errorElement = document.getElementById(`${fieldId}-error`);
+      
+      field.classList.add('error');
+      errorElement.textContent = message;
+      errorElement.style.display = 'flex';
+    }
+    
+    // Ocultar mensaje de error
+    function hideError(fieldId) {
+      const field = document.getElementById(fieldId);
+      const errorElement = document.getElementById(`${fieldId}-error`);
+      
+      field.classList.remove('error');
+      errorElement.style.display = 'none';
+    }
+    
+    // Validar campo requerido
+    function validateRequiredField(fieldId) {
+      const field = document.getElementById(fieldId);
+      if (!field.value.trim()) {
+        showError(fieldId, 'Este campo es obligatorio');
+        return false;
+      }
+      hideError(fieldId);
+      return true;
+    }
+    
+    // Validar edad
+    function validateAge() {
+      const ageField = document.getElementById('edad');
+      const age = parseInt(ageField.value);
+      
+      if (!ageField.value.trim()) {
+        showError('edad', 'Este campo es obligatorio');
+        return false;
+      }
+      
+      if (isNaN(age) || age < 0 || age > 120) {
+        showError('edad', 'Ingresa una edad válida (0-120)');
+        return false;
+      }
+      
+      hideError('edad');
+      return true;
+    }
+    
+    // Validar checkbox de privacidad
+    function validatePrivacy() {
+      const privacyCheckbox = document.getElementById('privacidad');
+      if (!privacyCheckbox.checked) {
+        showError('privacidad', 'Debes aceptar la política de privacidad');
+        return false;
+      }
+      hideError('privacidad');
+      return true;
+    }
+    
+    // Validación en tiempo real
+    document.querySelectorAll('input[required], select[required], textarea[required]').forEach(input => {
+      input.addEventListener('blur', function() {
+        if (this.id === 'edad') {
+          validateAge();
+        } else {
+          validateRequiredField(this.id);
+        }
+      });
+      
+      input.addEventListener('input', function() {
+        if (this.id === 'edad') {
+          validateAge();
+        } else {
+          hideError(this.id);
+        }
+      });
+    });
+    
+    // Validación antes de enviar
+    form.addEventListener('submit', function(e) {
+      let isValid = true;
+      
+      // Validar todos los campos requeridos
+      isValid = validateRequiredField('nombre') && isValid;
+      isValid = validateAge() && isValid;
+      isValid = validateRequiredField('genero') && isValid;
+      isValid = validateRequiredField('sintomas') && isValid;
+      isValid = validateRequiredField('gravedad') && isValid;
+      isValid = validatePrivacy() && isValid;
+      
+      if (!isValid) {
+        e.preventDefault();
+        
+        // Mostrar mensaje de error general
+        formStatus.textContent = 'Por favor, completa todos los campos obligatorios correctamente.';
+        formStatus.className = 'form-status error';
+        formStatus.style.display = 'flex';
+        
+        // Desplazarse al primer error
+        const firstError = form.querySelector('.error');
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        return false;
+      }
+      
+      // Mostrar mensaje de carga
+      submitButton.disabled = true;
+      submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+      
+      // Mostrar mensaje de éxito
+      formStatus.textContent = '¡Gracias por tu reporte! Estamos procesando la información.';
+      formStatus.className = 'form-status success';
+      formStatus.style.display = 'flex';
+      
+      return true;
+    });
+    
+    // Restablecer el botón si el envío falla
+    form.addEventListener('formsubmit:error', function() {
+      submitButton.disabled = false;
+      submitButton.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar reporte';
+      
+      formStatus.textContent = 'Hubo un error al enviar el formulario. Por favor, inténtalo de nuevo.';
+      formStatus.className = 'form-status error';
+      formStatus.style.display = 'flex';
+    });
+  </script>
+</body>
+</html>
