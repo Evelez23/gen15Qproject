@@ -8,7 +8,7 @@
         default-src 'self';
         img-src 'self' data: https://raw.githubusercontent.com;
         style-src 'self' 'unsafe-inline';
-        script-src 'self' 'unsafe-inline' https://formsubmit.co;
+        script-src 'self' 'unsafe-inline' https://formsubmit.co https://giscus.app;
     ">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -27,630 +27,26 @@
             --border-radius: 16px;
             --transition: all 0.3s ease;
         }
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        /* ...resto de tu CSS igual... */
+        .giscus {
+          margin-top: 24px;
+          border-radius: var(--border-radius);
+          background: rgba(255,255,255,0.05);
+          box-shadow: var(--shadow);
+          padding: 0;
+          border: 1px solid rgba(255,255,255,0.06);
+          font-family: inherit;
         }
-        
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: radial-gradient(ellipse at top right, rgba(59, 130, 246, 0.15), transparent 60%),
-                        radial-gradient(ellipse at bottom left, rgba(16, 185, 129, 0.1), transparent 60%),
-                        var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 24px;
-            flex: 1;
-        }
-        
-        /* Navegación mejorada */
-        .nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            background: rgba(15, 23, 42, 0.9);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .nav .inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 24px;
-        }
-        
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            letter-spacing: .3px;
-        }
-        
-        .brand img.logo {
-            height: 40px;
-            width: auto;
-            border-radius: 8px;
-        }
-        
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .nav a {
-            color: var(--muted);
-            text-decoration: none;
-            padding: 10px 16px;
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-            font-weight: 500;
-        }
-        
-        .nav a.active, .nav a:hover {
-            color: var(--text);
-            background: rgba(255,255,255,.05);
-        }
-        
-        .btn-agregar {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--primary);
-            color: white;
-            padding: 10px 16px;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-        
-        .btn-agregar:hover {
-            background: var(--primary-light);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
-        }
-        
-        h1 {
-            font-size: clamp(28px, 4vw, 42px);
-            line-height: 1.1;
-            margin: 0 0 16px;
-            background: linear-gradient(to right, #f1f5f9, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .subtitle {
-            margin: 0 0 32px;
-            color: var(--muted);
-            font-size: 1.1em;
-        }
-        
-        /* Panel principal */
-        .panel {
-            background: var(--card);
-            border-radius: var(--border-radius);
-            padding: 32px;
-            box-shadow: var(--shadow);
-            margin-bottom: 32px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: var(--transition);
-        }
-        
-        .panel:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-        }
-        
-        .panel h2 {
-            margin-top: 0;
-            margin-bottom: 24px;
-            color: var(--primary-light);
-            font-size: 1.6em;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .panel p {
-            margin-bottom: 16px;
-            line-height: 1.6;
-        }
-        
-        /* Sistema de grid */
-        .resources-grid, .brochure-grid {
-            display: grid;
-            gap: 24px;
-            margin: 28px 0;
-        }
-        
-        .resources-grid {
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        }
-        
-        .brochure-grid {
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        }
-        
-        /* Tarjetas de recursos */
-        .resource-card, .brochure-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--border-radius);
-            padding: 24px;
-            transition: var(--transition);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .resource-card:hover, .brochure-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-            background: rgba(255, 255, 255, 0.08);
-        }
-        
-        .resource-icon, .brochure-icon {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: var(--primary);
-            text-align: center;
-        }
-        
-        .resource-card h3, .brochure-item h3 {
-            margin: 0 0 16px 0;
-            color: var(--text);
-            font-size: 1.2em;
-        }
-        
-        .resource-card p {
-            color: var(--muted);
-            flex-grow: 1;
-            margin-bottom: 20px;
-        }
-        
-        /* Botones de descarga */
-        .btn-download {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--primary);
-            color: var(--bg);
-            padding: 10px 20px;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            text-decoration: none;
-            transition: var(--transition);
-            margin-top: auto;
-            justify-content: center;
-        }
-        
-        .btn-download:hover {
-            background: var(--primary-light);
-            transform: translateY(-2px);
-        }
-        
-        /* Lista de enlaces */
-        .links-list {
-            list-style: none;
-            margin: 24px 0;
-        }
-        
-        .links-list li {
-            margin-bottom: 12px;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--border-radius);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: var(--transition);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .links-list li:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateX(5px);
-        }
-        
-        .links-list a {
-            color: var(--primary);
-            text-decoration: none;
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .links-list a:hover {
-            text-decoration: underline;
-        }
-        
-        .tag {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: 600;
-            margin-left: 10px;
-        }
-        
-        .tag-pdf {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-        
-        .tag-link {
-            background: rgba(59, 130, 246, 0.2);
-            color: var(--primary);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 28px;
-            margin-top: auto;
-            color: var(--muted);
-            font-size: 0.9rem;
-            background: rgba(0, 0, 0, 0.2);
-        }
-        
-        /* Formulario de sugerencias */
-        .suggestion-form {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--border-radius);
-            padding: 24px;
-            margin-top: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border-radius: var(--border-radius);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: var(--card);
-            color: var(--text);
-            font-family: inherit;
-            transition: var(--transition);
-        }
-        
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-        }
-        
-        .btn-submit {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--success);
-            color: var(--bg);
-            border: none;
-            padding: 12px 24px;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .btn-submit:hover {
-            background: #22c55e;
-            transform: translateY(-2px);
-        }
-        
-        /* Sugerencias de la comunidad */
-        .suggestions-container {
-            margin-top: 32px;
-        }
-        
-        .suggestions-list {
-            list-style: none;
-            margin: 24px 0;
-        }
-        
-        .suggestion-item {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 16px;
-            border-left: 4px solid var(--primary);
-            transition: var(--transition);
-        }
-        
-        .suggestion-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .suggestion-text {
-            color: var(--text);
-            margin-bottom: 12px;
-            line-height: 1.5;
-        }
-        
-        .suggestion-meta {
-            display: flex;
-            justify-content: space-between;
-            color: var(--muted);
-            font-size: 0.9em;
-        }
-        
-        .no-suggestions {
-            text-align: center;
-            padding: 40px;
-            color: var(--muted);
-            font-style: italic;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--border-radius);
-        }
-        
-        .toggle-suggestions {
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--text);
-            border: none;
-            padding: 12px 20px;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            margin-top: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: var(--transition);
-            width: 100%;
-            justify-content: center;
-        }
-        
-        .toggle-suggestions:hover {
-            background: rgba(255, 255, 255, 0.12);
-        }
-        
-        /* Recursos en desarrollo */
-        .coming-soon {
-            text-align: center;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--border-radius);
-            margin: 20px 0;
-            border: 1px dashed rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Responsive */
-        @media (max-width: 968px) {
-            .nav .inner {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 16px;
-            }
-            
-            .nav-links {
-                width: 100%;
-                overflow-x: auto;
-                padding-bottom: 8px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 16px;
-            }
-            
-            .resources-grid, .brochure-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .panel {
-                padding: 24px;
-            }
-            
-            .suggestion-meta {
-                flex-direction: column;
-                gap: 8px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .nav a {
-                padding: 8px 12px;
-                font-size: 0.9em;
-            }
-            
-            .btn-agregar {
-                padding: 8px 12px;
-                font-size: 0.9em;
-            }
-            
-            .resource-card, .brochure-item {
-                padding: 20px;
-            }
-            
-            .links-list li {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-            }
-            
-            .tag {
-                margin-left: 0;
-            }
+        .giscus-frame {
+          border-radius: var(--border-radius);
         }
     </style>
 </head>
 <body>
-    <nav class="nav">
-        <div class="inner">
-            <div class="brand">
-                <img class="logo" src="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/img/logo%20micro1.webp" alt="Logo Microdeleción 15q11.2">
-                <div>Microdeleción 15q11.2</div>
-            </div>
-            <div class="nav-links">
-                <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
-                <a href="genetica.html"><i class="fas fa-dna"></i> Genética</a> 
-                <a href="casos.html"><i class="fas fa-folder-open"></i> Casos</a>
-                <a href="estadisticas.html"><i class="fas fa-chart-bar"></i> Estadísticas</a>
-                <a href="recursos.html" class="active"><i class="fas fa-book"></i> Recursos</a>
-                <a class="btn-agregar" href="formulario.html"><i class="fas fa-plus-circle"></i> Reportar caso</a>
-            </div>
-        </div>
-    </nav>
-
-    <section class="container">
-        <h1>Recursos Prácticos</h1>
-        <p class="subtitle">Herramientas útiles para el día a día con microdeleción 15q11.2</p>
-
-        <div class="panel">
-            <h2><i class="fas fa-file-download"></i> Documentos Descargables</h2>
-            <p>Material práctico basado en la experiencia de nuestra comunidad</p>
-            
-            <div class="resources-grid">
-                <div class="resource-card">
-                    <div class="resource-icon"><i class="fas fa-file-medical"></i></div>
-                    <h3>Registro de Síntomas</h3>
-                    <p>Plantilla para llevar un control detallado de síntomas, tratamientos y evolución.</p>
-                    <a href="https://raw.githubusercontent.com/Evelez23/gen15Qproject/main/resources/registro-sintomas.pdf" class="btn-download" download>
-                        <i class="fas fa-download"></i> Descargar PDF
-                    </a>
-                </div>
-                
-                <div class="resource-card">
-                    <div class="resource-icon"><i class="fas fa-question-circle"></i></div>
-                    <h3>Preguntas para Especialistas</h3>
-                    <p>Lista de preguntas importantes para hacer en consultas con genetistas y neurólogos.</p>
-                    <a href="https://raw.githubusercontent.com/Evelez23/gen15Qproject/main/resources/preguntas-genetista.pdf" class="btn-download" download>
-                        <i class="fas fa-download"></i> Descargar PDF
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel">
-            <h2><i class="fas fa-book-open"></i> Folletos Informativos</h2>
-            <p>Documentos compartidos por la comunidad sobre diferentes aspectos de la microdeleción</p>
-            
-            <div class="brochure-grid">
-                <div class="brochure-item">
-                    <div class="brochure-icon"><i class="fas fa-bolt"></i></div>
-                    <h3>Epilepsia en pacientes</h3>
-                    <a href="https://github.com/Evelez23/microdelecion-15q11.2/raw/main/resources/Epilepsia%20en%20pacientes%20con%20síndrome%20INVDUP15.pdf" class="btn-download" download>
-                        <i class="fas fa-download"></i> Descargar
-                    </a>
-                </div>
-                
-                <div class="brochure-item">
-                    <div class="brochure-icon"><i class="fas fa-bed"></i></div>
-                    <h3>Importancia del sueño</h3>
-                    <a href="https://github.com/Evelez23/microdelecion-15q11.2/raw/main/resources/Importancia%20del%20sueño%20en%20encefalopatías%20epilépticas.pdf" class="btn-download" download>
-                        <i class="fas fa-download"></i> Descargar
-                    </a>
-                </div>
-                
-                <div class="brochure-item">
-                    <div class="brochure-icon"><i class="fas fa-dna"></i></div>
-                    <h3>Microdeleciones 15q11.2</h3>
-                    <a href="https://github.com/Evelez23/microdelecion-15q11.2/raw/main/resources/Microdeleciones%2015q11.2.pdf" class="btn-download" download>
-                        <i class="fas fa-download"></i> Descargar
-                    </a>
-                </div>
-                
-                <div class="brochure-item">
-                    <div class="brochure-icon"><i class="fas fa-flask"></i></div>
-                    <h3>Novedades científicas</h3>
-                    <a href="https://github.com/Evelez23/microdelecion-15q11.2/raw/main/resources/NOVEDADES%20CIENTÍFICAS%20EN%20INV-DUP%2015%20Dr.pdf" class="btn-download" download>
-                        <i class="fas fa-download"></i> Descargar
-                    </a>
-                </div>
-                
-                <div class="brochure-item">
-                    <div class="brochure-icon"><i class="fas fa-hospital"></i></div>
-                    <h3>Proyecto diagnóstico</h3>
-                    <a href="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/resources/PROYECTO%20DE%20DIAGN%C3%93STICO%2C%20SEGUIMIENTO%20Y%20TRATAMIENTO%20DE%20LOS%20PACIENTES%20CON%20S%C3%8DNDROME%20DE%20INVERSI%C3%93N-DUPLICACI%C3%93N%20DEL%20CROMOSOMA%2015.pdf" class="btn-download" download>
-                        <i class="fas fa-download"></i> Descargar
-                    </a>
-                </div>
-                
-                <div class="brochure-item">
-                    <div class="brochure-icon"><i class="fas fa-star"></i></div>
-                    <h3>Nuevo síndrome</h3>
-                    <a href="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/resources/Un%20nuevo%20s%C3%ADndrome%20con%20expresividad%20variable%20.pdf" class="btn-download" download>
-                        <i class="fas fa-download"></i> Descargar
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel">
-            <h2><i class="fas fa-external-link-alt"></i> Enlaces y Organizaciones</h2>
-            <p>Recursos externos de confianza sobre microdeleciones</p>
-            
-            <ul class="links-list">
-                <li>
-                    <a href="https://www.rarechromo.org" target="_blank">
-                        <i class="fas fa-external-link-alt"></i> Rare Chromosome Disorder Support Group
-                    </a>
-                    <span class="tag tag-link">Inglés</span>
-                </li>
-                <li>
-                    <a href="https://medlineplus.gov/spanish/genetics/condition/15q112-microdeletion/" target="_blank">
-                        <i class="fas fa-external-link-alt"></i> MedlinePlus - Información en español
-                    </a>
-                    <span class="tag tag-link">Español</span>
-                </li>
-                <li>
-                    <a href="https://www.genome.gov/Genetic-Disorders/15q11-2-Microdeletion" target="_blank">
-                        <i class="fas fa-external-link-alt"></i> National Human Genome Research Institute
-                    </a>
-                    <span class="tag tag-link">Inglés</span>
-                </li>
-                <li>
-                    <a href="https://www.instagram.com/sindromedelecion15q11.2" target="_blank">
-                        <i class="fab fa-instagram"></i> Síndrome Deleción 15q11.2 en Instagram
-                    </a>
-                    <span class="tag tag-link">Red social</span>
-                </li>
-            </ul>
-        </div>
-
+    <!-- ...contenido igual hasta la última sección... -->
         <div class="panel">
             <h2><i class="fas fa-rocket"></i> Próximos Recursos</h2>
             <p>Estamos trabajando en crear más materiales útiles para la comunidad</p>
-            
             <div class="resources-grid">
                 <div class="resource-card">
                     <div class="resource-icon"><i class="fas fa-phone-alt"></i></div>
@@ -658,14 +54,12 @@
                     <p>Profesionales y centros especializados recomendados por la comunidad.</p>
                     <span class="tag tag-link">En desarrollo</span>
                 </div>
-                
                 <div class="resource-card">
                     <div class="resource-icon"><i class="fas fa-chart-line"></i></div>
                     <h3>Guía de Terapias</h3>
                     <p>Tipos de terapias y su efectividad según nuestra comunidad.</p>
                     <span class="tag tag-link">En desarrollo</span>
                 </div>
-                
                 <div class="resource-card">
                     <div class="resource-icon"><i class="fas fa-school"></i></div>
                     <h3>Adaptaciones Escolares</h3>
@@ -673,7 +67,6 @@
                     <span class="tag tag-link">En desarrollo</span>
                 </div>
             </div>
-            
             <div class="suggestion-form">
                 <h3><i class="fas fa-lightbulb"></i> ¿Qué recursos te gustaría que agreguemos?</h3>
                 <form id="suggestionForm" action="https://formsubmit.co/elmer_velez@hotmail.com" method="POST">
@@ -691,20 +84,17 @@
                     </div>
                     <input type="hidden" name="_next" value="https://evelez23.github.io/microdelecion-15q11.2/gracias.html">
                     <input type="hidden" name="_captcha" value="false">
-                    
                     <button type="submit" class="btn-submit">
                         <i class="fas fa-paper-plane"></i> Enviar Sugerencia
                     </button>
                 </form>
             </div>
-
             <div class="suggestions-container">
                 <h2><i class="fas fa-comments"></i> Sugerencias de la Comunidad</h2>
                 <button class="toggle-suggestions" onclick="toggleSuggestions()">
                     <span id="toggle-icon">▼</span>
                     <span id="toggle-text">Ver sugerencias</span>
                 </button>
-                
                 <div id="suggestions-list" style="display: none;">
                     <ul class="suggestions-list" id="suggestions-container">
                         <!-- Las sugerencias se cargarán aquí dinámicamente -->
@@ -715,109 +105,36 @@
                 </div>
             </div>
         </div>
-    </section>
 
+        <!-- Caja de comentarios Giscus discreta -->
+        <div class="panel" style="background: none; box-shadow: none; border: none; margin-top: 0; padding: 0;">
+          <h3 style="color: var(--primary-light); margin-top: 30px; margin-bottom: 8px; font-size: 1.25em; font-weight: 600; letter-spacing: .05em;">
+            <i class="fas fa-comments"></i> Comentarios públicos
+          </h3>
+          <div style="max-width: 700px; margin: 0 auto; background: none;">
+            <script src="https://giscus.app/client.js"
+              data-repo="Evelez23/gen15Qproject"
+              data-repo-id="R_kgDOL2Q3CQ"
+              data-category="General"
+              data-category-id="DIC_kwDOL2Q3Cc4CdtgK"
+              data-mapping="pathname"
+              data-strict="1"
+              data-reactions-enabled="1"
+              data-emit-metadata="0"
+              data-input-position="bottom"
+              data-theme="dark"
+              data-lang="es"
+              crossorigin="anonymous"
+              async>
+            </script>
+          </div>
+        </div>
+    </section>
     <footer class="footer">
         <p>© 2025 | Microdeleción 15q11.2 - Recursos creados por y para la comunidad</p>
     </footer>
-
     <script>
-        // Almacenamiento de sugerencias
-        const STORAGE_KEY = 'suggestions_15q11';
-        
-        // Cargar sugerencias al iniciar
-        document.addEventListener('DOMContentLoaded', function() {
-            loadSuggestions();
-        });
-        
-        // Función para cargar sugerencias
-        function loadSuggestions() {
-            const suggestions = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-            const container = document.getElementById('suggestions-container');
-            const noSuggestions = document.getElementById('no-suggestions');
-            
-            container.innerHTML = '';
-            
-            if (suggestions.length === 0) {
-                noSuggestions.style.display = 'block';
-                return;
-            }
-            
-            noSuggestions.style.display = 'none';
-            
-            // Mostrar sugerencias en orden inverso (más recientes primero)
-            suggestions.reverse().forEach(suggestion => {
-                const li = document.createElement('li');
-                li.className = 'suggestion-item';
-                
-                const date = new Date(suggestion.date);
-                const formattedDate = date.toLocaleDateString('es-ES', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-                
-                li.innerHTML = `
-                    <div class="suggestion-text">${suggestion.text}</div>
-                    <div class="suggestion-meta">
-                        <span><i class="fas fa-user"></i> Por: ${suggestion.name || 'Anónimo'}</span>
-                        <span><i class="fas fa-calendar"></i> ${formattedDate}</span>
-                    </div>
-                `;
-                
-                container.appendChild(li);
-            });
-        }
-        
-        // Función para togglear la visibilidad de sugerencias
-        function toggleSuggestions() {
-            const suggestionsList = document.getElementById('suggestions-list');
-            const toggleIcon = document.getElementById('toggle-icon');
-            const toggleText = document.getElementById('toggle-text');
-            
-            if (suggestionsList.style.display === 'none') {
-                suggestionsList.style.display = 'block';
-                toggleIcon.textContent = '▲';
-                toggleText.textContent = 'Ocultar sugerencias';
-            } else {
-                suggestionsList.style.display = 'none';
-                toggleIcon.textContent = '▼';
-                toggleText.textContent = 'Ver sugerencias';
-            }
-        }
-        
-        // Manejar el formulario de sugerencias
-        document.getElementById('suggestionForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const nameInput = document.getElementById('name');
-            const suggestionInput = document.getElementById('suggestion');
-            
-            const suggestion = {
-                name: nameInput.value.trim(),
-                text: suggestionInput.value.trim(),
-                date: new Date().toISOString()
-            };
-            
-            if (!suggestion.text) return;
-            
-            // Guardar sugerencia
-            const suggestions = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-            suggestions.push(suggestion);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(suggestions));
-            
-            // Mostrar mensaje de éxito
-            alert(`¡Gracias ${suggestion.name || 'Anónimo'} por tu sugerencia!\n\nTu idea será considerada para futuros recursos.`);
-            
-            // Limpiar formulario y recargar sugerencias
-            this.reset();
-            loadSuggestions();
-            
-            // Mostrar las sugerencias si estaban ocultas
-            document.getElementById('suggestions-list').style.display = 'block';
-            document.getElementById('toggle-icon').textContent = '▲';
-            document.getElementById('toggle-text').textContent = 'Ocultar sugerencias';
-        });
+        // ...tu JS igual, aquí no es necesario modificar nada...
     </script>
 </body>
 </html>
