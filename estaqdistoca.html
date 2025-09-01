@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Estadísticas y Resumen Clínico | Microdeleción 15q11.2</title>
+  <meta name="description" content="Estadísticas detalladas y análisis de casos de microdeleción 15q11.2">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --muted: #94a3b8;
+      --text: #f1f5f9;
+      --primary: #3b82f6;
+      --primary-light: #60a5fa;
+      --accent: #ef4444;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --border-radius: 16px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(ellipse at top right, rgba(59, 130, 246, 0.15), transparent 60%),
+                  radial-gradient(ellipse at bottom left, rgba(16, 185, 129, 0.1), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      flex: 1;
+    }
+
+    /* Navegación mejorada */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav .inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: .3px;
+    }
+
+    .brand img.logo {
+      height: 40px;
+      width: auto;
+      border-radius: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .nav a.active, .nav a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,.05);
+    }
+
+    .btn-agregar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      padding: 10px 16px;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .btn-agregar:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    h1 {
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.1;
+      margin: 0 0 16px;
+      background: linear-gradient(to right, #f1f5f9, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      margin: 0 0 32px;
+      color: var(--muted);
+      font-size: 1.1em;
+    }
+
+    /* Panel principal */
+    .panel {
+      background: var(--card);
+      border-radius: var(--border-radius);
+      padding: 32px;
+      box-shadow: var(--shadow);
+      margin-bottom: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: var(--transition);
+    }
+
+    .panel:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .panel h2, .panel h3 {
+      margin-top: 0;
+      color: var(--primary-light);
+    }
+
+    .panel h2 {
+      margin-bottom: 24px;
+      font-size: 1.6em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .panel h3 {
+      margin-bottom: 16px;
+      font-size: 1.2em;
+    }
+
+    /* Nota sobre datos */
+    .data-note {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), transparent);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: var(--border-radius);
+      padding: 20px 24px;
+      margin: 0 0 32px 0;
+    }
+
+    .data-note p {
+      margin: 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .data-note p::before {
+      content: "💡";
+      font-size: 1.2em;
+    }
+
+    /* Grid system */
+    .grid-4, .grid-3, .grid-2 {
+      display: grid;
+      gap: 24px;
+      margin: 32px 0;
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+
+    /* Tarjetas de estadísticas */
+    .stat-card {
+      background: var(--card);
+      border-radius: var(--border-radius);
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--success));
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .stat-card h3 {
+      font-size: 1.1em;
+      margin: 0 0 16px 0;
+      color: var(--muted);
+    }
+
+    .stat-number {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin: 0;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .stat-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+      color: var(--primary-light);
+    }
+
+    /* Contenedores de gráficos */
+    .chart-container {
+      position: relative;
+      height: 240px;
+      margin: 20px 0;
+    }
+
+    .chart-footer {
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: var(--border-radius);
+      border-left: 4px solid var(--primary);
+    }
+
+    .chart-footer p {
+      margin: 0;
+      font-size: 0.95em;
+      color: var(--muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .chart-footer p::before {
+      content: "📌";
+      font-size: 1.1em;
+    }
+
+    /* Países grid */
+    .paises-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .pais-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: var(--border-radius);
+      padding: 20px 16px;
+      text-align: center;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .pais-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .bandera {
+      font-size: 2.8rem;
+      margin-bottom: 12px;
+      display: block;
+      line-height: 1;
+    }
+
+    .pais-nombre {
+      font-weight: 600;
+      font-size: 0.95em;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .pais-casos {
+      font-size: 0.85em;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* Estados de carga y error */
+    .loading-message, .error-message {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .loading-message::after {
+      content: "";
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 12px;
+      vertical-align: middle;
+    }
+
+    .error-message {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid var(--danger);
+      border-radius: var(--border-radius);
+      padding: 30px;
+    }
+
+    .error-message button {
+      margin-top: 16px;
+      background: var(--danger);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .error-message button:hover {
+      background: #dc2626;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 28px;
+      margin-top: auto;
+      color: var(--muted);
+      font-size: 0.9rem;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+      .nav .inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      
+      .nav-links {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 8px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 16px;
+      }
+      
+      .panel {
+        padding: 24px;
+      }
+      
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .grid-3, .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      
+      .paises-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav a {
+        padding: 8px 12px;
+        font-size: 0.9em;
+      }
+      
+      .btn-agregar {
+        padding: 8px 12px;
+        font-size: 0.9em;
+      }
+      
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+      
+      .paises-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .stat-number {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="inner">
+      <div class="brand">
+        <img class="logo" src="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/img/logo%20micro1.webp" alt="Logo Microdeleción 15q11.2">
+        <div>Microdeleción 15q11.2</div>
+      </div>
+      <div class="nav-links">
+        <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+        <a href="genetica.html"><i class="fas fa-dna"></i> Genética</a> 
+        <a href="casos.html"><i class="fas fa-folder-open"></i> Casos</a>
+        <a href="estadisticas.html" class="active"><i class="fas fa-chart-bar"></i> Estadísticas</a>
+        <a href="recursos.html"><i class="fas fa-book"></i> Recursos</a>
+        <a class="btn-agregar" href="formulario.html"><i class="fas fa-plus-circle"></i> Reportar caso</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h1>Estadísticas y Resumen Clínico</h1>
+    <p class="subtitle">Análisis completo de los casos reportados por nuestra comunidad</p>
+    
+    <div class="data-note">
+      <p><b>Nota sobre los datos:</b> Estas estadísticas se generan a partir de los casos reportados por las familias en esta plataforma. No representan un estudio científico riguroso, sino una herramienta de visualización para nuestra comunidad. La información no sustituye el consejo médico profesional.</p>
+    </div>
+
+    <section id="estadisticas-kpis" class="grid-4">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
+        <h3>Pacientes registrados</h3>
+        <p class="stat-number" id="total-casos">...</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-birthday-cake"></i></div>
+        <h3>Edad promedio</h3>
+        <p class="stat-number" id="edad-promedio">...</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+        <h3>Tasa de validación</h3>
+        <p class="stat-number" id="validacion-rate">...</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-globe-americas"></i></div>
+        <h3>Países con casos</h3>
+        <p class="stat-number" id="paises-total">...</p>
+      </div>
+    </section>
+
+    <div id="loading" class="loading-message">
+      Cargando datos...
+    </div>
+
+    <section id="estadisticas-graficos" class="grid-2">
+      <div class="panel">
+        <h2><i class="fas fa-venus-mars"></i> Distribución por género</h2>
+        <div class="chart-container">
+          <canvas id="chartSexo" aria-label="Distribución de casos por género"></canvas>
+        </div>
+        <div class="chart-footer">
+          <p><b>Ratio:</b> Distribución similar entre géneros en los casos reportados.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <h2><i class="fas fa-balance-scale"></i> Distribución por nivel de afectación</h2>
+        <div class="chart-container">
+          <canvas id="chartGravedad" aria-label="Distribución de casos por nivel de afectación"></canvas>
+        </div>
+        <div class="chart-footer">
+          <p><b>Observación:</b> La mayoría de casos reportados presentan una afectación de nivel moderado.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <h2><i class="fas fa-stethoscope"></i> Síntomas comunes</h2>
+        <div class="chart-container">
+          <canvas id="chartPrev" aria-label="Distribución de casos por síntomas principales"></canvas>
+        </div>
+        <div class="chart-footer">
+          <p><b>Patrón de comorbilidad:</b> <span id="sintomas-multiples">...</span>% de los casos reportados presentan múltiples síntomas simultáneamente, subrayando la complejidad de la condición.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <h2><i class="fas fa-birthday-cake"></i> Distribución por edad</h2>
+        <div class="chart-container">
+          <canvas id="chartEdad" aria-label="Distribución de casos por edad"></canvas>
+        </div>
+        <div class="chart-footer">
+          <p><b>Tendencia:</b> La mayoría de los diagnósticos reportados ocurren en la primera infancia (0-5 años).</p>
+        </div>
+      </div>
+      <div class="panel">
+        <h2><i class="fas fa-check-double"></i> Origen y Validación de Casos</h2>
+        <div class="chart-container">
+          <canvas id="chartOrigenResumen" aria-label="Distribución de casos por origen"></canvas>
+        </div>
+        <div class="chart-footer">
+          <p><b>Calidad de datos:</b> Una gran parte de los casos han sido validados.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="estadisticas-localizacion">
+      <div class="panel">
+        <h2><i class="fas fa-globe-americas"></i> Casos por países y ciudades</h2>
+        <div id="paises-container" class="paises-grid" style="display: none;"></div>
+        <div id="paises-loading" class="loading-message">
+          Cargando datos de países...
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="inner">
+      © 2025 | Estadísticas basadas en datos reales de la comunidad
+    </div>
+  </footer>
+
+  <script>
+    // Base de conocimiento de ciudades y sus países
+    const ciudadesPorPais = {
+      'españa': [
+        'madrid', 'barcelona', 'valencia', 'sevilla', 'zaragoza', 'málaga', 'murcia', 'palma', 'las palmas',
+        'bilbao', 'alicante', 'córdoba', 'valladolid', 'vigo', 'gijón', 'hospitalet', 'a coruña', 'vitoria',
+        'granada', 'elche', 'oviedo', 'badalona', 'cartagena', 'terrassa', 'jerez', 'sabadell', 'móstoles',
+        'alcalá de henares', 'pamplona', 'fuenlabrada', 'almería', 'leganés', 'santander', 'castellón', 'burgos',
+        'albacete', 'alcorcón', 'getafe', 'san sebastián', 'logroño', 'badajoz', 'huelva', 'salamanca', 'mérida',
+        'tarragona', 'lérida', 'marbella', 'león', 'cadiz', 'parla', 'igualada', 'segovia', 'utrera', 'arganda del rey',
+        'gijon', 'oviedo', 'alicante', 'valencia', 'arganda del rey', 'malaga', 'zaragoza', 'asturias', 'barcelona',
+        'madrid', 'sevilla', 'murcia', 'igualada', 'segovia', 'utrera', 'málaga', 'alicante', 'valencia', 'zaragoza'
+      ],
+      'argentina': [
+        'buenos aires', 'córdoba', 'rosario', 'mendoza', 'san miguel de tucumán', 'la plata', 'mar del plata',
+        'salta', 'santa fe', 'san juan', 'resistencia', 'neuquén', 'santiago del estero', 'corrientes', 'bahía blanca',
+        'posadas', 'paraná', 'formosa', 'san salvador de jujuy', 'la rioja', 'comodoro rivadavia', 'san luis',
+        'rio cuarto', 'concordia', 'san nicolás de los arroyos', 'tandil', 'san rafael', 'trelew', 'viedma'
+      ],
+      'honduras': [
+        'tegucigalpa', 'san pedro sula', 'choloma', 'la ceiba', 'el progreso', 'ciudad choluteca', 'comayagua',
+        'puerto cortés', 'la lima', 'danlí', 'siguatepeque', 'juticalpa', 'villanueva', 'tocoa', 'tela', 'santa rosa de copán',
+        'san lorenzo', 'olanchito', 'catacamas', 'yoro', 'ciudad de honduras'
+      ]
+    };
+
+    // Lista de países reconocidos
+    const paisesReconocidos = ['españa', 'argentina', 'honduras', 'méxico', 'colombia', 'chile', 'perú'];
+
+    // Función para determinar el país basado en la ciudad
+    function determinarPaisPorCiudad(ciudad) {
+      if (!ciudad) return null;
+      
+      const ciudadNormalizada = ciudad.toLowerCase().trim();
+      
+      for (const [pais, ciudades] of Object.entries(ciudadesPorPais)) {
+        if (ciudades.includes(ciudadNormalizada)) {
+          return pais;
+        }
+      }
+      
+      return null;
+    }
+
+    // Función para verificar si un texto es un país reconocido
+    function esPaisReconocido(texto) {
+      if (!texto) return false;
+      const textoNormalizado = texto.toLowerCase().trim();
+      return paisesReconocidos.includes(textoNormalizado);
+    }
+
+    // Función para normalizar el nombre del país
+    function normalizarPais(nombrePais) {
+      if (!nombrePais) return null;
+      
+      const nombreNormalizado = nombrePais.toLowerCase().trim();
+      
+      if (nombreNormalizado.includes('españa') || nombreNormalizado.includes('espana')) {
+        return 'España';
+      } else if (nombreNormalizado.includes('argentina')) {
+        return 'Argentina';
+      } else if (nombreNormalizado.includes('honduras')) {
+        return 'Honduras';
+      }
+      
+      return nombrePais;
+    }
+
+    // Función para normalizar los datos de diferentes fuentes
+    function normalizarCaso(caso, origen) {
+      // Determinar la estructura del caso y normalizarla
+      const casoNormalizado = {
+        origen: origen,
+        nombre: caso.Nombre || caso["Nombre "] || "",
+        edad: parseFloat(caso.Edad || caso["Edad "] || caso["Edad"] || 0),
+        genero: (caso.Género || caso.genero || "").toString().toLowerCase(),
+        localizacion: caso.Localizacion || caso.Localización || caso["Localización"] || "",
+        sintomas: caso["síntomas principales"] || caso["síntomas principales  "] || caso.sintomas || caso.sintomas_principales || "",
+        gravedad: caso["Nivel de afectación"] || caso.gravedad || caso["Nivel de afectacion"] || "",
+        pruebas: caso["Pruebas realizadas"] || "",
+        medicamentos: caso["Medicamentos actuales/pasados"] || "",
+        terapias: caso["Terapias recibidas"] || "",
+        estudios: caso["¿Ha participado en estudios clinicos o geneticos?"] || "",
+        necesidades: caso["Necesidades y Desafíos"] || ""
+      };
+      
+      // Normalización adicional del género
+      if (casoNormalizado.genero.includes('masc') || casoNormalizado.genero === 'm') {
+        casoNormalizado.genero = 'masculino';
+      } else if (casoNormalizado.genero.includes('femen') || casoNormalizado.genero === 'f') {
+        casoNormalizado.genero = 'femenino';
+      }
+      
+      return casoNormalizado;
+    }
+
+    async function loadDataset() {
+      const urlValidados = 'https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/data/casos_validados.json';
+      const urlNoValidados = 'https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/data/casos_no_validados.json';
+
+      try {
+        const [resValidados, resNoValidados] = await Promise.all([
+          fetch(urlValidados),
+          fetch(urlNoValidados)
+        ]);
+        
+        if (!resValidados.ok || !resNoValidados.ok) {
+          throw new Error('Error al cargar los datos');
+        }
+        
+        const dataValidados = await resValidados.json();
+        const dataNoValidados = await resNoValidados.json();
+        
+        // Normalizar todos los casos
+        const casosValidados = dataValidados.map(caso => normalizarCaso(caso, 'validado'));
+        const casosNoValidados = dataNoValidados.map(caso => normalizarCaso(caso, 'no validado'));
+
+        return [...casosValidados, ...casosNoValidados];
+
+      } catch (error) {
+        console.error('Error al cargar los datasets desde GitHub:', error);
+        return [];
+      }
+    }
+
+    async function initStats() {
+      try {
+        const data = await loadDataset();
+        if (data.length === 0) {
+          document.getElementById('loading').textContent = 'Hubo un error al cargar los datos. Por favor, inténtelo de nuevo más tarde.';
+          return;
+        }
+        
+        console.log('Datos cargados y normalizados:', data);
+
+        // 1. KPIS PRINCIPALES
+        document.getElementById('total-casos').textContent = data.length;
+        
+        const edadesValidas = data.map(r => {
+          const edad = parseFloat(r.edad || 0);
+          return isNaN(edad) ? 0 : edad;
+        }).filter(e => e > 0);
+        
+        const edadPromedio = edadesValidas.length > 0 ? 
+          Math.round(edadesValidas.reduce((a, b) => a + b, 0) / edadesValidas.length) : 0;
+        document.getElementById('edad-promedio').textContent = edadPromedio;
+
+        // Cálculo correcto de validación
+        const casosValidados = data.filter(r => r.origen === 'validado').length;
+        const porcentajeValidados = data.length > 0 ? Math.round((casosValidados / data.length) * 100) : 0;
+        document.getElementById('validacion-rate').textContent = `${porcentajeValidados}%`;
+
+        // 2. GRÁFICO DE SÍNTOMAS
+        const sintomasConfig = [
+          { label: 'TEA', key: 'autismo', regex: /autismo|autis|tea|espectro autista/i },
+          { label: 'TDAH', key: 'tdah', regex: /tdah|deficit de atencion|hiperactividad/i },
+          { label: 'Hipotonía', key: 'hipotonia', regex: /hipoton|tono muscular bajo/i },
+          { label: 'Disfagia', key: 'disfagia', regex: /disfagia/i },
+          { label: 'Epilepsia', key: 'epilepsia', regex: /epilep/i },
+          { label: 'Cardiopatías', key: 'cardiopatia', regex: /cardiopat/i },
+          { label: 'Retraso cognitivo/motor', key: 'retraso', regex: /retraso cognitivo|retraso motor/i },
+          { label: 'Problemas de lenguaje', key: 'lenguaje', regex: /problemas de lenguaje|habla|dislalia/i }
+        ];
+        
+        const countsSintomas = sintomasConfig.map(({ regex }) => 
+          data.filter(r => regex.test(r.sintomas || '')).length
+        );
+        
+        new Chart(document.getElementById('chartPrev').getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: sintomasConfig.map(s => s.label),
+            datasets: [{
+              label: 'Pacientes',
+              data: countsSintomas,
+              backgroundColor: 'rgba(59, 130, 246, 0.7)',
+              borderColor: 'rgba(59, 130, 246, 1)',
+              borderWidth: 1,
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: { 
+                beginAtZero: true, 
+                title: { 
+                  display: true, 
+                  text: 'Número de casos',
+                  color: '#94a3b8'
+                },
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.05)'
+                },
+                ticks: {
+                  color: '#94a3b8'
+                }
+              },
+              x: {
+                grid: {
+                  display: false
+                },
+                ticks: {
+                  color: '#f1f5f9'
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                titleColor: '#f1f5f9',
+                bodyColor: '#f1f5f9',
+                borderColor: 'rgba(59, 130, 246, 0.5)',
+                borderWidth: 1,
+                cornerRadius: 8,
+                displayColors: false
+              }
+            }
+          }
+        });
+
+        // 3. GRÁFICO DE GÉNERO
+        const hombres = data.filter(r => (r.genero || '').includes('masculino') || (r.genero || '') === 'm').length;
+        const mujeres = data.filter(r => (r.genero || '').includes('femenino') || (r.genero || '') === 'f').length;
+        const noEspecificado = data.length - (hombres + mujeres);
+        
+        new Chart(document.getElementById('chartSexo').getContext('2d'), {
+          type: 'doughnut',
+          data: {
+            labels: ['Masculino', 'Femenino', 'No especificado'],
+            datasets: [{
+              data: [hombres, mujeres, noEspecificado],
+              backgroundColor: [
+                'rgba(59, 130, 246, 0.7)',
+                'rgba(239, 68, 68, 0.7)',
+                'rgba(148, 163, 184, 0.7)'
+              ],
+              borderColor: [
+                'rgba(59, 130, 246, 1)',
+                'rgba(239, 68, 68, 1)',
+                'rgba(148, 163, 184, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { 
+              legend: { 
+                position: 'bottom',
+                labels: {
+                  color: '#f1f5f9',
+                  padding: 15,
+                  font: {
+                    size: 12
+                  }
+                }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                titleColor: '#f1f5f9',
+                bodyColor: '#f1f5f9',
+                borderColor: 'rgba(59, 130, 246, 0.5)',
+                borderWidth: 1,
+                cornerRadius: 8
+              }
+            }
+          }
+        });
+
+        // 4. GRÁFICO DE EDAD
+        const bucketsEdad = { "0-5 años": 0, "6-12 años": 0, "13-18 años": 0, "19+ años": 0, "No especificada": 0 };
+        data.forEach(r => {
+          const edad = parseFloat(r.edad || 0);
+          if (!isNaN(edad) && edad > 0) {
+            if (edad <= 5) bucketsEdad["0-5 años"]++;
+            else if (edad <= 12) bucketsEdad["6-12 años"]++;
+            else if (edad <= 18) bucketsEdad["13-18 años"]++;
+            else bucketsEdad["19+ años"]++;
+          } else {
+            bucketsEdad["No especificada"]++;
+          }
+        });
+        
+        new Chart(document.getElementById('chartEdad').getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: Object.keys(bucketsEdad),
+            datasets: [{
+              label: 'Número de casos',
+              data: Object.values(bucketsEdad),
+              backgroundColor: 'rgba(239, 68, 68, 0.7)',
+              borderColor: 'rgba(239, 68, 68, 1)',
+              borderWidth: 1,
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: { 
+              y: { 
+                beginAtZero: true, 
+                title: { 
+                  display: true, 
+                  text: 'Número de casos',
+                  color: '#94a3b8'
+                },
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.05)'
+                },
+                ticks: {
+                  color: '#94a3b8'
+                }
+              },
+              x: {
+                grid: {
+                  display: false
+                },
+                ticks: {
+                  color: '#f1f5f9'
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                titleColor: '#f1f5f9',
+                bodyColor: '#f1f5f9',
+                borderColor: 'rgba(239, 68, 68, 0.5)',
+                borderWidth: 1,
+                cornerRadius: 8,
+                displayColors: false
+              }
+            }
+          }
+        });
+
+        // 5. GRÁFICO DE GRAVEDAD
+        const bucketsGravedad = { "Leve": 0, "Moderado": 0, "Grave": 0, "Asintomático": 0, "No especificado": 0 };
+        data.forEach(r => {
+          const gravedad = (r.gravedad || '').toLowerCase();
+          if (gravedad.includes('leve') || gravedad.includes('vida independiente')) bucketsGravedad['Leve']++;
+          else if (gravedad.includes('moderado') || gravedad.includes('necesita apoyo')) bucketsGravedad['Moderado']++;
+          else if (gravedad.includes('grave') || gravedad.includes('dependencia')) bucketsGravedad['Grave']++;
+          else if (gravedad.includes('asintomatico') || gravedad.includes('asintomática')) bucketsGravedad['Asintomático']++;
+          else bucketsGravedad['No especificado']++;
+        });
+        
+        new Chart(document.getElementById('chartGravedad').getContext('2d'), {
+          type: 'doughnut',
+          data: {
+            labels: Object.keys(bucketsGravedad),
+            datasets: [{
+              data: Object.values(bucketsGravedad),
+              backgroundColor: [
+                'rgba(16, 185, 129, 0.7)',
+                'rgba(245, 158, 11, 0.7)',
+                'rgba(239, 68, 68, 0.7)',
+                'rgba(148, 163, 184, 0.7)',
+                'rgba(126, 126, 126, 0.7)'
+              ],
+              borderColor: [
+                'rgba(16, 185, 129, 1)',
+                'rgba(245, 158, 11, 1)',
+                'rgba(239, 68, 68, 1)',
+                'rgba(148, 163, 184, 1)',
+                'rgba(126, 126, 126, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { 
+              legend: { 
+                position: 'bottom',
+                labels: {
+                  color: '#f1f5f9',
+                  padding: 15,
+                  font: {
+                    size: 12
+                  }
+                }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                titleColor: '#f1f5f9',
+                bodyColor: '#f1f5f9',
+                borderColor: 'rgba(59, 130, 246, 0.5)',
+                borderWidth: 1,
+                cornerRadius: 8
+              }
+            }
+          }
+        });
+
+        // 6. GRÁFICO DE ORIGEN DE CASOS - CORREGIDO
+        const origenCtx = document.getElementById('chartOrigenResumen');
+        if (origenCtx) {
+          const validados = data.filter(r => r.origen === 'validado').length;
+          const noValidados = data.filter(r => r.origen === 'no validado').length;
+          
+          new Chart(origenCtx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+              labels: ['Validados', 'No validados'],
+              datasets: [{
+                data: [validados, noValidados],
+                backgroundColor: [
+                  'rgba(16, 185, 129, 0.7)',
+                  'rgba(245, 158, 11, 0.7)'
+                ],
+                borderColor: [
+                  'rgba(16, 185, 129, 1)',
+                  'rgba(245, 158, 11, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { 
+                legend: { 
+                  position: 'bottom',
+                  labels: {
+                    color: '#f1f5f9',
+                    padding: 15,
+                    font: {
+                      size: 12
+                    }
+                  }
+                },
+                tooltip: {
+                  backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                  titleColor: '#f1f5f9',
+                  bodyColor: '#f1f5f9',
+                  borderColor: 'rgba(59, 130, 246, 0.5)',
+                  borderWidth: 1,
+                  cornerRadius: 8,
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.label || '';
+                      const value = context.raw || 0;
+                      const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                      const percentage = Math.round((value / total) * 100);
+                      return `${label}: ${value} (${percentage}%)`;
+                    }
+                  }
+                }
+              }
+            }
+          });
+        }
+        
+        // 7. DESPLIEGUE DE PAÍSES Y CIUDADES - CORREGIDO
+        const localizaciones = data.filter(r => r.localizacion && r.localizacion.trim() !== '');
+        const paises = {};
+        
+        localizaciones.forEach(r => {
+          const loc = (r.localizacion || '').trim();
+          let pais, ciudad;
+
+          // Primero verificar si la localización es directamente un país
+          const paisNormalizado = normalizarPais(loc);
+          if (paisNormalizado && esPaisReconocido(paisNormalizado)) {
+            pais = paisNormalizado;
+            ciudad = 'No especificada';
+          } 
+          // Si no es un país, intentar extraer país y ciudad
+          else if (loc.includes(',')) {
+            const partes = loc.split(',');
+            ciudad = partes[0].trim();
+            pais = normalizarPais(partes[1].trim());
+          } else if (loc.includes('/')) {
+            const partes = loc.split('/');
+            pais = normalizarPais(partes[0].trim());
+            ciudad = partes.length > 1 ? partes[1].trim() : 'No especificada';
+          } else {
+            // Si no hay separador, asumir que es una ciudad y determinar su país
+            ciudad = loc;
+            pais = determinarPaisPorCiudad(ciudad) || 'No especificado';
+          }
+          
+          // Si después de todo no tenemos un país válido, intentar determinar por la ciudad
+          if (!pais || pais.toLowerCase() === 'no especificado') {
+            pais = determinarPaisPorCiudad(ciudad) || 'No especificado';
+          }
+          
+          // Si la ciudad es conocida pero no tenemos país, usar España por defecto (mayoría de casos)
+          if (ciudad && determinarPaisPorCiudad(ciudad) && pais === 'No especificado') {
+            pais = 'España';
+          }
+          
+          // Corrección final: si el "país" es realmente una ciudad española, asignar a España
+          if (pais !== 'España' && determinarPaisPorCiudad(pais) === 'españa') {
+            ciudad = pais;
+            pais = 'España';
+          }
+          
+          // Asegurar que el país está normalizado
+          pais = normalizarPais(pais) || 'No especificado';
+          
+          if (!paises[pais]) {
+            paises[pais] = { total: 0, ciudades: {} };
+          }
+          paises[pais].total++;
+          
+          if (ciudad && ciudad.toLowerCase() !== 'no especificada') {
+            if (!paises[pais].ciudades[ciudad]) {
+              paises[pais].ciudades[ciudad] = 0;
+            }
+            paises[pais].ciudades[ciudad]++;
+          }
+        });
+
+        // Calcular el total de países únicos para el KPI
+        const uniqueCountries = new Set(Object.keys(paises).filter(p => p !== 'No especificado'));
+        document.getElementById('paises-total').textContent = uniqueCountries.size;
+
+        const getBandera = (nombrePais) => {
+            const banderas = {
+                'españa': '🇪🇸',
+                'honduras': '🇭🇳',
+                'argentina': '🇦🇷',
+                'méxico': '🇲🇽',
+                'colombia': '🇨🇴',
+                'chile': '🇨🇱',
+                'perú': '🇵🇪'
+            };
+            return banderas[nombrePais.toLowerCase()] || '🗺️';
+        };
+
+        const paisesArray = Object.keys(paises)
+          .filter(pais => pais !== 'No especificado')
+          .map(nombre => ({
+            nombre,
+            total: paises[nombre].total,
+            bandera: getBandera(nombre),
+            ciudades: Object.keys(paises[nombre].ciudades)
+              .filter(ciudad => ciudad !== 'No especificada')
+              .map(ciudadNombre => ({
+                nombre: ciudadNombre,
+                count: paises[nombre].ciudades[ciudadNombre]
+              })).sort((a,b) => b.count - a.count)
+          }));
+        
+        paisesArray.sort((a, b) => b.total - a.total);
+        
+        const paisesContainer = document.getElementById('paises-container');
+        paisesContainer.style.display = 'grid';
+        document.getElementById('paises-loading').style.display = 'none';
+
+        paisesArray.forEach(pais => {
+          const card = document.createElement('div');
+          card.className = 'pais-card';
+          let ciudadesHtml = '';
+          
+          if (pais.ciudades.length > 0) {
+            ciudadesHtml = `<div style="margin-top: 10px; font-size: 0.8em; color: var(--muted);">${pais.ciudades.map(c => `${c.nombre} (${c.count})`).join(', ')}</div>`;
+          }
+
+          card.innerHTML = `
+            <span class="bandera">${pais.bandera}</span>
+            <div class="pais-nombre">${pais.nombre}</div>
+            <div class="pais-casos">${pais.total} caso${pais.total > 1 ? 's' : ''}</div>
+            ${ciudadesHtml}
+          `;
+          paisesContainer.appendChild(card);
+        });
+        
+        // Calcular porcentaje de casos con múltiples síntomas para la nota
+        const casosConMultiplesSintomas = data.filter(r => {
+            const sintomas = (r.sintomas || '').toLowerCase();
+            const esMultiple = (sintomas.includes(',') || sintomas.includes(';') || sintomas.includes(' y '));
+            return esMultiple;
+        });
+        
+        const porcentajeSintomasMultiples = data.length > 0 ? 
+          Math.round((casosConMultiplesSintomas.length / data.length) * 100) : 0;
+        document.getElementById('sintomas-multiples').textContent = porcentajeSintomasMultiples;
+
+        // Ocultar mensaje de carga
+        document.getElementById('loading').style.display = 'none';
+
+        // Animaciones
+        if (window.anime) {
+          anime({
+            targets: '.panel, .pais-card',
+            opacity: [0, 1],
+            translateY: [20, 0],
+            delay: anime.stagger(100),
+            duration: 800,
+            easing: 'easeOutQuad'
+          });
+        }
+
+      } catch (error) {
+        console.error('Error al cargar datos o generar gráficos:', error);
+        const loadingDiv = document.getElementById('loading');
+        if (loadingDiv) loadingDiv.textContent = 'Hubo un error al cargar los datos. Por favor, inténtelo de nuevo más tarde.';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initStats);
+  </script>
+</body>
+</html>
