@@ -1,47 +1,170 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>¡Gracias! | Microdeleción 15q11.2</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Gracias! | Microdeleción 15q11.2</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --bg: #0f172a;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --primary: #3b82f6;
+    --primary-light: #60a5fa;
+    --border-radius: 16px;
+    --shadow: 0 10px 30px rgba(0,0,0,.35);
+    --transition: all 0.3s ease;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: radial-gradient(ellipse at top right, rgba(59, 130, 246, 0.15), transparent 60%),
+                radial-gradient(ellipse at bottom left, rgba(16, 185, 129, 0.1), transparent 60%),
+                var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .nav {
+    position: sticky;
+    top:0;
+    z-index:100;
+    backdrop-filter: blur(10px);
+    background: rgba(15, 23, 42, 0.9);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .nav .inner {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 24px;
+  }
+
+  .brand {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-weight:700;
+    letter-spacing:.3px;
+  }
+
+  .brand img.logo { height:40px; width:auto; border-radius:8px; }
+
+  .nav-links {
+    display:flex;
+    align-items:center;
+    gap:4px;
+    flex-wrap:wrap;
+  }
+
+  .nav a {
+    color: var(--muted);
+    text-decoration:none;
+    padding:10px 16px;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    font-weight:500;
+  }
+
+  .nav a:hover, .nav a.active { color: var(--text); background: rgba(255,255,255,0.05); }
+
+  .container { max-width:1200px; margin:0 auto; padding:24px; flex:1; text-align:center; }
+
+  h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    margin-bottom: 24px;
+    line-height:1.2;
+    background: linear-gradient(to right, #f1f5f9, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  p { margin-bottom:16px; color: var(--muted); font-size:1.1em; }
+
+  .button {
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color:white;
+    border:none;
+    border-radius: var(--border-radius);
+    padding:14px 24px;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:none;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    margin: 8px;
+  }
+
+  .button:hover { transform: translateY(-3px); box-shadow:0 12px 25px rgba(59,130,246,0.35); }
+
+  .button.secondary {
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+    box-shadow:none;
+  }
+
+  .button.secondary:hover {
+    background: rgba(255,255,255,0.12);
+    transform: translateY(-3px);
+  }
+
+  .footer {
+    text-align:center;
+    padding:28px;
+    margin-top:auto;
+    color: var(--muted);
+    font-size:0.9rem;
+    background: rgba(0,0,0,0.2);
+  }
+
+  @media (max-width:768px) {
+    .container { padding:16px; }
+    .nav-links { justify-content:center; }
+    .button { width:100%; justify-content:center; }
+  }
+</style>
 </head>
 <body>
- <nav class="nav">
-        <div class="inner">
-            <div class="brand">
-                <img class="logo" src="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/img/logo%20micro1.webp" alt="Logo Microdeleción 15q11.2">
-                <div>Microdeleción 15q11.2</div>
-            </div>
-            <div class="nav-links">
-                <a href="index.html" class="active"><i class="fas fa-home"></i> Inicio</a>
-                <a href="genetica.html"><i class="fas fa-dna"></i> Genética</a> 
-                <a href="casos.html"><i class="fas fa-folder-open"></i> Casos</a>
-                <a href="estadisticas.html"><i class="fas fa-chart-bar"></i> Estadísticas</a>
-                <a href="recursos.html"><i class="fas fa-book"></i> Recursos</a>
-                <a class="btn-agregar" href="formulario.html"><i class="fas fa-plus-circle"></i> Reportar caso</a>
-            </div>
-        </div>
-    </nav>
 
-  <section class="container">
-    <div style="text-align: center; padding: 60px 20px;">
-      <h1>✅ ¡Gracias por tu contribución!</h1>
-      <p style="font-size: 1.2em; margin: 20px 0; color: var(--muted);">
-        Tu reporte ha sido enviado exitosamente. Revisaremos la información y la agregaremos a nuestra base de datos.
-      </p>
-      <p style="color: var(--primary); font-weight: 600;">
-        Los datos estarán disponibles en la página en las próximas 24 horas.
-      </p>
-      <div style="margin: 40px 0;">
-        <a href="index.html" class="button">Volver al inicio</a>
-        <a href="casos.html" class="button secondary">Ver casos existentes</a>
-      </div>
+<nav class="nav">
+  <div class="inner">
+    <div class="brand">
+      <img class="logo" src="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/img/logo%20micro1.webp" alt="Logo Microdeleción 15q11.2">
+      <div>Microdeleción 15q11.2</div>
     </div>
-  </section>
+    <div class="nav-links">
+      <a href="index.html" class="active"><i class="fas fa-home"></i> Inicio</a>
+      <a href="genetica.html"><i class="fas fa-dna"></i> Genética</a> 
+      <a href="casos.html"><i class="fas fa-folder-open"></i> Casos</a>
+      <a class="button" href="formulario.html"><i class="fas fa-plus-circle"></i> Reportar caso</a>
+    </div>
+  </div>
+</nav>
 
-  <footer class="footer">
-    © 2025 | Comunidad de Familias 15q11.2
-  </footer>
+<section class="container">
+  <h1>✅ ¡Gracias por tu contribución!</h1>
+  <p>Tu reporte ha sido enviado exitosamente. Revisaremos la información y la agregaremos a nuestra base de datos.</p>
+  <p style="color: var(--primary); font-weight:600;">Los datos estarán disponibles en la página en las próximas 24 horas.</p>
+  <div>
+    <a href="index.html" class="button">Volver al inicio</a>
+    <a href="casos.html" class="button secondary">Ver casos existentes</a>
+  </div>
+</section>
+
+<footer class="footer">
+  © 2025 | Comunidad de Familias 15q11.2
+</footer>
+
 </body>
 </html>
