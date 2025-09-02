@@ -47,6 +47,7 @@
       flex: 1;
     }
 
+    /* Navegación mejorada */
     .nav {
       position: sticky;
       top: 0;
@@ -132,6 +133,7 @@
       font-size: 1.1em;
     }
 
+    /* Panel principal */
     .panel {
       background: var(--card);
       border-radius: var(--border-radius);
@@ -156,6 +158,7 @@
       line-height: 1.6;
     }
 
+    /* Estados del formulario */
     .form-status {
       padding: 16px 20px;
       border-radius: var(--border-radius);
@@ -177,6 +180,7 @@
       color: #ef4444;
     }
 
+    /* Contenedor del formulario */
     .form-container {
       background: rgba(255, 255, 255, 0.03);
       border-radius: var(--border-radius);
@@ -264,6 +268,7 @@
       gap: 8px;
     }
 
+    /* Checkbox de privacidad */
     .privacy-check {
       display: flex;
       gap: 12px;
@@ -284,6 +289,7 @@
       line-height: 1.5;
     }
 
+    /* Botón de envío */
     .submit-button {
       display: inline-flex;
       align-items: center;
@@ -313,6 +319,7 @@
       transform: none;
     }
 
+    /* Grid de información */
     .grid-2 {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -361,6 +368,7 @@
       background: rgba(0, 0, 0, 0.2);
     }
 
+    /* Validación de campos */
     .form-group.error input,
     .form-group.error select,
     .form-group.error textarea {
@@ -378,6 +386,7 @@
       display: none;
     }
 
+    /* Responsive */
     @media (max-width: 968px) {
       .nav .inner {
         flex-direction: column;
@@ -479,7 +488,13 @@
       
       <div id="form-status" class="form-status"></div>
       
-      <form id="casoForm" class="form-container">
+      <form id="casoForm" class="form-container" action="https://formsubmit.co/elmer_velez@hotmail.com" method="POST">
+        <!-- Campos ocultos de FormSubmit -->
+        <input type="hidden" name="_subject" value="Nuevo caso de Microdeleción 15q11.2">
+        <input type="hidden" name="_next" value="https://evelez23.github.io/gen15Qproject/gracias.html">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        
         <!-- Información básica -->
         <fieldset>
           <legend><i class="fas fa-user"></i> Información básica</legend>
@@ -657,7 +672,7 @@
           <li>✅ Nunca publicaremos información personal identificable</li>
           <li>✅ Los datos se muestran de forma agregada y anónima</li>
           <li>✅ Puedes solicitar eliminar tu información en cualquier momento</li>
-          <li>✅ Los datos que compartas se usan únicamente para nutrir esta plataforma, generar estadísticas.</li>
+          <li>✅ Los datos que compartes se usan únicamente para nutrir esta plataforma, generar estadísticas.</li>
         </ul>
       </div>
     </div>
@@ -665,6 +680,7 @@
 
   <footer class="footer">© 2025 | Formulario seguro y confidencial - Comunidad de Familias 15q11.2</footer>
 
+  <!-- JavaScript mejorado -->
   <script>
     // Elementos del DOM
     const form = document.getElementById('casoForm');
@@ -750,7 +766,7 @@
       });
     });
     
-    // Validación y envío del formulario (VERSIÓN SEGURA)
+    // Validación antes de enviar
     form.addEventListener('submit', function(e) {
       let isValid = true;
       
@@ -776,62 +792,30 @@
           firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         
-        // Reactivar el botón si la validación falla
-        submitButton.disabled = false;
-        submitButton.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar reporte';
-        
         return false;
       }
       
-      // --- CÓDIGO SEGURO - SIN TOKEN --- //
-      e.preventDefault(); // Prevenimos el envío
-
       // Mostrar mensaje de carga
       submitButton.disabled = true;
       submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-
-      // 1. Recopilar los datos
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-
-      // 2. Crear un objeto para mostrar feedback al usuario
-      const casoParaMostrar = {
-        "Nombre": data.nombre,
-        "Edad": data.edad,
-        "Género": data.genero,
-        "Ubicación": data.localizacion,
-        "Síntomas": data.sintomas,
-        "Gravedad": data.gravedad,
-        "Pruebas realizadas": data.pruebas,
-        "Medicamentos": data.medicamentos,
-        "Terapias": data.terapias,
-        "Desafíos": data.desafios,
-        "Comentarios": data.comentarios,
-        "Fecha": new Date().toLocaleDateString('es-ES')
-      };
-
-      // 3. Mostrar los datos en pantalla en lugar de enviarlos
-      formStatus.innerHTML = `
-        <div style="text-align: left;">
-            <strong><i class="fas fa-check-circle"></i> ¡Formulario Completado!</strong><br>
-            <p>Gracias por tu contribución. Para proteger tu privacidad y seguridad, este formulario no se envía automáticamente.</p>
-            <details>
-                <summary>Ver datos recopilados (para verificar)</summary>
-                <pre style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; overflow: auto; margin-top: 1rem;">${JSON.stringify(casoParaMostrar, null, 2)}</pre>
-            </details>
-            <p style="margin-top: 1rem;"><strong>Por favor, copia estos datos y envíalos por email a la administración para que los agreguemos manualmente al sistema.</strong></p>
-        </div>
-      `;
+      
+      // Mostrar mensaje de éxito
+      formStatus.textContent = '¡Gracias por tu reporte! Estamos procesando la información.';
       formStatus.className = 'form-status success';
       formStatus.style.display = 'flex';
-
-      // 4. Limpiar el formulario y reactivar el botón
-      form.reset();
+      
+      return true;
+    });
+    
+    // Restablecer el botón si el envío falla
+    form.addEventListener('formsubmit:error', function() {
       submitButton.disabled = false;
       submitButton.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar reporte';
+      
+      formStatus.textContent = 'Hubo un error al enviar el formulario. Por favor, inténtalo de nuevo.';
+      formStatus.className = 'form-status error';
+      formStatus.style.display = 'flex';
     });
   </script>
 </body>
 </html>
-     
-         
