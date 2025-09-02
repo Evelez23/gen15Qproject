@@ -750,8 +750,8 @@
       });
     });
     
-    // Validación y envío del formulario
-    form.addEventListener('submit', async function(e) {
+    // Validación y envío del formulario (VERSIÓN SEGURA)
+    form.addEventListener('submit', function(e) {
       let isValid = true;
       
       // Validar todos los campos requeridos
@@ -783,61 +783,55 @@
         return false;
       }
       
-      // --- NUEVO CÓDIGO DE ENVÍO A GITHUB --- //
-      e.preventDefault(); // Prevenimos el envío normal del formulario
-      
+      // --- CÓDIGO SEGURO - SIN TOKEN --- //
+      e.preventDefault(); // Prevenimos el envío
+
       // Mostrar mensaje de carga
       submitButton.disabled = true;
       submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
 
-      // Recopilar los datos del formulario
+      // 1. Recopilar los datos
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
 
-      // Configurar la llamada a la API de GitHub
-      // ¡¡REEMPLAZA 'TU_TOKEN_PERSONAL' CON UN TOKEN REAL!!
-      const token = "TU_TOKEN_PERSONAL_AQUI"; // ← REEMPLAZA ESTO
-      const repo = "Evelez23/gen15Qproject";
-      const url = `https://api.github.com/repos/${repo}/issues`;
-
-      const issueData = {
-        title: `Nuevo Reporte: ${data.nombre}`,
-        body: `**Se ha reportado un nuevo caso.**\n\n` +
-              `A continuación los datos:\n\n` +
-              `\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\``
+      // 2. Crear un objeto para mostrar feedback al usuario
+      const casoParaMostrar = {
+        "Nombre": data.nombre,
+        "Edad": data.edad,
+        "Género": data.genero,
+        "Ubicación": data.localizacion,
+        "Síntomas": data.sintomas,
+        "Gravedad": data.gravedad,
+        "Pruebas realizadas": data.pruebas,
+        "Medicamentos": data.medicamentos,
+        "Terapias": data.terapias,
+        "Desafíos": data.desafios,
+        "Comentarios": data.comentarios,
+        "Fecha": new Date().toLocaleDateString('es-ES')
       };
 
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Authorization": `token ${token}`,
-            "Accept": "application/vnd.github.v3+json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(issueData)
-        });
+      // 3. Mostrar los datos en pantalla en lugar de enviarlos
+      formStatus.innerHTML = `
+        <div style="text-align: left;">
+            <strong><i class="fas fa-check-circle"></i> ¡Formulario Completado!</strong><br>
+            <p>Gracias por tu contribución. Para proteger tu privacidad y seguridad, este formulario no se envía automáticamente.</p>
+            <details>
+                <summary>Ver datos recopilados (para verificar)</summary>
+                <pre style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; overflow: auto; margin-top: 1rem;">${JSON.stringify(casoParaMostrar, null, 2)}</pre>
+            </details>
+            <p style="margin-top: 1rem;"><strong>Por favor, copia estos datos y envíalos por email a la administración para que los agreguemos manualmente al sistema.</strong></p>
+        </div>
+      `;
+      formStatus.className = 'form-status success';
+      formStatus.style.display = 'flex';
 
-        if (response.ok) {
-          formStatus.textContent = '¡Gracias! Tu reporte se ha enviado correctamente y se agregará al registro.';
-          formStatus.className = 'form-status success';
-          formStatus.style.display = 'flex';
-          form.reset(); // Limpiar el formulario
-        } else {
-          const error = await response.json();
-          throw new Error(error.message || 'Error al crear el issue en GitHub');
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        formStatus.textContent = 'Hubo un error al enviar el reporte. Por favor, inténtalo de nuevo más tarde.';
-        formStatus.className = 'form-status error';
-        formStatus.style.display = 'flex';
-      } finally {
-        // Reactivar el botón siempre, tanto en éxito como en error
-        submitButton.disabled = false;
-        submitButton.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar reporte';
-      }
+      // 4. Limpiar el formulario y reactivar el botón
+      form.reset();
+      submitButton.disabled = false;
+      submitButton.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar reporte';
     });
   </script>
 </body>
 </html>
+     
+         
