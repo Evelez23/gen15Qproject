@@ -1,33 +1,1122 @@
-// Crear efecto de partículas para el botón de reporte
-function crearParticulas() {
-    const particlesContainer = document.getElementById('particles');
-    if (!particlesContainer) return;
-    
-    // Limpiar partículas existentes
-    particlesContainer.innerHTML = '';
-    
-    // Crear 15 partículas
-    for (let i = 0; i < 15; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        
-        // Tamaño aleatorio entre 2 y 5px
-        const size = Math.random() * 3 + 2;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        
-        // Posición inicial aleatoria
-        const posX = Math.random() * 100;
-        const posY = Math.random() * 100;
-        particle.style.left = `${posX}%`;
-        particle.style.top = `${posY}%`;
-        
-        // Retardo aleatorio en la animación
-        particle.style.animationDelay = `${Math.random() * 2}s`;
-        
-        particlesContainer.appendChild(particle);
-    }
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microdeleción 15q11.2 – Portal Comunitario</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --muted: #94a3b8;
+            --text: #f1f5f9;
+            --primary: #3b82f6;
+            --primary-light: #60a5fa;
+            --accent: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow: 0 10px 30px rgba(0,0,0,.35);
+            --border-radius: 16px;
+            --transition: all 0.3s ease;
+        }
 
-// Iniciar partículas cuando la página cargue
-window.addEventListener('load', crearParticulas);
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(ellipse at top right, rgba(59, 130, 246, 0.15), transparent 60%),
+                        radial-gradient(ellipse at bottom left, rgba(16, 185, 129, 0.1), transparent 60%),
+                        var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+            flex: 1;
+        }
+
+        /* Navegación mejorada */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(15, 23, 42, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav .inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            letter-spacing: .3px;
+        }
+
+        .brand img.logo {
+            height: 40px;
+            width: auto;
+            border-radius: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav a {
+            color: var(--muted);
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .nav a.active, .nav a:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-agregar {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary);
+            color: white;
+            padding: 10px 16px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-agregar:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Hero section mejorada */
+        .hero {
+            padding: 80px 0 40px;
+        }
+
+        .hero-flex {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-image {
+            flex: 1;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+            display: block;
+        }
+
+        .pie-foto {
+            text-align: center;
+            font-style: italic;
+            color: var(--muted);
+            margin-top: 10px;
+            font-size: 0.9em;
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 52px);
+            line-height: 1.1;
+            margin: 0 0 16px;
+            background: linear-gradient(to right, #f1f5f9, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            margin: 0 0 24px;
+            color: var(--muted);
+            font-size: 1.1em;
+        }
+
+        .testimonio {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+            padding: 28px;
+            border-radius: var(--border-radius);
+            margin: 32px 0;
+            border-left: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonio::before {
+            content: """;
+            position: absolute;
+            top: -20px;
+            left: 10px;
+            font-size: 120px;
+            color: rgba(59, 130, 246, 0.1);
+            font-family: Georgia, serif;
+        }
+
+        .testimonio h2 {
+            color: var(--primary);
+            margin-bottom: 16px;
+            font-size: 1.5em;
+        }
+
+        .testimonio ul {
+            margin: 16px 0 16px 24px;
+        }
+
+        .testimonio li {
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .testimonio li::before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        .cta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 32px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 14px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(59, 130, 246, 0.35);
+        }
+
+        .button.secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            box-shadow: none;
+        }
+
+        .button.secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-3px);
+        }
+
+        /* Tarjetas de estadísticas mejoradas */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin: 48px 0;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border-radius: var(--border-radius);
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--success));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .stat-card h2 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .stat-card p {
+            color: var(--muted);
+            margin: 0;
+            font-size: 0.95em;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            color: var(--primary-light);
+        }
+
+        /* Grid system mejorado */
+        .grid-2, .grid-3, .grid-4 {
+            display: grid;
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        }
+
+        .panel {
+            background: var(--card);
+            border-radius: var(--border-radius);
+            padding: 28px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .panel h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary-light);
+            font-size: 1.4em;
+        }
+
+        /* Disclaimer mejorado */
+        .disclaimer {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), transparent);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: var(--border-radius);
+            padding: 20px 24px;
+            margin: 40px 0;
+        }
+
+        .disclaimer p {
+            margin: 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .disclaimer p::before {
+            content: "💡";
+            font-size: 1.2em;
+        }
+
+        /* Footer mejorado */
+        .footer {
+            text-align: center;
+            padding: 28px;
+            margin-top: auto;
+            color: var(--muted);
+            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        /* Países grid mejorado */
+        .paises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+            padding: 16px 0;
+        }
+
+        .pais-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 20px 16px;
+            text-align: center;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .pais-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .bandera {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+            display: block;
+            line-height: 1;
+        }
+
+        .pais-nombre {
+            font-weight: 600;
+            font-size: 0.95em;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+
+        .pais-casos {
+            font-size: 0.85em;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .pais-loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        /* Estados de carga y error */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--muted);
+        }
+
+        .loading::after {
+            content: "";
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .error button {
+            margin-top: 1rem;
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .error button:hover {
+            background: #dc2626;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive design mejorado */
+        @media (max-width: 968px) {
+            .hero-flex {
+                flex-direction: column;
+            }
+            
+            .hero-content {
+                order: 2;
+            }
+            
+            .hero-image {
+                order: 1;
+                margin-bottom: 2rem;
+                width: 100%;
+            }
+            
+            .nav .inner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .nav-links {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 8px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .cta {
+                justify-content: center;
+            }
+            
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonio {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav a {
+                padding: 8px 12px;
+                font-size: 0.9em;
+            }
+            
+            .btn-agregar {
+                padding: 8px 12px;
+                font-size: 0.9em;
+            }
+            
+            .stat-card h2 {
+                font-size: 2.2rem;
+            }
+            
+            .button {
+                padding: 12px 20px;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .cta {
+                flex-direction: column;
+            }
+        }
+
+        /* Estilos para el botón de reporte creativo */
+        .reporte-creativo {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0 30px;
+        }
+
+        .floating-report-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 16px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .floating-report-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .floating-report-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.5);
+        }
+
+        .floating-report-btn:hover::before {
+            opacity: 1;
+        }
+
+        .floating-report-btn i {
+            font-size: 1.2em;
+        }
+
+        /* Efecto de partículas alrededor del botón */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(59, 130, 246, 0.6);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 4s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-30px) translateX(20px);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="inner">
+            <div class="brand">
+                <a href="index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;">
+                    <img class="logo" src="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/img/logo%20micro1.webp" alt="Logo Microdeleción 15q11.2">
+                    <div>Microdeleción 15q11.2</div>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="active"><i class="fas fa-home"></i> Inicio</a>
+                <a href="genetica.html"><i class="fas fa-dna"></i> Genética</a> 
+                <a href="casos.html"><i class="fas fa-folder-open"></i> Casos</a>
+                <a href="estadisticas.html"><i class="fas fa-chart-bar"></i> Estadísticas</a>
+                <a href="recursos.html"><i class="fas fa-book"></i> Recursos</a>
+                <a class="btn-agregar" href="formulario.html"><i class="fas fa-plus-circle"></i> Reportar caso</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container hero-flex">
+            <div class="hero-content">
+                <h1>Microdeleción 15q11.2 – Comunidad de Familias</h1>
+                <p>Plataforma colaborativa para documentar y comprender la microdeleción 15q11.2 <strong>desde la perspectiva de las familias afectadas</strong>.</p>
+                
+                <div class="testimonio">
+                    <h2>“No estamos solos”</h2>
+                    <p>Aunque cada niño es un mundo y la enfermedad nos sorprende con nuevas curvas, aquí compartimos el miedo, la rabia y también la alegría de cada pequeño paso:</p>
+                    <ul>
+                        <li>La primera palabra</li>
+                        <li>El primer bocado</li>
+                        <li>El día sin crisis</li>
+                    </ul>
+                    <p>Lloramos juntos, reímos juntos y, sobre todo, luchamos juntos. Porque somos muchos bajo el mismo gen y, entre todos, <strong>ya sabemos más que los libros</strong>.</p>
+                </div>
+                
+                <div class="cta">
+                    <a class="button" href="casos.html"><i class="fas fa-folder-open"></i> Ver casos</a>
+                    <a class="button secondary" href="estadisticas.html"><i class="fas fa-chart-bar"></i> Ver estadísticas</a>
+                </div>
+            </div>
+            
+          <div class="hero-image">
+    <figure>
+        <img src="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/img/82526dd8-8147-48ea-88dc-700b6a49ebf8.webp" 
+             alt="Mi hijo empujando su caminadora - cada pequeño paso es una victoria"
+             class="pintura-oleo">
+        <figcaption class="pie-foto">
+            Cada pequeño paso es una victoria - Familia 15q11.2
+        </figcaption>
+    </figure>
+</div>
+            
+        </div>
+                </div>
+            
+
+        <div class="container">
+            <div id="loading" class="loading">
+                <p>Cargando datos actualizados</p>
+            </div>
+            
+            <div id="error-message" class="error" style="display: none;">
+                <h3>Error al cargar los datos</h3>
+                <p>No se pudieron cargar los datos desde el repositorio. Por favor, intenta nuevamente.</p>
+                <button onclick="window.location.reload()">Reintentar</button>
+            </div>
+
+            <div id="content" style="display: none;">
+                <div class="cards" id="kpis"></div>
+
+                <div class="grid-2">
+                    <div class="panel">
+                        <h3>Distribución por edades</h3>
+                        <canvas id="chartAges" height="160"></canvas>
+                    </div>
+                    <div class="panel">
+                        <h3>Presencia internacional</h3>
+                        <div id="paises-container" class="paises-grid">
+                            <div class="pais-loading">Cargando países...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Botón de reporte creativo añadido antes del disclaimer -->
+    <div class="reporte-creativo">
+        <a href="formulario.html" class="floating-report-btn" id="creativeReportBtn">
+            <i class="fas fa-plus-circle"></i>
+            Reportar un caso
+            <div class="particles" id="particles"></div>
+        </a>
+    </div>
+
+    <div class="disclaimer">
+        <p><strong>Importante:</strong> Esta plataforma es desarrollada por familias afectadas. La información aquí compartida tiene fines educativos y de apoyo mutuo, no sustituye el consejo médico profesional.</p>
+    </div>
+
+    <footer class="footer">© 2025 | Comunidad de Familias 15q11.2</footer>
+
+    <script>
+        // URLs de los archivos REALES en GitHub
+      const CASOS_VALIDADOS_URL = 'https://evelez23.github.io/gen15Qproject/data/casos_validados.json';
+const CASOS_NO_VALIDADOS_URL = 'https://evelez23.github.io/gen15Qproject/data/casos_no_validados.json';
+
+        
+        // Elementos del DOM
+        const loadingElement = document.getElementById('loading');
+        const errorElement = document.getElementById('error-message');
+        const contentElement = document.getElementById('content');
+        
+        // Función para obtener el campo de localización (corregido)
+        function obtenerLocalizacion(caso) {
+            // Probar diferentes nombres de campo que pueden existir
+            return caso.Localizacion || caso.localizacion || caso.Localización || 
+                   caso.Localizacion || caso.Ubicacion || caso[' Necesidades y Desafíos'] || 
+                   caso.Localización || '';
+        }
+
+        // Función para obtener la edad (corregido)
+        function obtenerEdad(caso) {
+            // Probar diferentes nombres de campo para la edad
+            const edad = caso.Edad || caso.edad || caso['Edad '] || 0;
+            return typeof edad === 'string' ? parseInt(edad) || 0 : edad;
+        }
+
+        // Función para cargar datos desde GitHub
+        async function loadData() {
+            try {
+                loadingElement.style.display = 'block';
+                errorElement.style.display = 'none';
+                contentElement.style.display = 'none';
+                
+                // Cargar ambos archivos
+                const [responseValidados, responseNoValidados] = await Promise.all([
+                    fetch(CASOS_VALIDADOS_URL),
+                    fetch(CASOS_NO_VALIDADOS_URL)
+                ]);
+                
+                if (!responseValidados.ok || !responseNoValidados.ok) {
+                    throw new Error('Error al cargar los archivos');
+                }
+                
+                const [casosValidados, casosNoValidados] = await Promise.all([
+                    responseValidados.json(),
+                    responseNoValidados.json()
+                ]);
+                
+                // Combinar los datos y añadir propiedad __origen
+                const data = [
+                    ...casosValidados.map(caso => ({ ...caso, __origen: "validado" })),
+                    ...casosNoValidados.map(caso => ({ ...caso, __origen: "no_validado" }))
+                ];
+                
+                initIndex(data);
+                
+            } catch (error) {
+                console.error('Error cargando datos:', error);
+                loadingElement.style.display = 'none';
+                errorElement.style.display = 'block';
+                contentElement.style.display = 'none';
+            }
+        }
+        
+        function initIndex(data) {
+            console.log('Datos cargados:', data); // Para debugging
+            
+            // Ocultar loading y mostrar contenido
+            loadingElement.style.display = 'none';
+            errorElement.style.display = 'none';
+            contentElement.style.display = 'block';
+            
+            // ---- KPIs ----
+            const total = data.length;
+            const validados = data.filter(c => c.__origen === "validado").length;
+            const noValidados = data.filter(c => c.__origen === "no_validado").length;
+
+            // Países / localización distintos (excluyendo "No especificada")
+            const paisesSet = new Set();
+            
+            data.forEach(c => {
+                const lugar = obtenerLocalizacion(c);
+                if (lugar && typeof lugar === 'string' && lugar.trim().toLowerCase() !== "no especificada") {
+                    const pais = detectarPais(lugar.trim());
+                    if (pais && pais !== "Desconocido") {
+                        paisesSet.add(pais);
+                    }
+                }
+            });
+
+            // Render de KPIs
+            const kpiContainer = document.getElementById("kpis");
+            if (kpiContainer) {
+                kpiContainer.innerHTML = `
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <h2>${total}</h2>
+                        <p>Total de casos</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                        <h2>${validados}</h2>
+                        <p>Casos validados</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
+                        <h2>${noValidados}</h2>
+                        <p>Casos no validados</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-globe-americas"></i></div>
+                        <h2>${paisesSet.size}</h2>
+                        <p>Países con casos</p>
+                    </div>
+                `;
+            }
+
+            // ---- Distribución por edades ----
+            const buckets = {
+                "0-5": 0,
+                "6-12": 0,
+                "13-18": 0,
+                "19+": 0,
+                "No especificada": 0
+            };
+
+            data.forEach(c => {
+                const edad = obtenerEdad(c);
+                if (!isNaN(edad) && edad > 0) {
+                    if (edad <= 5) buckets["0-5"]++;
+                    else if (edad <= 12) buckets["6-12"]++;
+                    else if (edad <= 18) buckets["13-18"]++;
+                    else buckets["19+"]++;
+                } else {
+                    buckets["No especificada"]++;
+                }
+            });
+
+            // Chart: edades
+            const agesEl = document.getElementById("chartAges");
+            if (agesEl) {
+                const ctxAges = agesEl.getContext("2d");
+                new Chart(ctxAges, {
+                    type: "bar",
+                    data: {
+                        labels: Object.keys(buckets),
+                        datasets: [{
+                            label: "Número de casos",
+                            data: Object.values(buckets),
+                            backgroundColor: "#3b82f6",
+                            borderRadius: 6,
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(30, 41, 59, 0.9)',
+                                titleColor: '#f1f5f9',
+                                bodyColor: '#f1f5f9',
+                                borderColor: 'rgba(59, 130, 246, 0.5)',
+                                borderWidth: 1,
+                                cornerRadius: 8,
+                                displayColors: false
+                            }
+                        },
+                        scales: { 
+                            y: { 
+                                beginAtZero: true, 
+                                ticks: { stepSize: 1 },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.05)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ---- Mapa de países ----
+            const paisesContainer = document.getElementById("paises-container");
+            if (paisesContainer) {
+                // Contar casos por país detectado
+                const paisesCount = {};
+                data.forEach(c => {
+                    const lugar = obtenerLocalizacion(c);
+                    if (lugar && typeof lugar === 'string' && lugar.trim().toLowerCase() !== "no especificada") {
+                        const pais = detectarPais(lugar.trim());
+                        if (pais && pais !== "Desconocido") {
+                            paisesCount[pais] = (paisesCount[pais] || 0) + 1;
+                        }
+                    }
+                });
+
+                // Ordenar por número de casos
+                const paisesOrdenados = Object.entries(paisesCount)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 12); // Top 12 países
+
+                if (paisesOrdenados.length > 0) {
+                    paisesContainer.innerHTML = paisesOrdenados.map(([pais, count]) => {
+                        const bandera = getBandera(pais);
+                        const nombrePais = formatearNombrePais(pais);
+                        
+                        return `
+                            <div class="pais-card">
+                                <span class="bandera">${bandera}</span>
+                                <div class="pais-nombre">${nombrePais}</div>
+                                <div class="pais-casos">${count} caso${count !== 1 ? 's' : ''}</div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    paisesContainer.innerHTML = '<div class="pais-loading">No hay datos de países disponibles</div>';
+                }
+            }
+        }
+
+        // Función para formatear el nombre del país
+        function formatearNombrePais(pais) {
+            const formatoEspecial = {
+                'usa': 'EE.UU.',
+                'estados unidos': 'EE.UU.',
+                'reino unido': 'Reino Unido',
+                'espana': 'España',
+                'mexico': 'México',
+                'peru': 'Perú',
+                'japon': 'Japón'
+            };
+            
+            return formatoEspecial[pais.toLowerCase()] || 
+                   pais.charAt(0).toUpperCase() + pais.slice(1);
+        }
+
+        // Función para obtener bandera por país
+        function getBandera(pais) {
+            const paisNormalizado = pais.toLowerCase().trim();
+            
+            const banderas = {
+                'españa': '🇪🇸', 'espana': '🇪🇸', 'spain': '🇪🇸',
+                'argentina': '🇦🇷',
+                'honduras': '🇭🇳',
+                'méxico': '🇲🇽', 'mexico': '🇲🇽',
+                'colombia': '🇨🇴',
+                'chile': '🇨🇱',
+                'perú': '🇵🇪', 'peru': '🇵🇪',
+                'venezuela': '🇻🇪',
+                'ecuador': '🇪🇨',
+                'uruguay': '🇺🇾',
+                'brasil': '🇧🇷',
+                'estados unidos': '🇺🇸', 'usa': '🇺🇸', 'eeuu': '🇺🇸',
+                'canadá': '🇨🇦', 'canada': '🇨🇦',
+                'francia': '🇫🇷',
+                'italia': '🇮🇹',
+                'alemania': '🇩🇪',
+                'reino unido': '🇬🇧', 'inglaterra': '🇬🇧',
+                'japón': '🇯🇵', 'japon': '🇯🇵',
+                'desconocido': '🌍',
+                'default': '🌍'
+            };
+
+            return banderas[paisNormalizado] || banderas.default;
+        }
+
+        // Función mejorada para detectar el país desde una ciudad/región
+        function detectarPais(lugar) {
+            if (!lugar || lugar.toLowerCase() === "no especificada") return 'Desconocido';
+            
+            const lugarLower = lugar.toLowerCase();
+            
+            // Lista de países a detectar (prioridad a coincidencias exactas)
+            const paises = [
+                'españa', 'espana', 'spain', 'argentina', 'honduras', 
+                'méxico', 'mexico', 'colombia', 'chile', 'perú', 'peru',
+                'venezuela', 'ecuador', 'uruguay', 'brasil', 'estados unidos',
+                'usa', 'eeuu', 'canadá', 'canada', 'francia', 'italia', 
+                'alemania', 'reino unido', 'inglaterra', 'japón', 'japon'
+            ];
+            
+            // Primero buscar el nombre completo del país
+            for (const pais of paises) {
+                if (lugarLower.includes(pais)) {
+                    return pais;
+                }
+            }
+            
+            // Si no encontramos país directamente, buscar por ciudades/regiones
+            const mappingCiudades = {
+                // España
+                'oviedo': 'españa', 'asturias': 'españa', 'gijón': 'españa', 'gijon': 'españa',
+                'madrid': 'españa', 'barcelona': 'españa', 'valencia': 'españa',
+                'sevilla': 'españa', 'bilbao': 'españa', 'granada': 'españa',
+                'alicante': 'españa', 'murcia': 'españa', 'zaragoza': 'españa',
+                'segovia': 'españa', 'málaga': 'españa', 'malaga': 'españa',
+                'utrera': 'españa', 'sevilla': 'españa',
+                
+                // Argentina
+                'buenos aires': 'argentina',
+                
+                // Honduras
+                'honduras': 'honduras',
+                
+                // México
+                'méxico': 'méxico', 'mexico': 'méxico',
+                
+                // Varios
+                'barcelona': 'españa', 'igualada': 'españa'
+            };
+            
+            // Buscar coincidencias de ciudades
+            for (const [ciudad, pais] of Object.entries(mappingCiudades)) {
+                if (lugarLower.includes(ciudad)) {
+                    return pais;
+                }
+            }
+            
+            // Si no encontramos nada, devolver el texto original
+            return lugar;
+        }
+
+        // Cargar los datos al iniciar
+        loadData();
+
+        // Crear efecto de partículas para el botón de reporte
+        function crearParticulas() {
+            const particlesContainer = document.getElementById('particles');
+            if (!particlesContainer) return;
+            
+            // Limpiar partículas existentes
+            particlesContainer.innerHTML = '';
+            
+            // Crear 15 partículas
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Tamaño aleatorio entre 2 y 5px
+                const size = Math.random() * 3 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Posición inicial aleatoria
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                
+                // Retardo aleatorio en la animación
+                particle.style.animationDelay = `${Math.random() * 2}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Iniciar partículas cuando la página cargue
+        window.addEventListener('load', crearParticulas);
+    </script>
+</body>
+</html>
