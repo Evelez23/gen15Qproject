@@ -280,5 +280,48 @@
     "Medicamentos": "Ninguno",
     "Terapias": "Logopedia y fisioterapia",
     "__origen": "validado"
+   },
+  {
+    "Marca temporal": "",
+    "Nombre": "PAPA DE HÉCTOR",
+    "Edad ": 54,
+    "Género": "M",
+    "Localización": "España / Ciudad Real",
+    "Pruebas realizadas  (ej: array genético, EEG, resonancia)  ": "Array genético",
+    "síntomas principales  ": "SIN SINTOMAS",
+    "Nivel de afectación": "No especificado",
+    "Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  ": "ASINTOMÁTICO",
+    "Terapias recibidas\n(logopedia, psicoterapia, etc.):  ": "ASINTOMÁTICO",
+    "Â¿Ha participado en estudios clÃ­nicos o genÃ©ticos?": "",
+    " Necesidades y Desafíos": "comentarios"
+  },
+  {
+    "Marca temporal": "",
+    "Nombre": "Alba",
+    "Edad ": 3,
+    "Género": "F",
+    "Localización": "Murcia, España",
+    "Pruebas realizadas  (ej: array genético, EEG, resonancia)  ": "Array genético",
+    "síntomas principales  ": "Retraso en el lenguaje;Hipotonía;Dificultad para comer;Estreñimiento;Problemas de sueño",
+    "Nivel de afectación": "Leve (vida independiente con apoyos mínimos)",
+    "Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  ": "",
+    "Terapias recibidas\n(logopedia, psicoterapia, etc.):  ": "Logopedia;Estimulación",
+    "Â¿Ha participado en estudios clÃ­nicos o genÃ©ticos?": "",
+    " Necesidades y Desafíos": "Comunicación;Alimentación;Sueño"
+  },
+  {
+    "Marca temporal": "",
+    "Nombre": "HÉCTOR",
+    "Edad ": 5,
+    "Género": "M",
+    "Localización": "España / Ciudad Real",
+    "Pruebas realizadas  (ej: array genético, EEG, resonancia)  ": "Array genético",
+    "síntomas principales  ": "TEA (Trastorno del Espectro Autista);Dificultades en la comunicación;Dificultades en la interacción social;Retraso cognitivo;Retraso madurativo",
+    "Nivel de afectación": "Moderado (necesita apoyo significativo)",
+    "Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  ": "",
+    "Terapias recibidas\n(logopedia, psicoterapia, etc.):  ": "Integración sensorial;Terapia ocupacional;Logopedia;Grupal interacción con iguales",
+    "Â¿Ha participado en estudios clÃ­nicos o genÃ©ticos?": "",
+    " Necesidades y Desafíos": "Comunicación;Interacción social;Retraso cognitivo;Retraso madurativo"
   }
 ]
+
