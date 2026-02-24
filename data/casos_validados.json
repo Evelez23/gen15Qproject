@@ -310,6 +310,8 @@
     " Necesidades y Desafíos": "Comunicación;Alimentación;Sueño"
   },
   {
+    [
+  {
     "Marca temporal": "",
     "Nombre": "HÉCTOR",
     "Edad ": 5,
@@ -320,8 +322,51 @@
     "Nivel de afectación": "Moderado (necesita apoyo significativo)",
     "Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  ": "",
     "Terapias recibidas\n(logopedia, psicoterapia, etc.):  ": "Integración sensorial;Terapia ocupacional;Logopedia;Grupal interacción con iguales",
-    "Â¿Ha participado en estudios clÃ­nicos o genÃ©ticos?": "",
+    "¿Ha participado en estudios clínicos o genéticos?": "",
     " Necesidades y Desafíos": "Comunicación;Interacción social;Retraso cognitivo;Retraso madurativo"
+  },
+  {
+    "Marca temporal": "",
+    "Nombre": "Noah Moreno",
+    "Edad ": 6,
+    "Género": "Masculino",
+    "Localización": "Brasil",
+    "Pruebas realizadas  (ej: array genético, EEG, resonancia)  ": "Array genético",
+    "síntomas principales  ": "TEA;Atraso en la linguagem;Hipotonía",
+    "Nivel de afectación": "Moderado",
+    "Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  ": "Canabidiol",
+    "Terapias recibidas\n(logopedia, psicoterapia, etc.):  ": "Psicología;Terapia ocupacional;Fonoaudiología;Musicoterapia;Equoterapia;Psicopedagogía;Psicomotricidad",
+    "¿Ha participado en estudios clínicos o genéticos?": "",
+    " Necesidades y Desafíos": "Lenguaje"
+  },
+  {
+    "Marca temporal": "",
+    "Nombre": "Carlos Benítez",
+    "Edad ": 22,
+    "Género": "Masculino",
+    "Localización": "Barcelona, España",
+    "Pruebas realizadas  (ej: array genético, EEG, resonancia)  ": "Array genético;Resonancia",
+    "síntomas principales  ": "TEA;Dificultad de atención",
+    "Nivel de afectación": "Leve",
+    "Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  ": "Aripiprazol;Ziprasidona",
+    "Terapias recibidas\n(logopedia, psicoterapia, etc.):  ": "Logopedia;Psicología;Psiquiatría",
+    "¿Ha participado en estudios clínicos o genéticos?": "",
+    " Necesidades y Desafíos": ""
+  },
+  {
+    "Marca temporal": "",
+    "Nombre": "Carmen",
+    "Edad ": 4,
+    "Género": "Femenino",
+    "Localización": "Murcia, España",
+    "Pruebas realizadas  (ej: array genético, EEG, resonancia)  ": "Array genético",
+    "síntomas principales  ": "TEA;Hipersensibilidad oral y en cabeza",
+    "Nivel de afectación": "Moderado",
+    "Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  ": "Olanzapina",
+    "Terapias recibidas\n(logopedia, psicoterapia, etc.):  ": "Logopedia;Piscina terapéutica;Psicopedagogía;Alimentación terapéutica;Fisioterapia respiratoria",
+    "¿Ha participado en estudios clínicos o genéticos?": "",
+    " Necesidades y Desafíos": "Afrontar retos diarios en regulación sensorial y adaptación"
   }
+]
 ]
 
