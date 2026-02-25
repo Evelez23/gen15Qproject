@@ -97,20 +97,7 @@
     "Â¿Ha participado en estudios clÃ­nicos o genÃ©ticos?": "SI",
     " Necesidades y Desafíos": "Falta deinformación médica"
   },
-  {
-    "Marca temporal": "2025/08/02 3:37:28 a.m. GMT-6",
-    "Nombre": "Anahara",
-    "Edad ": 10,
-    "Género": "F",
-    "Localización": "Murcia, España",
-    "Pruebas realizadas  (ej: array genético, EEG, resonancia)  ": "Array",
-    "síntomas principales  ": "TEA (Trastorno del Espectro Autista);Retraso cognitivo/motor;Problemas de lenguaje;Trastornos de conducta (agresividad, auto-lesiones);Esquizofrenia,sin diagnóstico por edad sicosis",
-    "Nivel de afectación": "Moderado (necesita apoyo significativo)",
-    "Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  ": "Flouxetina,rispedal",
-    "Terapias recibidas\n(logopedia, psicoterapia, etc.):  ": "Actualmente ninguna",
-    "Â¿Ha participado en estudios clÃ­nicos o genÃ©ticos?": "SI",
-    " Necesidades y Desafíos": "Falta deinformación médica"
-  },
+ 
   {
     "Marca temporal": "2025/08/02 3:39:16 a.m. GMT-6",
     "Nombre": "Diego",
@@ -204,19 +191,6 @@
   "Necesidades y Desafíos": "Evaluación del hermano (César) por dificultad del habla, seguimiento del desarrollo"
 },
   {
-    "Marca temporal": "2025-08-24 07:31:53.286000",
-    "Nombre": "Noah Moreno",
-    "Edad": 5,
-    "Género": "M",
-    "Localizacion": "No especificado",
-    "Pruebas realizadas": "Sim",
-    "sintomas": "Retraso cognitivo/motor, Hipotonía/Hiperlaxitud, Problemas de lenguaje",
-    "Nivel de afectación": "Moderado (necesita apoyo significativo)",
-    "Medicamentos": "Magnésio e Canabidiol",
-    "Terapias": "Psicologia ABA, fonaudiologia, terapia ocupacional",
-    "__origen": "validado"
-  },
-  {
     "Marca temporal": "2025-08-24 07:43:24.116000",
     "Nombre": "Carlos",
     "Edad": 11,
@@ -283,7 +257,7 @@
    },
   {
     "Marca temporal": "",
-    "Nombre": "PAPA DE HÉCTOR",
+    "Nombre": "PAPA_DE_HÉCTOR",
     "Edad ": 54,
     "Género": "M",
     "Localización": "España / Ciudad Real",
