@@ -6,6 +6,7 @@
   <title>Casos Registrados | Microdeleción 15q11.2</title>
   <meta name="description" content="Base de datos de casos de microdeleción 15q11.2 reportados por familias">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles/global.css">
   <style>
     :root {
       --bg: #0f172a;
@@ -629,10 +630,9 @@
   <footer class="footer">© 2025 | Comunidad de Familias 15q11.2</footer>
 
   <!-- JavaScript integrado -->
+  <script src="js/dataService.js"></script>
   <script>
-    // URLs de los archivos
-   const CASOS_VALIDADOS_URL = 'https://evelez23.github.io/gen15Qproject/data/casos_validados.json';
-const CASOS_NO_VALIDADOS_URL = 'https://evelez23.github.io/gen15Qproject/data/casos_no_validados.json';
+
     // Función para obtener solo el primer nombre
     function obtenerPrimerNombre(nombreCompleto) {
       if (!nombreCompleto) return 'Anónimo';
@@ -672,24 +672,7 @@ const CASOS_NO_VALIDADOS_URL = 'https://evelez23.github.io/gen15Qproject/data/ca
     // Función para cargar datos
     async function loadDataset() {
       try {
-        const [responseValidados, responseNoValidados] = await Promise.all([
-          fetch(CASOS_VALIDADOS_URL),
-          fetch(CASOS_NO_VALIDADOS_URL)
-        ]);
-        
-        if (!responseValidados.ok || !responseNoValidados.ok) {
-          throw new Error('Error al cargar los archivos');
-        }
-        
-        const [casosValidados, casosNoValidados] = await Promise.all([
-          responseValidados.json(),
-          responseNoValidados.json()
-        ]);
-        
-        return [
-          ...casosValidados.map(caso => ({ ...caso, __origen: "validado" })),
-          ...casosNoValidados.map(caso => ({ ...caso, __origen: "no_validado" }))
-        ];
+        return await window.dataService.loadCases();
       } catch (error) {
         console.error('Error cargando datos:', error);
         return [];
