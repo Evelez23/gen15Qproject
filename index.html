@@ -4,7 +4,8 @@
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-55JBDRGE1P"></script>
-<script>
+<script src="js/dataService.js"></script>
+    <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
@@ -16,6 +17,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Microdeleción 15q11.2 – Portal Comunitario</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles/global.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -766,11 +768,6 @@
     <footer class="footer">© 2025 | Comunidad de Familias 15q11.2</footer>
 
     <script>
-        // URLs de los archivos REALES en GitHub
-      const CASOS_VALIDADOS_URL = 'https://evelez23.github.io/gen15Qproject/data/casos_validados.json';
-const CASOS_NO_VALIDADOS_URL = 'https://evelez23.github.io/gen15Qproject/data/casos_no_validados.json';
-
-        
         // Elementos del DOM
         const loadingElement = document.getElementById('loading');
         const errorElement = document.getElementById('error-message');
@@ -798,27 +795,7 @@ const CASOS_NO_VALIDADOS_URL = 'https://evelez23.github.io/gen15Qproject/data/ca
                 errorElement.style.display = 'none';
                 contentElement.style.display = 'none';
                 
-                // Cargar ambos archivos
-                const [responseValidados, responseNoValidados] = await Promise.all([
-                    fetch(CASOS_VALIDADOS_URL),
-                    fetch(CASOS_NO_VALIDADOS_URL)
-                ]);
-                
-                if (!responseValidados.ok || !responseNoValidados.ok) {
-                    throw new Error('Error al cargar los archivos');
-                }
-                
-                const [casosValidados, casosNoValidados] = await Promise.all([
-                    responseValidados.json(),
-                    responseNoValidados.json()
-                ]);
-                
-                // Combinar los datos y añadir propiedad __origen
-                const data = [
-                    ...casosValidados.map(caso => ({ ...caso, __origen: "validado" })),
-                    ...casosNoValidados.map(caso => ({ ...caso, __origen: "no_validado" }))
-                ];
-                
+                const data = await window.dataService.loadCases();
                 initIndex(data);
                 
             } catch (error) {

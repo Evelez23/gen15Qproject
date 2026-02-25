@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="styles/global.css">
   <style>
     :root {
       --bg: #0f172a;
@@ -459,7 +460,7 @@
   <nav class="nav">
     <div class="inner">
       <div class="brand">
-                <a href="index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;">
+                <a href="index.html" >
                     <img class="logo" src="https://raw.githubusercontent.com/Evelez23/microdelecion-15q11.2/main/img/logo%20micro1.webp" alt="Logo Microdeleción 15q11.2">
                     <div>Microdeleción 15q11.2</div>
                 </a>
@@ -575,6 +576,7 @@
     </div>
   </footer>
 
+  <script src="js/dataService.js"></script>
   <script>
     // Base de conocimiento de ciudades y sus países
     const ciudadesPorPais = {
@@ -642,59 +644,11 @@
       
       return nombrePais;
     }
-
-    // Función para normalizar los datos de diferentes fuentes
-    function normalizarCaso(caso, origen) {
-      // Determinar la estructura del caso y normalizarla
-      const casoNormalizado = {
-        origen: origen,
-        nombre: caso.Nombre || caso["Nombre "] || "",
-        edad: parseFloat(caso.Edad || caso["Edad "] || caso["Edad"] || 0),
-        genero: (caso.Género || caso.genero || "").toString().toLowerCase(),
-        localizacion: caso.Localizacion || caso.Localización || caso["Localización"] || "",
-        sintomas: caso["síntomas principales"] || caso["síntomas principales  "] || caso.sintomas || caso.sintomas_principales || "",
-        gravedad: caso["Nivel de afectación"] || caso.gravedad || caso["Nivel de afectacion"] || "",
-        pruebas: caso["Pruebas realizadas"] || "",
-        medicamentos: caso["Medicamentos actuales/pasados"] || "",
-        terapias: caso["Terapias recibidas"] || "",
-        estudios: caso["¿Ha participado en estudios clinicos o geneticos?"] || "",
-        necesidades: caso["Necesidades y Desafíos"] || ""
-      };
-      
-      // Normalización adicional del género
-      if (casoNormalizado.genero.includes('masc') || casoNormalizado.genero === 'm') {
-        casoNormalizado.genero = 'masculino';
-      } else if (casoNormalizado.genero.includes('femen') || casoNormalizado.genero === 'f') {
-        casoNormalizado.genero = 'femenino';
-      }
-      
-      return casoNormalizado;
-    }
-
     async function loadDataset() {
-   const urlValidados = 'https://evelez23.github.io/gen15Qproject/data/casos_validados.json';
-const urlNoValidados = 'https://evelez23.github.io/gen15Qproject/data/casos_no_validados.json';
       try {
-        const [resValidados, resNoValidados] = await Promise.all([
-          fetch(urlValidados),
-          fetch(urlNoValidados)
-        ]);
-        
-        if (!resValidados.ok || !resNoValidados.ok) {
-          throw new Error('Error al cargar los datos');
-        }
-        
-        const dataValidados = await resValidados.json();
-        const dataNoValidados = await resNoValidados.json();
-        
-        // Normalizar todos los casos
-        const casosValidados = dataValidados.map(caso => normalizarCaso(caso, 'validado'));
-        const casosNoValidados = dataNoValidados.map(caso => normalizarCaso(caso, 'no validado'));
-
-        return [...casosValidados, ...casosNoValidados];
-
+        return await window.dataService.loadCases();
       } catch (error) {
-        console.error('Error al cargar los datasets desde GitHub:', error);
+        console.error('Error al cargar los datasets:', error);
         return [];
       }
     }
@@ -739,7 +693,7 @@ const urlNoValidados = 'https://evelez23.github.io/gen15Qproject/data/casos_no_v
         ];
         
         const countsSintomas = sintomasConfig.map(({ regex }) => 
-          data.filter(r => regex.test(r.sintomas || '')).length
+          data.filter(r => regex.test(r.sintomasTexto || '')).length
         );
         
         new Chart(document.getElementById('chartPrev').getContext('2d'), {
@@ -984,7 +938,7 @@ const urlNoValidados = 'https://evelez23.github.io/gen15Qproject/data/casos_no_v
         const origenCtx = document.getElementById('chartOrigenResumen');
         if (origenCtx) {
           const validados = data.filter(r => r.origen === 'validado').length;
-          const noValidados = data.filter(r => r.origen === 'no validado').length;
+          const noValidados = data.filter(r => r.origen === 'no_validado').length;
           
           new Chart(origenCtx.getContext('2d'), {
             type: 'doughnut',
@@ -1157,7 +1111,7 @@ const urlNoValidados = 'https://evelez23.github.io/gen15Qproject/data/casos_no_v
         
         // Calcular porcentaje de casos con múltiples síntomas para la nota
         const casosConMultiplesSintomas = data.filter(r => {
-            const sintomas = (r.sintomas || '').toLowerCase();
+            const sintomas = (r.sintomasTexto || '').toLowerCase();
             const esMultiple = (sintomas.includes(',') || sintomas.includes(';') || sintomas.includes(' y '));
             return esMultiple;
         });
