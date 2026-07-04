@@ -1015,9 +1015,12 @@
 
         // Función mejorada para detectar el país desde una ciudad/región
         function detectarPais(lugar) {
-            if (!lugar || lugar.toLowerCase() === "no especificada") return 'Desconocido';
+            if (!lugar) return 'Desconocido';
+
+            const lugarLower = lugar.toLowerCase().trim();
+            const lugarSinAcentos = lugarLower.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            const esLocalizacionNoEspecificada = /no especificad[ao]/.test(lugarSinAcentos);
             
-            const lugarLower = lugar.toLowerCase();
             
             // Lista de países a detectar (prioridad a coincidencias exactas)
             const paises = [
@@ -1030,20 +1033,24 @@
             
             // Primero buscar el nombre completo del país
             for (const pais of paises) {
-                if (lugarLower.includes(pais)) {
+                const paisSinAcentos = pais.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                if (lugarLower.includes(pais) || lugarSinAcentos.includes(paisSinAcentos)) {
                     return pais;
                 }
             }
+
+            if (esLocalizacionNoEspecificada) return 'Desconocido';
             
             // Si no encontramos país directamente, buscar por ciudades/regiones
             const mappingCiudades = {
                 // España
                 'oviedo': 'españa', 'asturias': 'españa', 'gijón': 'españa', 'gijon': 'españa',
-                'madrid': 'españa', 'barcelona': 'españa', 'valencia': 'españa',
-                'sevilla': 'españa', 'bilbao': 'españa', 'granada': 'españa',
-                'alicante': 'españa', 'murcia': 'españa', 'zaragoza': 'españa',
-                'segovia': 'españa', 'málaga': 'españa', 'malaga': 'españa',
-                'utrera': 'españa', 'sevilla': 'españa',
+                'madrid': 'españa', 'arganda del rey': 'españa', 'parla': 'españa',
+                'barcelona': 'españa', 'igualada': 'españa', 'tarragona': 'españa',
+                'valencia': 'españa', 'sevilla': 'españa', 'utrera': 'españa',
+                'bilbao': 'españa', 'granada': 'españa', 'alicante': 'españa',
+                'murcia': 'españa', 'zaragoza': 'españa', 'segovia': 'españa',
+                'málaga': 'españa', 'malaga': 'españa', 'ciudad real': 'españa',
                 
                 // Argentina
                 'buenos aires': 'argentina',
@@ -1055,18 +1062,18 @@
                 'méxico': 'méxico', 'mexico': 'méxico',
                 
                 // Varios
-                'barcelona': 'españa', 'igualada': 'españa'
             };
             
             // Buscar coincidencias de ciudades
             for (const [ciudad, pais] of Object.entries(mappingCiudades)) {
-                if (lugarLower.includes(ciudad)) {
+                const ciudadSinAcentos = ciudad.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                if (lugarLower.includes(ciudad) || lugarSinAcentos.includes(ciudadSinAcentos)) {
                     return pais;
                 }
             }
             
-            // Si no encontramos nada, devolver el texto original
-            return lugar;
+            // Si no encontramos un país ni una ciudad reconocida, no sumar como país.
+            return 'Desconocido';
         }
 
         // Cargar los datos al iniciar
