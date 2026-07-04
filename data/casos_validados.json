@@ -98,20 +98,6 @@
     " Necesidades y Desafíos": "Falta deinformación médica"
   },
   {
-    "Marca temporal": "2025/08/02 3:37:28 a.m. GMT-6",
-    "Nombre": "Anahara",
-    "Edad ": 10,
-    "Género": "F",
-    "Localización": "Murcia, España",
-    "Pruebas realizadas  (ej: array genético, EEG, resonancia)  ": "Array",
-    "síntomas principales  ": "TEA (Trastorno del Espectro Autista);Retraso cognitivo/motor;Problemas de lenguaje;Trastornos de conducta (agresividad, auto-lesiones);Esquizofrenia,sin diagnóstico por edad sicosis",
-    "Nivel de afectación": "Moderado (necesita apoyo significativo)",
-    "Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  ": "Flouxetina,rispedal",
-    "Terapias recibidas\n(logopedia, psicoterapia, etc.):  ": "Actualmente ninguna",
-    "Â¿Ha participado en estudios clÃ­nicos o genÃ©ticos?": "SI",
-    " Necesidades y Desafíos": "Falta deinformación médica"
-  },
-  {
     "Marca temporal": "2025/08/02 3:39:16 a.m. GMT-6",
     "Nombre": "Diego",
     "Edad ": 6,
@@ -189,32 +175,19 @@
     "Nivel de afectación": "Leve (vida independiente con apoyos mínimos)",
     "Â¿Ha participado en estudios clÃ­nicos o genÃ©ticos?": "SI",
     " Necesidades y Desafíos": "Educación inclusiva;Falta deinformación médica"
- },
+  },
   {
-  "Nombre": "Carlos Mateos Álvaro",
-  "Localizacion": "Madrid, España",
-  "Edad": 6,
-  "Género": "Masculino",
-  "Pruebas realizadas": "Array genético",
-  "síntomas principales": "Leve dificultad del habla, posibles trastornos del espectro autista, TDAH, hipotonía muscular",
-  "Nivel de afectación": "Leve",
-  "Medicamentos actuales/pasados": "No especificado",
-  "Terapias recibidas": "No especificado",
-  "¿Ha participado en estudios clinicos o geneticos?": "Sí, estudio de portador en familia (materna)",
-  "Necesidades y Desafíos": "Evaluación del hermano (César) por dificultad del habla, seguimiento del desarrollo"
-},
-  {
-    "Marca temporal": "2025-08-24 07:31:53.286000",
-    "Nombre": "Noah Moreno",
-    "Edad": 5,
-    "Género": "M",
-    "Localizacion": "No especificado",
-    "Pruebas realizadas": "Sim",
-    "sintomas": "Retraso cognitivo/motor, Hipotonía/Hiperlaxitud, Problemas de lenguaje",
-    "Nivel de afectación": "Moderado (necesita apoyo significativo)",
-    "Medicamentos": "Magnésio e Canabidiol",
-    "Terapias": "Psicologia ABA, fonaudiologia, terapia ocupacional",
-    "__origen": "validado"
+    "Nombre": "Carlos Mateos Álvaro",
+    "Localizacion": "Madrid, España",
+    "Edad": 6,
+    "Género": "Masculino",
+    "Pruebas realizadas": "Array genético",
+    "síntomas principales": "Leve dificultad del habla, posibles trastornos del espectro autista, TDAH, hipotonía muscular",
+    "Nivel de afectación": "Leve",
+    "Medicamentos actuales/pasados": "No especificado",
+    "Terapias recibidas": "No especificado",
+    "¿Ha participado en estudios clinicos o geneticos?": "Sí, estudio de portador en familia (materna)",
+    "Necesidades y Desafíos": "Evaluación del hermano (César) por dificultad del habla, seguimiento del desarrollo"
   },
   {
     "Marca temporal": "2025-08-24 07:43:24.116000",
@@ -280,10 +253,10 @@
     "Medicamentos": "Ninguno",
     "Terapias": "Logopedia y fisioterapia",
     "__origen": "validado"
-   },
+  },
   {
     "Marca temporal": "",
-    "Nombre": "PAPA DE HÉCTOR",
+    "Nombre": "PAPA_DE_HÉCTOR",
     "Edad ": 54,
     "Género": "M",
     "Localización": "España / Ciudad Real",
@@ -364,7 +337,20 @@
     "Terapias recibidas\n(logopedia, psicoterapia, etc.):  ": "Logopedia;Piscina terapéutica;Psicopedagogía;Alimentación terapéutica;Fisioterapia respiratoria",
     "¿Ha participado en estudios clínicos o genéticos?": "",
     " Necesidades y Desafíos": "Afrontar retos diarios en regulación sensorial y adaptación"
+  },
+  {
+    "Marca temporal": "2026-07-03",
+    "Nombre": "Einar",
+    "Edad": 4,
+    "Género": "Masculino",
+    "Localización": "Valencia, España",
+    "Pruebas realizadas": "Array genético, electroencefalograma",
+    "síntomas principales": "Trastorno sensorial, retraso en desarrollo motor, visoespacial, problemas de coordinación oculo-motriz. Necesita contacto para regular sus emociones. Trastorno del sueño.",
+    "Nivel de afectación": "Moderado",
+    "Medicamentos actuales/pasados": "No especificados",
+    "Terapias recibidas": "Terapia ocupacional una vez a la semana. Ahora empezarán a verle de At.temprana con casi 5 años. Va a taekwondo y natación también aconsejado como terapia.",
+    "¿Ha participado en estudios clinicos o geneticos?": "No especificado",
+    "Necesidades y Desafíos": "Desregulación emocional. Él tiene una capacidad verbal muy alta en comparación con su desarrollo motor. En el cole empieza a quedarse atrás.",
+    "__origen": "Formulario web - Validado"
   }
 ]
-
-
