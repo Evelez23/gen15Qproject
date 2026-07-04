@@ -664,9 +664,25 @@
       return typeof edad === 'string' ? parseInt(edad) || 0 : edad;
     }
 
+    // Función para normalizar valores que pueden venir como texto o como array
+    function textoPlano(valor) {
+      if (Array.isArray(valor)) return valor.filter(Boolean).join('; ');
+      if (valor === null || valor === undefined) return '';
+      return String(valor);
+    }
+
+    // Función para normalizar texto de búsqueda sin depender de mayúsculas ni acentos
+    function normalizarBusqueda(valor) {
+      return textoPlano(valor)
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim();
+    }
+
     // Función para obtener síntomas
     function obtenerSintomas(caso) {
-      return caso.sintomas || caso['síntomas principales  '] || caso['síntomas principales'] || 'No especificado';
+      return textoPlano(caso.sintomasTexto || caso.sintomas || caso['síntomas principales  '] || caso['síntomas principales'] || 'No especificado');
     }
 
     // Función para obtener nivel de afectación simplificado
@@ -725,12 +741,13 @@
 
       // Formatear listas
       function formatearLista(texto) {
-        if (!texto || texto === "No especificado") return "No especificado";
-        if (texto.includes(";")) {
-          const items = texto.split(";").map(t => t.trim()).filter(t => t.length > 0);
+        const textoNormalizado = textoPlano(texto);
+        if (!textoNormalizado || textoNormalizado === "No especificado") return "No especificado";
+        if (textoNormalizado.includes(";")) {
+          const items = textoNormalizado.split(";").map(t => t.trim()).filter(t => t.length > 0);
           return items.map(i => `<span class="sintoma-tag">${i}</span>`).join("");
         }
-        return texto;
+        return textoNormalizado;
       }
 
       // Actualizar estadísticas
@@ -879,17 +896,27 @@
 
       // Filtrar y renderizar
       function filtrarYRenderizar() {
-        const searchTerm = searchInput.value.toLowerCase().trim();
+        const searchTerm = normalizarBusqueda(searchInput.value);
         let filtrados = data;
 
         // Búsqueda
         if (searchTerm) {
-          filtrados = filtrados.filter(c =>
-            (c.Nombre || c.nombre || '').toLowerCase().includes(searchTerm) ||
-            (obtenerLocalizacion(c) || '').toLowerCase().includes(searchTerm) ||
-            (obtenerSintomas(c) || '').toLowerCase().includes(searchTerm) ||
-            (obtenerGravedadSimplificada(c) || '').toLowerCase().includes(searchTerm)
-          );
+          filtrados = filtrados.filter(c => {
+            const camposBusqueda = [
+              c.Nombre,
+              c.nombre,
+              obtenerNombreCorto(c.Nombre || c.nombre),
+              obtenerLocalizacion(c),
+              obtenerSintomas(c),
+              obtenerGravedadSimplificada(c),
+              c.pruebas,
+              c.medicamentos,
+              c.terapias,
+              c.necesidades
+            ];
+
+            return camposBusqueda.some(campo => normalizarBusqueda(campo).includes(searchTerm));
+          });
         }
 
         // Filtros
