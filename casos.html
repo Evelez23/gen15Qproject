@@ -805,6 +805,13 @@
         return textoNormalizado;
       }
 
+      function obtenerSaludoBienvenida(caso) {
+        const genero = normalizarBusqueda(caso.Género || caso.Genero || caso.genero);
+        if (genero.startsWith('f') || genero.includes('femenino')) return 'Bienvenida';
+        if (genero.startsWith('m') || genero.includes('masculino')) return 'Bienvenido';
+        return 'Bienvenido/a';
+      }
+
       // Renderizar mensajes automáticos de bienvenida para los últimos integrantes de cada JSON
       function renderBienvenidas(casos) {
         if (!bienvenidasPanel || !bienvenidasContainer) return;
@@ -822,13 +829,12 @@
 
         bienvenidasContainer.innerHTML = ultimosPorOrigen.map(caso => {
           const nombre = obtenerNombreCorto(caso.Nombre || caso.nombre);
-          const ubicacion = obtenerLocalizacion(caso);
-          const estado = caso.__origen === 'validado' ? 'caso validado' : 'caso pendiente de validar';
+          const saludo = obtenerSaludoBienvenida(caso);
 
           return `
             <article class="bienvenida-card">
-              <strong>¡Bienvenido/a, ${nombre}!</strong>
-              <p>Nos alegra tenerte en la comunidad. ${ubicacion !== 'No especificada' ? `Ubicación: ${ubicacion}. ` : ''}Registro: ${estado}.</p>
+              <strong>¡${saludo}, ${nombre}!</strong>
+              <p>Nos alegra tenerte en la comunidad, gracias por compartir tu caso con nosotros.</p>
             </article>
           `;
         }).join('');
