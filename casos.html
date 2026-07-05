@@ -425,6 +425,49 @@
       border: 1px solid rgba(59, 130, 246, 0.2);
     }
 
+    .bienvenida-panel {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.16), rgba(59, 130, 246, 0.08));
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .bienvenida-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .bienvenida-header h2 {
+      margin: 0;
+    }
+
+    .bienvenida-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+    }
+
+    .bienvenida-card {
+      background: rgba(15, 23, 42, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .bienvenida-card strong {
+      color: var(--success);
+      display: block;
+      font-size: 1.05em;
+      margin-bottom: 6px;
+    }
+
+    .bienvenida-card p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.94em;
+    }
+
     .empty-state {
       text-align: center;
       padding: 60px 20px;
@@ -613,6 +656,13 @@
       </div>
     </div>
 
+    <div class="panel bienvenida-panel" id="bienvenidas-panel" hidden>
+      <div class="bienvenida-header">
+        <h2><i class="fas fa-heart" style="color: var(--success);"></i> Bienvenida a nuevos integrantes</h2>
+      </div>
+      <div class="bienvenida-grid" id="bienvenidas-container"></div>
+    </div>
+
     <!-- Casos Validados -->
     <h2><i class="fas fa-check-circle" style="color: var(--success);"></i> Casos Validados</h2>
     <div id="casos-validados-container" class="listado-casos"></div>
@@ -709,7 +759,10 @@
 
     // Función principal
     async function initCasos() {
-      const data = await loadDataset();
+      const data = (await loadDataset()).map((caso, index, casos) => ({
+        ...caso,
+        __indiceOrigen: casos.slice(0, index).filter(item => item.__origen === caso.__origen).length
+      }));
       const contValidados = document.getElementById('casos-validados-container');
       const contNoValidados = document.getElementById('casos-no-validados-container');
       const searchInput = document.getElementById('search');
@@ -720,6 +773,8 @@
       const totalCasosElem = document.getElementById('total-casos');
       const casosValidadosElem = document.getElementById('casos-validados');
       const casosNoValidadosElem = document.getElementById('casos-no-validados');
+      const bienvenidasPanel = document.getElementById('bienvenidas-panel');
+      const bienvenidasContainer = document.getElementById('bienvenidas-container');
 
       // Icono según género y edad
       function iconoGeneroEdad(genero, edad) {
@@ -748,6 +803,37 @@
           return items.map(i => `<span class="sintoma-tag">${i}</span>`).join("");
         }
         return textoNormalizado;
+      }
+
+      // Renderizar mensajes automáticos de bienvenida para los últimos integrantes de cada JSON
+      function renderBienvenidas(casos) {
+        if (!bienvenidasPanel || !bienvenidasContainer) return;
+
+        const ultimosPorOrigen = ['validado', 'no_validado']
+          .flatMap(origen => casos
+            .filter(caso => caso.__origen === origen)
+            .sort((a, b) => b.__indiceOrigen - a.__indiceOrigen)
+            .slice(0, 2));
+
+        if (ultimosPorOrigen.length === 0) {
+          bienvenidasPanel.hidden = true;
+          return;
+        }
+
+        bienvenidasContainer.innerHTML = ultimosPorOrigen.map(caso => {
+          const nombre = obtenerNombreCorto(caso.Nombre || caso.nombre);
+          const ubicacion = obtenerLocalizacion(caso);
+          const estado = caso.__origen === 'validado' ? 'caso validado' : 'caso pendiente de validar';
+
+          return `
+            <article class="bienvenida-card">
+              <strong>¡Bienvenido/a, ${nombre}!</strong>
+              <p>Nos alegra tenerte en la comunidad. ${ubicacion !== 'No especificada' ? `Ubicación: ${ubicacion}. ` : ''}Registro: ${estado}.</p>
+            </article>
+          `;
+        }).join('');
+
+        bienvenidasPanel.hidden = false;
       }
 
       // Actualizar estadísticas
@@ -961,6 +1047,7 @@
       btnLimpiar.addEventListener('click', limpiarFiltros);
 
       // Render inicial
+      renderBienvenidas(data);
       filtrarYRenderizar();
     }
 
