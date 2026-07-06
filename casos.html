@@ -827,14 +827,22 @@
           return;
         }
 
-        bienvenidasContainer.innerHTML = ultimosPorOrigen.map(caso => {
+        const mensajesBienvenida = [
+          'Nos alegra tenerte en la comunidad, gracias por compartir tu caso con nosotros.',
+          'Gracias por abrirnos esta parte de tu historia; tu experiencia ayuda a otras familias.',
+          'Qué alegría sumarte a esta red de apoyo, gracias por confiar y compartir tu caso.',
+          'Tu caso suma información valiosa para la comunidad, gracias por formar parte de este espacio.'
+        ];
+
+        bienvenidasContainer.innerHTML = ultimosPorOrigen.map((caso, index) => {
           const nombre = obtenerNombreCorto(caso.Nombre || caso.nombre);
           const saludo = obtenerSaludoBienvenida(caso);
+          const mensaje = mensajesBienvenida[index % mensajesBienvenida.length];
 
           return `
             <article class="bienvenida-card">
               <strong>¡${saludo}, ${nombre}!</strong>
-              <p>Nos alegra tenerte en la comunidad, gracias por compartir tu caso con nosotros.</p>
+              <p>${mensaje}</p>
             </article>
           `;
         }).join('');
