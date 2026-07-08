@@ -883,7 +883,7 @@
           if (gravedad.includes('leve') || gravedad.includes('vida independiente')) bucketsGravedad['Leve']++;
           else if (gravedad.includes('moderado') || gravedad.includes('necesita apoyo')) bucketsGravedad['Moderado']++;
           else if (gravedad.includes('grave') || gravedad.includes('dependencia')) bucketsGravedad['Grave']++;
-          else if (gravedad.includes('asintomatico') || gravedad.includes('asintomática')) bucketsGravedad['Asintomático']++;
+          else if (gravedad.includes('asintomatico') || gravedad.includes('asintomático') || gravedad.includes('asintomática')) bucketsGravedad['Asintomático']++;
           else bucketsGravedad['No especificado']++;
         });
         
@@ -941,20 +941,23 @@
         if (origenCtx) {
           const validados = data.filter(r => r.origen === 'validado').length;
           const noValidados = data.filter(r => r.origen === 'no_validado').length;
+          const asintomaticos = data.filter(r => r.origen === 'asintomatico').length;
           
           new Chart(origenCtx.getContext('2d'), {
             type: 'doughnut',
             data: {
-              labels: ['Validados', 'No validados'],
+              labels: ['Validados', 'No validados', 'Asintomáticos'],
               datasets: [{
-                data: [validados, noValidados],
+                data: [validados, noValidados, asintomaticos],
                 backgroundColor: [
                   'rgba(16, 185, 129, 0.7)',
-                  'rgba(245, 158, 11, 0.7)'
+                  'rgba(245, 158, 11, 0.7)',
+                  'rgba(96, 165, 250, 0.7)'
                 ],
                 borderColor: [
                   'rgba(16, 185, 129, 1)',
-                  'rgba(245, 158, 11, 1)'
+                  'rgba(245, 158, 11, 1)',
+                  'rgba(96, 165, 250, 1)'
                 ],
                 borderWidth: 1
               }]

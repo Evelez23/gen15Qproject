@@ -323,6 +323,12 @@
       border: 1px solid rgba(239, 68, 68, 0.3);
     }
 
+    .badge.asintomatico {
+      background: rgba(96, 165, 250, 0.18);
+      color: var(--primary-light);
+      border: 1px solid rgba(96, 165, 250, 0.32);
+    }
+
     .badge.no-especificado {
       background: rgba(148, 163, 184, 0.2);
       color: var(--muted);
@@ -423,6 +429,49 @@
       font-size: 0.85em;
       color: var(--primary);
       border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .bienvenida-panel {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.16), rgba(59, 130, 246, 0.08));
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .bienvenida-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .bienvenida-header h2 {
+      margin: 0;
+    }
+
+    .bienvenida-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+    }
+
+    .bienvenida-card {
+      background: rgba(15, 23, 42, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .bienvenida-card strong {
+      color: var(--success);
+      display: block;
+      font-size: 1.05em;
+      margin-bottom: 6px;
+    }
+
+    .bienvenida-card p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.94em;
     }
 
     .empty-state {
@@ -588,6 +637,7 @@
         <option value="leve">Leve</option>
         <option value="moderado">Moderado</option>
         <option value="severo">Severo</option>
+        <option value="asintomático">Asintomático</option>
       </select>
 
       <button id="btn-limpiar" class="button"><i class="fas fa-times"></i> Limpiar filtros</button>
@@ -610,7 +660,18 @@
           <h3>Casos no validados</h3>
           <p class="stat-number" id="casos-no-validados">0</p>
         </div>
+        <div>
+          <h3>Asintomáticos</h3>
+          <p class="stat-number" id="casos-asintomaticos">0</p>
+        </div>
       </div>
+    </div>
+
+    <div class="panel bienvenida-panel" id="bienvenidas-panel" hidden>
+      <div class="bienvenida-header">
+        <h2><i class="fas fa-heart" style="color: var(--success);"></i> Bienvenida a nuevos integrantes</h2>
+      </div>
+      <div class="bienvenida-grid" id="bienvenidas-container"></div>
     </div>
 
     <!-- Casos Validados -->
@@ -620,6 +681,10 @@
     <!-- Casos No Validados -->
     <h2><i class="fas fa-hourglass-half" style="color: var(--warning);"></i> Casos No Validados</h2>
     <div id="casos-no-validados-container" class="listado-casos"></div>
+
+    <!-- Personas Asintomáticas -->
+    <h2><i class="fas fa-user-check" style="color: var(--primary-light);"></i> Personas Asintomáticas</h2>
+    <div id="casos-asintomaticos-container" class="listado-casos"></div>
 
   </section>
 
@@ -664,9 +729,25 @@
       return typeof edad === 'string' ? parseInt(edad) || 0 : edad;
     }
 
+    // Función para normalizar valores que pueden venir como texto o como array
+    function textoPlano(valor) {
+      if (Array.isArray(valor)) return valor.filter(Boolean).join('; ');
+      if (valor === null || valor === undefined) return '';
+      return String(valor);
+    }
+
+    // Función para normalizar texto de búsqueda sin depender de mayúsculas ni acentos
+    function normalizarBusqueda(valor) {
+      return textoPlano(valor)
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim();
+    }
+
     // Función para obtener síntomas
     function obtenerSintomas(caso) {
-      return caso.sintomas || caso['síntomas principales  '] || caso['síntomas principales'] || 'No especificado';
+      return textoPlano(caso.sintomasTexto || caso.sintomas || caso['síntomas principales  '] || caso['síntomas principales'] || 'No especificado');
     }
 
     // Función para obtener nivel de afectación simplificado
@@ -677,6 +758,7 @@
       if (gravedad.toLowerCase().includes('leve')) return 'Leve';
       if (gravedad.toLowerCase().includes('moderado')) return 'Moderado';
       if (gravedad.toLowerCase().includes('grave') || gravedad.toLowerCase().includes('sever')) return 'Severo';
+      if (gravedad.toLowerCase().includes('asintom')) return 'Asintomático';
       
       return gravedad;
     }
@@ -693,9 +775,13 @@
 
     // Función principal
     async function initCasos() {
-      const data = await loadDataset();
+      const data = (await loadDataset()).map((caso, index, casos) => ({
+        ...caso,
+        __indiceOrigen: casos.slice(0, index).filter(item => item.__origen === caso.__origen).length
+      }));
       const contValidados = document.getElementById('casos-validados-container');
       const contNoValidados = document.getElementById('casos-no-validados-container');
+      const contAsintomaticos = document.getElementById('casos-asintomaticos-container');
       const searchInput = document.getElementById('search');
       const filtroGenero = document.getElementById('filtro-genero');
       const filtroGravedad = document.getElementById('filtro-gravedad');
@@ -704,6 +790,9 @@
       const totalCasosElem = document.getElementById('total-casos');
       const casosValidadosElem = document.getElementById('casos-validados');
       const casosNoValidadosElem = document.getElementById('casos-no-validados');
+      const casosAsintomaticosElem = document.getElementById('casos-asintomaticos');
+      const bienvenidasPanel = document.getElementById('bienvenidas-panel');
+      const bienvenidasContainer = document.getElementById('bienvenidas-container');
 
       // Icono según género y edad
       function iconoGeneroEdad(genero, edad) {
@@ -720,24 +809,72 @@
         if (nivel.includes('leve')) return 'badge leve';
         if (nivel.includes('moderado')) return 'badge moderado';
         if (nivel.includes('grave') || nivel.includes('sever')) return 'badge severo';
+        if (nivel.includes('asintom')) return 'badge asintomatico';
         return 'badge no-especificado';
       }
 
       // Formatear listas
       function formatearLista(texto) {
-        if (!texto || texto === "No especificado") return "No especificado";
-        if (texto.includes(";")) {
-          const items = texto.split(";").map(t => t.trim()).filter(t => t.length > 0);
+        const textoNormalizado = textoPlano(texto);
+        if (!textoNormalizado || textoNormalizado === "No especificado") return "No especificado";
+        if (textoNormalizado.includes(";")) {
+          const items = textoNormalizado.split(";").map(t => t.trim()).filter(t => t.length > 0);
           return items.map(i => `<span class="sintoma-tag">${i}</span>`).join("");
         }
-        return texto;
+        return textoNormalizado;
+      }
+
+      function obtenerSaludoBienvenida(caso) {
+        const genero = normalizarBusqueda(caso.Género || caso.Genero || caso.genero);
+        if (genero.startsWith('f') || genero.includes('femenino')) return 'Bienvenida';
+        if (genero.startsWith('m') || genero.includes('masculino')) return 'Bienvenido';
+        return 'Bienvenido/a';
+      }
+
+      // Renderizar mensajes automáticos de bienvenida para los últimos integrantes de cada JSON
+      function renderBienvenidas(casos) {
+        if (!bienvenidasPanel || !bienvenidasContainer) return;
+
+        const ultimosPorOrigen = ['validado', 'no_validado']
+          .flatMap(origen => casos
+            .filter(caso => caso.__origen === origen)
+            .sort((a, b) => b.__indiceOrigen - a.__indiceOrigen)
+            .slice(0, 2));
+
+        if (ultimosPorOrigen.length === 0) {
+          bienvenidasPanel.hidden = true;
+          return;
+        }
+
+        const mensajesBienvenida = [
+          'Nos alegra tenerte en la comunidad, gracias por compartir tu caso con nosotros.',
+          'Gracias por abrirnos esta parte de tu historia; tu experiencia ayuda a otras familias.',
+          'Qué alegría sumarte a esta red de apoyo, gracias por confiar y compartir tu caso.',
+          'Tu caso suma información valiosa para la comunidad, gracias por formar parte de este espacio.'
+        ];
+
+        bienvenidasContainer.innerHTML = ultimosPorOrigen.map((caso, index) => {
+          const nombre = obtenerNombreCorto(caso.Nombre || caso.nombre);
+          const saludo = obtenerSaludoBienvenida(caso);
+          const mensaje = mensajesBienvenida[index % mensajesBienvenida.length];
+
+          return `
+            <article class="bienvenida-card">
+              <strong>¡${saludo}, ${nombre}!</strong>
+              <p>${mensaje}</p>
+            </article>
+          `;
+        }).join('');
+
+        bienvenidasPanel.hidden = false;
       }
 
       // Actualizar estadísticas
-      function actualizarEstadisticas(validados, noValidados) {
-        totalCasosElem.textContent = validados.length + noValidados.length;
+      function actualizarEstadisticas(validados, noValidados, asintomaticos) {
+        totalCasosElem.textContent = validados.length + noValidados.length + asintomaticos.length;
         casosValidadosElem.textContent = validados.length;
         casosNoValidadosElem.textContent = noValidados.length;
+        casosAsintomaticosElem.textContent = asintomaticos.length;
       }
 
       // Mostrar filtros activos
@@ -879,17 +1016,27 @@
 
       // Filtrar y renderizar
       function filtrarYRenderizar() {
-        const searchTerm = searchInput.value.toLowerCase().trim();
+        const searchTerm = normalizarBusqueda(searchInput.value);
         let filtrados = data;
 
         // Búsqueda
         if (searchTerm) {
-          filtrados = filtrados.filter(c =>
-            (c.Nombre || c.nombre || '').toLowerCase().includes(searchTerm) ||
-            (obtenerLocalizacion(c) || '').toLowerCase().includes(searchTerm) ||
-            (obtenerSintomas(c) || '').toLowerCase().includes(searchTerm) ||
-            (obtenerGravedadSimplificada(c) || '').toLowerCase().includes(searchTerm)
-          );
+          filtrados = filtrados.filter(c => {
+            const camposBusqueda = [
+              c.Nombre,
+              c.nombre,
+              obtenerNombreCorto(c.Nombre || c.nombre),
+              obtenerLocalizacion(c),
+              obtenerSintomas(c),
+              obtenerGravedadSimplificada(c),
+              c.pruebas,
+              c.medicamentos,
+              c.terapias,
+              c.necesidades
+            ];
+
+            return camposBusqueda.some(campo => normalizarBusqueda(campo).includes(searchTerm));
+          });
         }
 
         // Filtros
@@ -912,10 +1059,12 @@
         // División validados / no validados
         const validados = filtrados.filter(c => c.__origen === 'validado');
         const noValidados = filtrados.filter(c => c.__origen === 'no_validado');
+        const asintomaticos = filtrados.filter(c => c.__origen === 'asintomatico');
 
         renderCasos(validados, contValidados);
         renderCasos(noValidados, contNoValidados);
-        actualizarEstadisticas(validados, noValidados);
+        renderCasos(asintomaticos, contAsintomaticos);
+        actualizarEstadisticas(validados, noValidados, asintomaticos);
         actualizarFiltrosActivos();
       }
 
@@ -934,6 +1083,7 @@
       btnLimpiar.addEventListener('click', limpiarFiltros);
 
       // Render inicial
+      renderBienvenidas(data);
       filtrarYRenderizar();
     }
 

@@ -70,20 +70,6 @@
     " Necesidades y Desafíos": "Falta deinformación médica"
   },
   {
-    "Marca temporal": "2025/08/02 2:35:02 a.m. GMT-6",
-    "Nombre": "Carlos benitez Martínez",
-    "Edad ": 21,
-    "Género": "M",
-    "Localización": "Igualada, Barcelona",
-    "Pruebas realizadas  (ej: array genético, EEG, resonancia)  ": "Array",
-    "síntomas principales  ": "TEA (Trastorno del Espectro Autista);TDAH;Trastornos de conducta (agresividad, auto-lesiones)",
-    "Nivel de afectación": "Leve (vida independiente con apoyos mínimos)",
-    "Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  ": "Abilifi.zipresa",
-    "Terapias recibidas\n(logopedia, psicoterapia, etc.):  ": "Logopeda psicólogia, psiquiatra ",
-    "Â¿Ha participado en estudios clÃ­nicos o genÃ©ticos?": "SI",
-    " Necesidades y Desafíos": "Falta deinformación médica"
-  },
-  {
     "Marca temporal": "2025/08/02 3:11:12 a.m. GMT-6",
     "Nombre": "Ivan",
     "Edad ": 32,
@@ -216,19 +202,6 @@
     "__origen": "validado"
   },
   {
-    "Marca temporal": "2025-08-24 08:12:40.165000",
-    "Nombre": "Juan jose",
-    "Edad": 54,
-    "Género": "M",
-    "Localizacion": "No especificado",
-    "Pruebas realizadas": "Array",
-    "sintomas": "Ninguno",
-    "Nivel de afectación": "Leve (vida independiente con apoyos mínimos)",
-    "Medicamentos": "No especificado",
-    "Terapias": "Logopeda psicología psiquiatría",
-    "__origen": "validado"
-  },
-  {
     "Marca temporal": "2025-08-24 09:01:04.913000",
     "Nombre": "Nerea",
     "Edad": 6,
@@ -239,7 +212,8 @@
     "Nivel de afectación": "Leve (vida independiente con apoyos mínimos)",
     "Medicamentos": "Ninguno",
     "Terapias": "Logopedia, psicoterapia, psicomotricidad",
-    "__origen": "validado"
+    "__origen": "validado",
+    "Necesidades y Desafíos": "Madre Mer comenta que Nerea es autista y que su padre también es autista, pero no es portador del 15q; se mantiene seguimiento para entender qué síntomas podrían estar relacionados con 15q."
   },
   {
     "Marca temporal": "2025-08-24 09:18:37.869000",
@@ -253,20 +227,6 @@
     "Medicamentos": "Ninguno",
     "Terapias": "Logopedia y fisioterapia",
     "__origen": "validado"
-  },
-  {
-    "Marca temporal": "",
-    "Nombre": "PAPA_DE_HÉCTOR",
-    "Edad ": 54,
-    "Género": "M",
-    "Localización": "España / Ciudad Real",
-    "Pruebas realizadas  (ej: array genético, EEG, resonancia)  ": "Array genético",
-    "síntomas principales  ": "SIN SINTOMAS",
-    "Nivel de afectación": "No especificado",
-    "Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  ": "ASINTOMÁTICO",
-    "Terapias recibidas\n(logopedia, psicoterapia, etc.):  ": "ASINTOMÁTICO",
-    "Â¿Ha participado en estudios clÃ­nicos o genÃ©ticos?": "",
-    " Necesidades y Desafíos": "comentarios"
   },
   {
     "Marca temporal": "",

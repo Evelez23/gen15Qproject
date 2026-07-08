@@ -1,0 +1,58 @@
+[
+  {
+    "Marca temporal": "2025-08-24 08:12:40.165000",
+    "Nombre": "Juan jose",
+    "Edad": 54,
+    "Género": "M",
+    "Localizacion": "No especificado",
+    "Pruebas realizadas": "Array",
+    "sintomas": "Sin síntomas reportados",
+    "Nivel de afectación": "Asintomático",
+    "Medicamentos": "No especificado",
+    "Terapias": "Logopeda psicología psiquiatría",
+    "__origen": "validado"
+  },
+  {
+    "Marca temporal": "",
+    "Nombre": "PAPA_DE_HÉCTOR",
+    "Edad ": 54,
+    "Género": "M",
+    "Localización": "España / Ciudad Real",
+    "Pruebas realizadas  (ej: array genético, EEG, resonancia)  ": "Array genético",
+    "síntomas principales  ": "SIN SINTOMAS",
+    "Nivel de afectación": "Asintomático",
+    "Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  ": "ASINTOMÁTICO",
+    "Terapias recibidas\n(logopedia, psicoterapia, etc.):  ": "ASINTOMÁTICO",
+    "Â¿Ha participado en estudios clÃ­nicos o genÃ©ticos?": "",
+    " Necesidades y Desafíos": "comentarios",
+    "sintomas": "Sin síntomas reportados"
+  },
+  {
+    "Nombre": "Cristina_(mamá)",
+    "Localizacion": "Parla, Madrid",
+    "Edad": "Adulto",
+    "Género": "Femenino",
+    "Pruebas realizadas": "Array genético",
+    "síntomas principales": "Asintomática/portadora",
+    "Nivel de afectación": "Asintomática",
+    "Medicamentos actuales/pasados": "Ninguno",
+    "Terapias recibidas": "Ninguna",
+    "¿Ha participado en estudios clinicos o geneticos?": "Estudio familiar (11 familiares)",
+    "Necesidades y Desafíos": "Acompañamiento a otros padres",
+    "Nivel de afectacion": "Asintomático"
+  },
+  {
+    "Nombre": "Virginia",
+    "Localizacion": "Madrid",
+    "Edad": "Adulto",
+    "Género": "Femenino",
+    "Pruebas realizadas": "Array genético",
+    "síntomas principales": "Portadora asintomática",
+    "Nivel de afectación": "Asintomática",
+    "Medicamentos actuales/pasados": "Ninguno",
+    "Terapias recibidas": "Ninguna",
+    "¿Ha participado en estudios clinicos o geneticos?": "Estudio familiar",
+    "Necesidades y Desafíos": "Seguimiento genético familiar",
+    "Nivel de afectacion": "Asintomático"
+  }
+]
