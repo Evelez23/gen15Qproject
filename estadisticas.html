@@ -603,48 +603,61 @@
       ]
     };
 
-    // Lista de países reconocidos
-    const paisesReconocidos = ['españa', 'argentina', 'honduras', 'méxico', 'colombia', 'chile', 'perú', 'brasil', 'brazil'];
+    // Países admitidos y alias normalizados sin depender de tildes o mayúsculas.
+    const paisesCanonicos = {
+      espana: 'España', spain: 'España',
+      argentina: 'Argentina',
+      honduras: 'Honduras',
+      mexico: 'México',
+      colombia: 'Colombia',
+      chile: 'Chile',
+      peru: 'Perú',
+      brasil: 'Brasil', brazil: 'Brasil',
+      venezuela: 'Venezuela',
+      ecuador: 'Ecuador',
+      uruguay: 'Uruguay',
+      estados unidos: 'Estados Unidos', usa: 'Estados Unidos', eeuu: 'Estados Unidos',
+      canada: 'Canadá',
+      francia: 'Francia',
+      italia: 'Italia',
+      alemania: 'Alemania',
+      reino unido: 'Reino Unido', inglaterra: 'Reino Unido',
+      japon: 'Japón'
+    };
 
-    // Función para determinar el país basado en la ciudad
+    function normalizarTexto(texto) {
+      return String(texto || '').toLowerCase().trim()
+        .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');
+    }
+
     function determinarPaisPorCiudad(ciudad) {
-      if (!ciudad) return null;
-      
-      const ciudadNormalizada = ciudad.toLowerCase().trim();
-      
+      const ciudadNormalizada = normalizarTexto(ciudad);
+      if (!ciudadNormalizada) return null;
+
       for (const [pais, ciudades] of Object.entries(ciudadesPorPais)) {
-        if (ciudades.includes(ciudadNormalizada)) {
+        if (ciudades.some(nombre => normalizarTexto(nombre) === ciudadNormalizada)) {
           return pais;
         }
       }
-      
       return null;
     }
 
-    // Función para verificar si un texto es un país reconocido
-    function esPaisReconocido(texto) {
-      if (!texto) return false;
-      const textoNormalizado = texto.toLowerCase().trim();
-      return paisesReconocidos.includes(textoNormalizado);
-    }
-
-    // Función para normalizar el nombre del país
     function normalizarPais(nombrePais) {
       if (!nombrePais) return null;
-      
-      const nombreNormalizado = nombrePais.toLowerCase().trim();
-      
-      if (nombreNormalizado.includes('españa') || nombreNormalizado.includes('espana')) {
-        return 'España';
-      } else if (nombreNormalizado.includes('argentina')) {
-        return 'Argentina';
-      } else if (nombreNormalizado.includes('honduras')) {
-        return 'Honduras';
-      } else if (nombreNormalizado.includes('brasil') || nombreNormalizado.includes('brazil')) {
-        return 'Brasil';
+      const clave = normalizarTexto(nombrePais);
+      if (paisesCanonicos[clave]) return paisesCanonicos[clave];
+      // Acepta formatos como "México (MX)" sin convertir ciudades en países.
+      for (const [alias, canonico] of Object.entries(paisesCanonicos)) {
+        if (clave === alias || clave.startsWith(alias + ' ') || clave.startsWith(alias + ' (')) {
+          return canonico;
+        }
       }
-      
-      return nombrePais;
+      return nombrePais.trim();
+    }
+
+    function esPaisReconocido(texto) {
+      const canonico = normalizarPais(texto);
+      return Boolean(canonico && Object.values(paisesCanonicos).includes(canonico));
     }
     async function loadDataset() {
       try {
@@ -1006,41 +1019,31 @@
           const loc = (r.localizacion || '').trim();
           let pais, ciudad;
 
-          // Primero verificar si la localización es directamente un país
-          const paisNormalizado = normalizarPais(loc);
-          if (paisNormalizado && esPaisReconocido(paisNormalizado)) {
-            pais = paisNormalizado;
+          // Primero aceptar ubicaciones que ya sean un país conocido.
+          const paisDirecto = normalizarPais(loc);
+          if (esPaisReconocido(paisDirecto)) {
+            pais = paisDirecto;
             ciudad = 'No especificada';
-          } 
-          // Si no es un país, intentar extraer país y ciudad
-          else if (loc.includes(',')) {
-            const partes = loc.split(',');
-            ciudad = partes[0].trim();
-            pais = normalizarPais(partes[1].trim());
           } else if (loc.includes('/')) {
-            const partes = loc.split('/');
-            pais = normalizarPais(partes[0].trim());
-            ciudad = partes.length > 1 ? partes[1].trim() : 'No especificada';
+            // Formato habitual: "País / Ciudad".
+            const partes = loc.split('/').map(parte => parte.trim()).filter(Boolean);
+            const posiblePais = partes.find(parte => esPaisReconocido(parte));
+            pais = posiblePais ? normalizarPais(posiblePais) : 'No especificado';
+            ciudad = partes.find(parte => parte !== posiblePais) || 'No especificada';
+          } else if (loc.includes(',')) {
+            // Busca el país en cualquier segmento: admite "Ciudad, País" y
+            // "Ciudad, Región, País", sin confundir una ciudad con un país.
+            const partes = loc.split(',').map(parte => parte.trim()).filter(Boolean);
+            const posiblePais = partes.find(parte => esPaisReconocido(parte));
+            const primeraParte = partes[0] || '';
+            const paisCiudad = determinarPaisPorCiudad(primeraParte);
+            pais = posiblePais ? normalizarPais(posiblePais) : (paisCiudad ? normalizarPais(paisCiudad) : 'No especificado');
+            ciudad = posiblePais
+              ? (partes.find(parte => parte !== posiblePais && parte !== loc) || primeraParte || 'No especificada')
+              : primeraParte || 'No especificada';
           } else {
-            // Si no hay separador, asumir que es una ciudad y determinar su país
             ciudad = loc;
-            pais = determinarPaisPorCiudad(ciudad) || 'No especificado';
-          }
-          
-          // Si después de todo no tenemos un país válido, intentar determinar por la ciudad
-          if (!pais || pais.toLowerCase() === 'no especificado') {
-            pais = determinarPaisPorCiudad(ciudad) || 'No especificado';
-          }
-          
-          // Si la ciudad es conocida pero no tenemos país, usar España por defecto (mayoría de casos)
-          if (ciudad && determinarPaisPorCiudad(ciudad) && pais === 'No especificado') {
-            pais = 'España';
-          }
-          
-          // Corrección final: si el "país" es realmente una ciudad española, asignar a España
-          if (pais !== 'España' && determinarPaisPorCiudad(pais) === 'españa') {
-            ciudad = pais;
-            pais = 'España';
+            pais = determinarPaisPorCiudad(ciudad) ? normalizarPais(determinarPaisPorCiudad(ciudad)) : 'No especificado';
           }
           
           // Asegurar que el país está normalizado
