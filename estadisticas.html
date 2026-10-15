@@ -563,6 +563,7 @@
       <div class="panel">
         <h2><i class="fas fa-globe-americas"></i> Casos por países y ciudades</h2>
         <div id="paises-container" class="paises-grid" style="display: none;"></div>
+        <p id="ubicaciones-no-especificadas" role="status" style="display: none; margin-top: 1rem; color: var(--muted);"></p>
         <div id="paises-loading" class="loading-message">
           Cargando datos de países...
         </div>
@@ -1013,16 +1014,22 @@
         }
         
         // 7. DESPLIEGUE DE PAÍSES Y CIUDADES - CORREGIDO
-        const localizaciones = data.filter(r => r.localizacion && r.localizacion.trim() !== '');
+        // Procesar todos los casos para que las ubicaciones vacías no desaparezcan del resumen.
+        const localizaciones = data;
         const paises = {};
         
         localizaciones.forEach(r => {
           const loc = (r.localizacion || '').trim();
           let pais, ciudad;
 
+          // Las ubicaciones ausentes o marcadas como desconocidas se contabilizan aparte.
+          const ubicacionDesconocida = !loc || ['no especificado', 'no especificada', 'desconocido', 'desconocida', 'n/a'].includes(normalizarTexto(loc));
           // Primero aceptar ubicaciones que ya sean un país conocido.
           const paisDirecto = normalizarPais(loc);
-          if (esPaisReconocido(paisDirecto)) {
+          if (ubicacionDesconocida) {
+            pais = 'No especificado';
+            ciudad = 'No especificada';
+          } else if (esPaisReconocido(paisDirecto)) {
             pais = paisDirecto;
             ciudad = 'No especificada';
           } else if (loc.includes('/')) {
@@ -1066,6 +1073,16 @@
         // Calcular el total de países únicos para el KPI
         const uniqueCountries = new Set(Object.keys(paises).filter(p => p !== 'No especificado'));
         document.getElementById('paises-total').textContent = uniqueCountries.size;
+
+        // Hacer visible cuántos registros carecen de una ubicación utilizable.
+        const casosSinUbicacion = paises['No especificado'] ? paises['No especificado'].total : 0;
+        const avisoUbicacion = document.getElementById('ubicaciones-no-especificadas');
+        if (casosSinUbicacion > 0) {
+          avisoUbicacion.textContent = `${casosSinUbicacion} de ${data.length} casos no tienen un país o una ubicación suficientemente clara para clasificarlos.`;
+          avisoUbicacion.style.display = 'block';
+        } else {
+          avisoUbicacion.style.display = 'none';
+        }
 
         const getBandera = (nombrePais) => {
             const banderas = {
