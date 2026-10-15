@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investigación 15q11.2 - Materia Blanca</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f0f2f5;
+    padding: 20px;
+    line-height: 1.6;
+  }
+  
+  .research-section {
+    max-width: 900px;
+    margin: 0 auto;
+    color: #1a1a2e;
+    background: linear-gradient(135deg, #f8f9fc 0%, #eef1f8 100%);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 8px 32px rgba(26,26,46,0.08);
+  }
+  
+  .research-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  
+  .research-header h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #16213e;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.5px;
+  }
+  
+  .research-header .subtitle {
+    font-size: 15px;
+    color: #6b7280;
+    font-weight: 500;
+  }
+  
+  .research-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  
+  .brain-container {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  
+  .brain-visual {
+    flex: 1;
+    min-width: 300px;
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  }
+  
+  .brain-visual h3 {
+    font-size: 16px;
+    color: #374151;
+    margin: 0 0 16px 0;
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  .brain-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .region-dot {
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .region-dot:hover {
+    filter: drop-shadow(0 0 8px rgba(102,126,234,0.6));
+    transform: scale(1.2);
+  }
+  
+  .region-dot.active {
+    filter: drop-shadow(0 0 12px rgba(239,68,68,0.8));
+    animation: pulse 1.5s infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { r: 12; }
+    50% { r: 16; }
+  }
+  
+  .info-panel {
+    flex: 1;
+    min-width: 300px;
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  }
+  
+  .info-panel h3 {
+    font-size: 16px;
+    color: #374151;
+    margin: 0 0 16px 0;
+    font-weight: 600;
+  }
+  
+  .region-card {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  
+  .region-card.active {
+    display: block;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .region-card h4 {
+    font-size: 20px;
+    color: #1e3a5f;
+    margin: 0 0 12px 0;
+    font-weight: 700;
+  }
+  
+  .region-card .tag {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  
+  .region-card p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #4b5563;
+    margin: 0 0 12px 0;
+  }
+  
+  .symptoms-list {
+    background: #f0f4ff;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-top: 12px;
+  }
+  
+  .symptoms-list h5 {
+    font-size: 13px;
+    color: #4338ca;
+    margin: 0 0 8px 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .symptoms-list ul {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 13px;
+    color: #4b5563;
+    line-height: 1.8;
+  }
+  
+  .symptoms-list li {
+    margin-bottom: 2px;
+  }
+  
+  .legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 500;
+  }
+  
+  .legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+  }
+  
+  .key-findings {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+    color: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  
+  .key-findings h3 {
+    font-size: 18px;
+    margin: 0 0 16px 0;
+    font-weight: 700;
+  }
+  
+  .findings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  
+  .finding-card {
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 16px;
+    backdrop-filter: blur(4px);
+  }
+  
+  .finding-card .number {
+    font-size: 32px;
+    font-weight: 800;
+    color: #60a5fa;
+    line-height: 1;
+  }
+  
+  .finding-card .label {
+    font-size: 13px;
+    color: #bfdbfe;
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+  
+  .what-is-wm {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  }
+  
+  .what-is-wm h3 {
+    font-size: 18px;
+    color: #1e3a5f;
+    margin: 0 0 16px 0;
+    font-weight: 700;
+  }
+  
+  .wm-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  
+  .wm-type {
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  
+  .wm-type.gray {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    border: 2px solid #9ca3af;
+  }
+  
+  .wm-type.white {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 2px solid #f59e0b;
+  }
+  
+  .wm-type .icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+  
+  .wm-type h4 {
+    font-size: 15px;
+    margin: 0 0 8px 0;
+    font-weight: 700;
+  }
+  
+  .wm-type.gray h4 { color: #4b5563; }
+  .wm-type.white h4 { color: #92400e; }
+  
+  .wm-type p {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  .citation-box {
+    background: #f8fafc;
+    border-left: 4px solid #667eea;
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin-top: 20px;
+  }
+  
+  .citation-box h4 {
+    font-size: 14px;
+    color: #374151;
+    margin: 0 0 8px 0;
+    font-weight: 700;
+  }
+  
+  .citation-box p {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0 0 12px 0;
+    line-height: 1.6;
+  }
+  
+  .citation-box a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+  
+  .citation-box a:hover {
+    text-decoration: underline;
+  }
+  
+  .click-hint {
+    text-align: center;
+    font-size: 14px;
+    color: #9ca3af;
+    font-style: italic;
+    margin-top: 8px;
+  }
+  
+  .default-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #9ca3af;
+  }
+  
+  .default-message .brain-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+  }
+  
+  .default-message p {
+    font-size: 15px;
+    margin: 0;
+  }
+  
+  .wm-explanation {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.7;
+    margin: 0 0 16px 0;
+  }
+  
+  .wm-note {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 16px 0 0 0;
+    line-height: 1.6;
+    text-align: center;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .brain-container { flex-direction: column; }
+    .wm-comparison { grid-template-columns: 1fr; }
+    .findings-grid { grid-template-columns: repeat(2, 1fr); }
+    .research-section { padding: 20px; }
+    .research-header h2 { font-size: 22px; }
+  }
+  
+  @media (max-width: 480px) {
+    .findings-grid { grid-template-columns: 1fr; }
+    .legend { gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="research-section">
+  <div class="research-header">
+    <div class="research-badge">Investigación Científica 2026</div>
+    <h2>🧠 La Microdeleción 15q11.2 y el Cerebro</h2>
+    <p class="subtitle">Descubre lo que la ciencia revela sobre las diferencias en la materia blanca</p>
+  </div>
+
+  <!-- ¿Qué es la materia blanca? -->
+  <div class="what-is-wm">
+    <h3>📡 ¿Qué es la materia blanca?</h3>
+    <p class="wm-explanation">
+      El cerebro tiene dos tipos de tejido. La <strong>materia blanca</strong> es el "sistema de cableado" 
+      que conecta diferentes regiones del cerebro, permitiéndoles comunicarse entre sí.
+    </p>
+    <div class="wm-comparison">
+      <div class="wm-type gray">
+        <div class="icon">🧩</div>
+        <h4>Materia Gris</h4>
+        <p>Contiene los cuerpos de las neuronas. Es donde ocurre el pensamiento y el procesamiento.</p>
+      </div>
+      <div class="wm-type white">
+        <div class="icon">🔗</div>
+        <h4>Materia Blanca</h4>
+        <p>Contiene los axones (cables) recubiertos de mielina. Es la red de comunicación del cerebro.</p>
+      </div>
+    </div>
+    <p class="wm-note">
+      💡 <em>Sin materia blanca, las diferentes partes del cerebro no podrían "hablarse" entre sí.</em>
+    </p>
+  </div>
+
+  <!-- Hallazgos clave -->
+  <div class="key-findings">
+    <h3>🔬 Hallazgos Clave del Estudio de Korbmacher (2026)</h3>
+    <div class="findings-grid">
+      <div class="finding-card">
+        <div class="number">37,083</div>
+        <div class="label">Participantes analizados del UK Biobank</div>
+      </div>
+      <div class="finding-card">
+        <div class="number">126</div>
+        <div class="label">Portadores de deleción 15q11.2 estudiados</div>
+      </div>
+      <div class="finding-card">
+        <div class="number">6</div>
+        <div class="label">Técnicas de resonancia magnética avanzadas usadas</div>
+      </div>
+      <div class="finding-card">
+        <div class="number">4</div>
+        <div class="label">Regiones cerebrales con diferencias significativas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visualización interactiva del cerebro -->
+  <div class="brain-container">
+    <div class="brain-visual">
+      <h3>🗺️ Haz clic en una región del cerebro</h3>
+      <svg class="brain-svg" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
+        <!-- Fondo del cerebro -->
+        <ellipse cx="200" cy="160" rx="140" ry="120" fill="#e8ecf4" stroke="#c7d2e0" stroke-width="2"/>
+        
+        <!-- División hemisférica -->
+        <line x1="200" y1="50" x2="200" y2="270" stroke="#c7d2e0" stroke-width="2" stroke-dasharray="6,4"/>
+        
+        <!-- Cuerpo calloso (BodyCC) -->
+        <ellipse cx="200" cy="140" rx="55" ry="18" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" opacity="0.7"/>
+        <text x="200" y="144" text-anchor="middle" font-size="11" fill="#92400e" font-weight="600">Cuerpo Calloso</text>
+        <circle class="region-dot" id="dot-bodycc" cx="200" cy="140" r="12" fill="#f59e0b" stroke="white" stroke-width="2.5" onclick="showRegion('bodycc')"/>
+        
+        <!-- Fascículo uncinado (UF) -->
+        <path d="M 120 180 Q 140 220 170 240" fill="none" stroke="#c7d2e0" stroke-width="8" opacity="0.5"/>
+        <path d="M 280 180 Q 260 220 230 240" fill="none" stroke="#c7d2e0" stroke-width="8" opacity="0.5"/>
+        <text x="115" y="255" text-anchor="middle" font-size="10" fill="#6b7280" font-weight="500">Fascículo Uncinado</text>
+        <text x="285" y="255" text-anchor="middle" font-size="10" fill="#6b7280" font-weight="500">Fascículo Uncinado</text>
+        <circle class="region-dot" id="dot-uf-left" cx="145" cy="210" r="10" fill="#ef4444" stroke="white" stroke-width="2.5" onclick="showRegion('uf')"/>
+        <circle class="region-dot" id="dot-uf-right" cx="255" cy="210" r="10" fill="#ef4444" stroke="white" stroke-width="2.5" onclick="showRegion('uf')"/>
+        
+        <!-- Cingulum parahipocampal (CH) -->
+        <path d="M 160 90 Q 130 120 125 160" fill="none" stroke="#c7d2e0" stroke-width="6" opacity="0.5"/>
+        <path d="M 240 90 Q 270 120 275 160" fill="none" stroke="#c7d2e0" stroke-width="6" opacity="0.5"/>
+        <text x="105" y="105" text-anchor="middle" font-size="10" fill="#6b7280" font-weight="500">Cingulum</text>
+        <text x="295" y="105" text-anchor="middle" font-size="10" fill="#6b7280" font-weight="500">Cingulum</text>
+        <circle class="region-dot" id="dot-ch-left" cx="140" cy="125" r="10" fill="#8b5cf6" stroke="white" stroke-width="2.5" onclick="showRegion('ch')"/>
+        <circle class="region-dot" id="dot-ch-right" cx="260" cy="125" r="10" fill="#8b5cf6" stroke="white" stroke-width="2.5" onclick="showRegion('ch')"/>
+        
+        <!-- Hipocampo -->
+        <ellipse cx="155" cy="190" rx="20" ry="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5" opacity="0.5"/>
+        <ellipse cx="245" cy="190" rx="20" ry="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5" opacity="0.5"/>
+        <text x="155" y="194" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="500">Hipocampo</text>
+        <text x="245" y="194" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="500">Hipocampo</text>
+        <circle class="region-dot" id="dot-hippo-left" cx="155" cy="190" r="9" fill="#3b82f6" stroke="white" stroke-width="2.5" onclick="showRegion('hippo')"/>
+        <circle class="region-dot" id="dot-hippo-right" cx="245" cy="190" r="9" fill="#3b82f6" stroke="white" stroke-width="2.5" onclick="showRegion('hippo')"/>
+        
+        <!-- PLIC -->
+        <ellipse cx="165" cy="100" rx="12" ry="20" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" opacity="0.4"/>
+        <ellipse cx="235" cy="100" rx="12" ry="20" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" opacity="0.4"/>
+        <text x="165" y="70" text-anchor="middle" font-size="9" fill="#991b1b" font-weight="500">PLIC</text>
+        <text x="235" y="70" text-anchor="middle" font-size="9" fill="#991b1b" font-weight="500">PLIC</text>
+        <circle class="region-dot" id="dot-plic-left" cx="165" cy="100" r="8" fill="#ef4444" stroke="white" stroke-width="2" onclick="showRegion('plic')" opacity="0.6"/>
+        <circle class="region-dot" id="dot-plic-right" cx="235" cy="100" r="8" fill="#ef4444" stroke="white" stroke-width="2" onclick="showRegion('plic')" opacity="0.6"/>
+      </svg>
+      
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#f59e0b;"></div>
+          <span>Cuerpo Calloso</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#ef4444;"></div>
+          <span>Fascículo Uncinado</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#8b5cf6;"></div>
+          <span>Cingulum</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#3b82f6;"></div>
+          <span>Hipocampo</span>
+        </div>
+      </div>
+      <p class="click-hint">👆 Haz clic en los círculos de colores para ver los detalles</p>
+    </div>
+    
+    <div class="info-panel">
+      <h3>📋 Información de la región</h3>
+      
+      <div class="default-message" id="default-msg">
+        <div class="brain-icon">🧠</div>
+        <p>Selecciona una región del cerebro para ver qué encontró el estudio de Korbmacher y cómo se relaciona con los síntomas que las familias conocen.</p>
+      </div>
+      
+      <div class="region-card" id="card-bodycc">
+        <h4>🔗 Cuerpo Calloso</h4>
+        <span class="tag">Región más afectada</span>
+        <p>
+          Es el <strong>puente más grande del cerebro</strong>, conectando los dos hemisferios. 
+          Permite que la mitad izquierda y derecha del cerebro se comuniquen e intercambien información.
+        </p>
+        <p>
+          <strong>Lo que encontró el estudio:</strong> Los portadores de deleción 15q11.2 muestran 
+          <strong>mayor anisotropía fraccional (FA)</strong> y <strong>menor difusividad</strong> en esta región. 
+          Esto sugiere una <em>organización diferente</em> — posiblemente por sobrecrecimiento axonal 
+          o mielinización anormal.
+        </p>
+        <div class="symptoms-list">
+          <h5>🎯 Síntomas relacionados</h5>
+          <ul>
+            <li><strong>Dislexia y discalculia</strong> — dificultades con lectura y matemáticas</li>
+            <li><strong>Retrasos motores</strong> — coordinación entre ambos lados del cuerpo</li>
+            <li><strong>Problemas de velocidad de procesamiento</strong></li>
+            <li><strong>Dificultades con tareas que requieren ambos hemisferios</strong></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="region-card" id="card-uf">
+        <h4>💭 Fascículo Uncinado</h4>
+        <span class="tag">Regulación emocional</span>
+        <p>
+          Conecta la <strong>corteza frontal</strong> (pensamiento racional) con el <strong>sistema límbico</strong> 
+          (emociones y memoria). Es como el "cable" que permite que pensemos antes de sentir.
+        </p>
+        <p>
+          <strong>Lo que encontró el estudio:</strong> Diferencias en la microestructura que sugieren 
+          <strong>alteraciones en la conectividad frontolímbica</strong>, consistente con hallazgos previos 
+          en trastornos de ansiedad y depresión.
+        </p>
+        <div class="symptoms-list">
+          <h5>🎯 Síntomas relacionados</h5>
+          <ul>
+            <li><strong>Ansiedad</strong> — dificultad para regular el miedo</li>
+            <li><strong>Depresión</strong> — alteraciones en el procesamiento emocional</li>
+            <li><strong>Problemas de memoria emocional</strong></li>
+            <li><strong>Dificultades de adaptación social</strong></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="region-card" id="card-ch">
+        <h4>🧭 Cingulum Parahipocampal</h4>
+        <span class="tag">Atención y memoria</span>
+        <p>
+          Forma parte del <strong>sistema límbico</strong> y conecta el hipocampo con otras áreas del cerebro. 
+          Es fundamental para la <strong>atención, la memoria espacial y la navegación</strong>.
+        </p>
+        <p>
+          <strong>Lo que encontró el estudio:</strong> Alteraciones microestructurales en esta región, 
+          consistentes con estudios previos que la relacionan con <strong>TDAH</strong> y déficits atencionales.
+        </p>
+        <div class="symptoms-list">
+          <h5>🎯 Síntomas relacionados</h5>
+          <ul>
+            <li><strong>TDAH</strong> — dificultad para mantener la atención</li>
+            <li><strong>Problemas de memoria de trabajo</strong></li>
+            <li><strong>Desorientación espacial</strong></li>
+            <li><strong>Dificultades con la planificación</strong></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="region-card" id="card-hippo">
+        <h4>🧠 Hipocampo (tractos blancos)</h4>
+        <span class="tag">Memoria y aprendizaje</span>
+        <p>
+          Aunque el hipocampo es principalmente materia gris, los <strong>tractos que lo conectan</strong> 
+          con el resto del cerebro son materia blanca. Son esenciales para formar recuerdos y aprender cosas nuevas.
+        </p>
+        <p>
+          <strong>Lo que encontró el estudio:</strong> Diferencias en los tractos hipocampales que sugieren 
+          <strong>alteraciones en la conectividad de la memoria</strong>.
+        </p>
+        <div class="symptoms-list">
+          <h5>🎯 Síntomas relacionados</h5>
+          <ul>
+            <li><strong>Dificultades de aprendizaje</strong></li>
+            <li><strong>Problemas de memoria a corto plazo</strong></li>
+            <li><strong>Retrasos en adquirir nuevas habilidades</strong></li>
+            <li><strong>Dificultades con la orientación</strong></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="region-card" id="card-plic">
+        <h4>⚡ PLIC (Cápsula Interna Posterior)</h4>
+        <span class="tag">Vías motoras</span>
+        <p>
+          La <strong>porción posterior de la cápsula interna</strong> contiene las principales vías 
+          <strong>sensoriomotoras</strong> del cerebro. Es el "autopista" por donde viajan las señales 
+          que controlan el movimiento y la sensación.
+        </p>
+        <p>
+          <strong>Lo que encontró el estudio:</strong> Aunque no fue la región más significativa en este estudio, 
+          estudios previos (Silva et al., 2019) encontraron que el <strong>PLIC es donde los efectos son más grandes</strong> 
+          en la deleción 15q11.2.
+        </p>
+        <div class="symptoms-list">
+          <h5>🎯 Síntomas relacionados</h5>
+          <ul>
+            <li><strong>Retrasos motores</strong> — gateo, caminata, coordinación</li>
+            <li><strong>Hipotonía</strong> — tono muscular bajo</li>
+            <li><strong>Problemas de equilibrio</strong></li>
+            <li><strong>Dificultades con movimientos finos</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cita -->
+  <div class="citation-box">
+    <h4>📚 Fuente científica</h4>
+    <p>
+      <strong>Korbmacher, M. et al.</strong> (2026). "White matter microstructure differences between 
+      15q11.2 copy number variation carriers and non-carriers in mid-to-late life." 
+      <em>Translational Psychiatry</em>, 16:190. doi: 10.1038/s41398-026-03962-2
+    </p>
+    <p>
+      Estudio realizado en el UK Biobank con 37,083 participantes, incluyendo 126 portadores de deleción 
+      y 131 de duplicación 15q11.2 BP1-BP2, usando 6 técnicas avanzadas de resonancia magnética por difusión.
+    </p>
+    <a href="https://www.nature.com/articles/s41398-026-03962-2" target="_blank">→ Leer el artículo completo (Open Access)</a>
+    <br>
+    <a href="https://github.com/MaxKorbmacher/15q11.2WhiteMatterMicrostructure" target="_blank">→ Ver el código de análisis (GitHub)</a>
+  </div>
+</div>
+
+<script>
+  function showRegion(regionId) {
+    // Ocultar todos los cards
+    document.querySelectorAll('.region-card').forEach(card => {
+      card.classList.remove('active');
+    });
+    
+    // Ocultar mensaje default
+    document.getElementById('default-msg').style.display = 'none';
+    
+    // Mostrar el card seleccionado
+    document.getElementById('card-' + regionId).classList.add('active');
+    
+    // Resetear todos los dots
+    document.querySelectorAll('.region-dot').forEach(dot => {
+      dot.classList.remove('active');
+    });
+    
+    // Activar los dots correspondientes
+    document.querySelectorAll('[id^="dot-' + regionId + '"]').forEach(dot => {
+      dot.classList.add('active');
+    });
+  }
+</script>
+
+</body>
+</html>

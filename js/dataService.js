@@ -1,7 +1,8 @@
 (function () {
   const DATA_FILES = {
     validados: 'data/casos_validados.json',
-    noValidados: 'data/casos_no_validados.json'
+    noValidados: 'data/casos_no_validados.json',
+    asintomaticos: 'data/asintomaticos.json'
   };
 
   function toAbsolutePath(relativePath) {
@@ -80,10 +81,10 @@
     const edad = toNumber(pick(rawCase, ['Edad', 'Edad ', 'edad']));
     const genero = normalizeGender(pick(rawCase, ['Género', 'Genero', 'genero']));
     const localizacion = normalizeString(pick(rawCase, ['Localización', 'Localizacion', 'localizacion', 'Ubicacion', 'Ubicación']));
-    const sintomasRaw = pick(rawCase, ['síntomas principales', 'síntomas principales  ', 'sintomas', 'sintomas_principales']);
+    const sintomasRaw = pick(rawCase, ['síntomas principales', 'síntomas principales  ', 'sintomas principales', 'sintomas', 'sintomas_principales']);
     const gravedadRaw = pick(rawCase, ['Nivel de afectación', 'Nivel de afectacion', 'gravedad']);
     const pruebas = normalizeString(pick(rawCase, ['Pruebas realizadas', 'Pruebas realizadas  (ej: array genético, EEG, resonancia)  ']));
-    const medicamentos = normalizeString(pick(rawCase, ['Medicamentos actuales/pasados', 'Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  ', 'medicamentos']));
+    const medicamentos = normalizeString(pick(rawCase, ['Medicamentos actuales/pasados', 'Medicamentos actuales/pasados\n (ej: risperidona, magnesio):  ', 'Medicamentos actuales', 'Medicamentos', 'medicamentos']));
     const terapias = normalizeString(pick(rawCase, ['Terapias recibidas', 'Terapias recibidas\n(logopedia, psicoterapia, etc.):  ', 'terapias']));
     const estudios = normalizeString(pick(rawCase, ['¿Ha participado en estudios clinicos o geneticos?', 'Â¿Ha participado en estudios clÃ\xadnicos o genÃ©ticos?']));
     const necesidades = normalizeString(pick(rawCase, [' Necesidades y Desafíos', 'Necesidades y Desafíos', 'desafios']));
@@ -119,15 +120,17 @@
   }
 
   async function loadCases() {
-    const [validatedRaw, nonValidatedRaw] = await Promise.all([
+    const [validatedRaw, nonValidatedRaw, asymptomaticRaw] = await Promise.all([
       fetchJson(DATA_FILES.validados),
-      fetchJson(DATA_FILES.noValidados)
+      fetchJson(DATA_FILES.noValidados),
+      fetchJson(DATA_FILES.asintomaticos)
     ]);
 
     const validated = validatedRaw.map(item => normalizeCase(item, 'validado'));
     const nonValidated = nonValidatedRaw.map(item => normalizeCase(item, 'no_validado'));
+    const asymptomatic = asymptomaticRaw.map(item => normalizeCase(item, 'asintomatico'));
 
-    return [...validated, ...nonValidated];
+    return [...validated, ...nonValidated, ...asymptomatic];
   }
 
   window.dataService = {
